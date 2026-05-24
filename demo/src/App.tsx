@@ -191,13 +191,8 @@ function App() {
         <h2>Links</h2>
         <ul className="links">
           <li>
-            <a href="https://github.com/your-org/your-repo" target="_blank" rel="noreferrer">
+            <a href="https://github.com/Philipnil06/Verified-But-Wrong" target="_blank" rel="noreferrer">
               GitHub repository
-            </a>
-          </li>
-          <li>
-            <a href="https://example.com/paper.pdf" target="_blank" rel="noreferrer">
-              Paper PDF
             </a>
           </li>
         </ul>
