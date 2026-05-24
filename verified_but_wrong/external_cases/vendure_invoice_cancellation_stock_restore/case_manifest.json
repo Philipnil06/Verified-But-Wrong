@@ -1,0 +1,16 @@
+{
+  "case_id": "vendure_invoice_cancellation_stock_restore",
+  "benchmark_task_id": "invoice_cancellation_stock_restore",
+  "source_url": "https://github.com/vendure-ecommerce/vendure/issues/91",
+  "source_type": "externally sourced public GitHub issue adapted into a minimal vericoding-style case",
+  "public_spec_path": "public_spec.md",
+  "policy_pack_path": "policy_card.json",
+  "public_tests_path": "public_tests.py",
+  "hidden_oracle_path": "hidden_oracle.py",
+  "candidate_dir": "candidates",
+  "gate_can_access_oracle": false,
+  "gate_can_access_selected_candidate": false,
+  "gate_can_access_verified_but_wrong": false,
+  "use_in_paper": "externally sourced adapted issue suite",
+  "limitation": "Adapted issue pattern, not a reproduction of the original project behavior."
+}

@@ -1,0 +1,72 @@
+{
+  "timestamp": "2026-05-12T17:31:39.688860+00:00",
+  "task_id": "tenant_isolation_export",
+  "task_title": "Tenant isolation export",
+  "condition": "ticket_plus_generic_checklist",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the product ticket and the generic checklist.\nThe checklist is generic and may not mention task-specific organization policies.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the product ticket and the generic checklist. The checklist is generic and may not mention task-specific organization policies.\n\nTask title: Tenant isolation export\nFunction entrypoint: export_records\n\nProduct ticket:\n# Ticket: tenant-scoped export\n\nExport records matching requested filters, but only records whose tenant_id matches the authenticated actor tenant_id may be returned. User-provided filters must not override tenant scope.\n\nAcceptance criteria:\n- Tenant t1 receives only t1 records.\n- Cross-tenant records are never included.\n\nGeneric checklist:\n- authorization and access control\n- idempotency and duplicate handling\n- boundary conditions and off-by-one cases\n- state consistency and required state updates\n- audit logging or record retention where relevant\n- tenant or data isolation where relevant\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "d2587fbb9ae18f1ee14af9349b86f3743030df269362e8aeef85fc6fc6557890",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Tenant-scoped export of records (export_records)\",\n  \"behavior_requirements\": [\n    \"Authenticate actor and verify tenant_id from authentication context.\",\n    \"Filter records by both: (a) user-provided filters, and (b) tenant_id must equal authenticated actor's tenant_id.\",\n    \"Do not apply tenant filtering through user-provided filters; enforce tenant scoping regardless of input.\",\n    \"Return only records whose tenant_id matches the actor's tenant_id.\",\n    \"Reject or sanitize any user-provided filters that attempt to escape tenant scope (e.g., override with OR/IN across other tenants).\",\n    \"Ensure export operation is idempotent for a given export request; repeated exports with same filters produce same results.\",\n    \"Log authorization decisions, export requests, and any access-control failures for audit purposes.\",\n    \"Ensure response includes only data allowed by tenant scope; no cross-tenant data leakage.\"\n  ],\n  \"edge_cases\": [\n    \"No records for tenant: return empty results with success status.\",\n    \"Filters that would match across multiple tenants but only tenant_id matches actor; ensure only matching tenant records are returned.\",\n    \"Malformed or conflicting user filters: reject with clear error; do not fallback to broader tenant scope.\",\n    \"Boundary: large result sets; ensure pagination or streaming handles tenant scope consistently across pages.\",\n    \"Timestamps and soft-deleted records: exclude non-visible (per tenant) or include only if visible to tenant.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Tenant t1 receives only records with tenant_id == t1; no t2 or other tenants' records are returned.\",\n    \"Any user-provided filters that would permit cross-tenant data are ignored in favor of tenant-scoped filtering.\",\n    \"Export operation is deterministic for identical inputs; repeated calls yield identical results.\",\n    \"Audit logs capture tenant_id, action, filters (sanitized), and outcome (success/failure).\",\n    \"Cross-tenant records are never included in export results.\"\n  ],\n  \"non_goals\": [\n    \"Providing cross-tenant export functionality.\",\n    \"Altering tenant_id semantics for non-export operations.\",\n    \"Exporting records without enforcing tenant scoping.\"\n  ],\n  \"testable_assertions\": [\n    \"Given actor with tenant_id = t1 and filters that would match t2 data, export_records returns only t1 records.\",\n    \"Given no records for tenant t1, export_records returns an empty dataset but success status.\",\n    \"Providing a filter attempting to override tenant scope is rejected with a tenant-scope error and no data leakage occurs.\",\n    \"Repeated export with same request is idempotent and returns identical data.\",\n    \"Audit log contains tenant_id = t1, operation export_records, and sanitized filters.\"\n  ]\n}",
+  "response_hash": "ae761bff72a09f385c74814cd01edbf01d5a66a2353ae67bc12b86f08e55834c",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0fea518257cbae19006a0363faaf0881a2b1a689cd131c7c1a",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 341,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 592,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 933
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Tenant-scoped export of records (export_records)",
+    "behavior_requirements": [
+      "Authenticate actor and verify tenant_id from authentication context.",
+      "Filter records by both: (a) user-provided filters, and (b) tenant_id must equal authenticated actor's tenant_id.",
+      "Do not apply tenant filtering through user-provided filters; enforce tenant scoping regardless of input.",
+      "Return only records whose tenant_id matches the actor's tenant_id.",
+      "Reject or sanitize any user-provided filters that attempt to escape tenant scope (e.g., override with OR/IN across other tenants).",
+      "Ensure export operation is idempotent for a given export request; repeated exports with same filters produce same results.",
+      "Log authorization decisions, export requests, and any access-control failures for audit purposes.",
+      "Ensure response includes only data allowed by tenant scope; no cross-tenant data leakage."
+    ],
+    "edge_cases": [
+      "No records for tenant: return empty results with success status.",
+      "Filters that would match across multiple tenants but only tenant_id matches actor; ensure only matching tenant records are returned.",
+      "Malformed or conflicting user filters: reject with clear error; do not fallback to broader tenant scope.",
+      "Boundary: large result sets; ensure pagination or streaming handles tenant scope consistently across pages.",
+      "Timestamps and soft-deleted records: exclude non-visible (per tenant) or include only if visible to tenant."
+    ],
+    "acceptance_criteria": [
+      "Tenant t1 receives only records with tenant_id == t1; no t2 or other tenants' records are returned.",
+      "Any user-provided filters that would permit cross-tenant data are ignored in favor of tenant-scoped filtering.",
+      "Export operation is deterministic for identical inputs; repeated calls yield identical results.",
+      "Audit logs capture tenant_id, action, filters (sanitized), and outcome (success/failure).",
+      "Cross-tenant records are never included in export results."
+    ],
+    "non_goals": [
+      "Providing cross-tenant export functionality.",
+      "Altering tenant_id semantics for non-export operations.",
+      "Exporting records without enforcing tenant scoping."
+    ],
+    "testable_assertions": [
+      "Given actor with tenant_id = t1 and filters that would match t2 data, export_records returns only t1 records.",
+      "Given no records for tenant t1, export_records returns an empty dataset but success status.",
+      "Providing a filter attempting to override tenant scope is rejected with a tenant-scope error and no data leakage occurs.",
+      "Repeated export with same request is idempotent and returns identical data.",
+      "Audit log contains tenant_id = t1, operation export_records, and sanitized filters."
+    ]
+  },
+  "public_spec": "Title: Tenant-scoped export of records (export_records)\n\nBehavior requirements:\n- Authenticate actor and verify tenant_id from authentication context.\n- Filter records by both: (a) user-provided filters, and (b) tenant_id must equal authenticated actor's tenant_id.\n- Do not apply tenant filtering through user-provided filters; enforce tenant scoping regardless of input.\n- Return only records whose tenant_id matches the actor's tenant_id.\n- Reject or sanitize any user-provided filters that attempt to escape tenant scope (e.g., override with OR/IN across other tenants).\n- Ensure export operation is idempotent for a given export request; repeated exports with same filters produce same results.\n- Log authorization decisions, export requests, and any access-control failures for audit purposes.\n- Ensure response includes only data allowed by tenant scope; no cross-tenant data leakage.\n\nEdge cases:\n- No records for tenant: return empty results with success status.\n- Filters that would match across multiple tenants but only tenant_id matches actor; ensure only matching tenant records are returned.\n- Malformed or conflicting user filters: reject with clear error; do not fallback to broader tenant scope.\n- Boundary: large result sets; ensure pagination or streaming handles tenant scope consistently across pages.\n- Timestamps and soft-deleted records: exclude non-visible (per tenant) or include only if visible to tenant.\n\nAcceptance criteria:\n- Tenant t1 receives only records with tenant_id == t1; no t2 or other tenants' records are returned.\n- Any user-provided filters that would permit cross-tenant data are ignored in favor of tenant-scoped filtering.\n- Export operation is deterministic for identical inputs; repeated calls yield identical results.\n- Audit logs capture tenant_id, action, filters (sanitized), and outcome (success/failure).\n- Cross-tenant records are never included in export results.\n\nNon-goals:\n- Providing cross-tenant export functionality.\n- Altering tenant_id semantics for non-export operations.\n- Exporting records without enforcing tenant scoping.\n\nTestable assertions:\n- Given actor with tenant_id = t1 and filters that would match t2 data, export_records returns only t1 records.\n- Given no records for tenant t1, export_records returns an empty dataset but success status.\n- Providing a filter attempting to override tenant scope is rejected with a tenant-scope error and no data leakage occurs.\n- Repeated export with same request is idempotent and returns identical data.\n- Audit log contains tenant_id = t1, operation export_records, and sanitized filters.",
+  "generation_empty": false,
+  "generation_error": null
+}

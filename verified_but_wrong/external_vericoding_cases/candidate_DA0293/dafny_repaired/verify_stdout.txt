@@ -1,0 +1,16 @@
+﻿external_vericoding_cases/candidate_DA0293/dafny_repaired/bad_candidate_repaired_target.dfy(20,23): Warning: This ensures clause is part of a bodyless method. Add the {:axiom} attribute to it or the enclosing method to suppress this warning
+   |
+20 |     ensures ValidResult(result, N)
+   |                        ^
+
+Prover error: Model parsing error: Invalid model: invalid element name 0.0, at line 67 (  0.0)
+
+Prover error: Could not parse any models
+
+external_vericoding_cases/candidate_DA0293/dafny_repaired/bad_candidate_repaired_target.dfy(31,2): Error: assertion might not hold
+   |
+31 |   assert x == 3;
+   |   ^^^^^^
+
+
+Dafny program verifier finished with 3 verified, 1 error

@@ -1,0 +1,121 @@
+﻿# Local Environment Probe
+
+
+## pwd
+$ pwd
+
+exit_code: 0
+
+stdout:
+
+Path                                                                                                                   
+----                                                                                                                   
+C:\Users\Philip Nilsson\OneDrive - MÃ¤lardalens Tekniska Gymnasium\Skrivbordet\Hackathon apartresearch The Secure Pro...
+
+
+
+
+
+## git status --short
+$ git status --short
+
+exit_code: 1
+
+stderr:
+fatal: not a git repository (or any of the parent directories): .git
+
+
+
+## python --version
+$ python --version
+
+exit_code: 1
+
+stderr:
+Python hittades inte; kör utan argument för att installera från Microsoft Store eller inaktivera den här genvägen från Inställningar > Appar > Avancerade appinställningar > appkörningsalias.
+
+
+
+## py -3 --version
+$ py -3 --version
+
+exit_code: 0
+
+stdout:
+Python 3.13.0
+
+
+
+## dotnet --version
+$ dotnet --version
+
+exit_code: 1
+
+stderr:
+The command could not be loaded, possibly because:
+  * You intended to execute a .NET application:
+      The application '--version' does not exist.
+  * You intended to execute a .NET SDK command:
+      No .NET SDKs were found.
+
+Download a .NET SDK:
+https://aka.ms/dotnet/download
+
+Learn about SDK resolution:
+https://aka.ms/dotnet/sdk-not-found
+
+
+
+## dotnet --list-sdks
+$ dotnet --list-sdks
+
+exit_code: 0
+
+
+## dotnet --list-runtimes
+$ dotnet --list-runtimes
+
+exit_code: 0
+
+stdout:
+Microsoft.AspNetCore.App 3.1.10 [C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App]
+Microsoft.AspNetCore.App 7.0.7 [C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App]
+Microsoft.NETCore.App 3.1.10 [C:\Program Files\dotnet\shared\Microsoft.NETCore.App]
+Microsoft.NETCore.App 7.0.7 [C:\Program Files\dotnet\shared\Microsoft.NETCore.App]
+Microsoft.WindowsDesktop.App 7.0.7 [C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App]
+
+
+
+## dafny --version
+$ dafny --version
+
+exit_code: 1
+
+stderr:
+dafny : The term 'dafny' is not recognized as the name of a cmdlet, function, script file, or operable program. Check t
+he spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ dafny --version
++ ~~~~~
+    + CategoryInfo          : ObjectNotFound: (dafny:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+
+
+
+## z3 --version
+$ z3 --version
+
+exit_code: 1
+
+stderr:
+z3 : The term 'z3' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spe
+lling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ z3 --version
++ ~~
+    + CategoryInfo          : ObjectNotFound: (z3:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+
+

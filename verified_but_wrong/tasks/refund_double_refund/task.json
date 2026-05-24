@@ -1,0 +1,43 @@
+{
+  "id": "refund_double_refund",
+  "title": "Refund function with no double refund",
+  "entrypoint": "refund",
+  "intent": "Implement a refund function. Refunds must be positive, must never exceed the original payment, invalid or cancelled orders must fail, and the same order cannot be refunded twice.",
+  "ai_generated_spec": "Refund amount must be positive.",
+  "critic_improved_spec": "Refund amount must be positive, must not exceed the remaining refundable balance, cancelled orders must fail, and successful refunds must update refunded_total so the same money cannot be refunded twice.",
+  "missing_requirements": [
+    "Refund must not exceed original payment",
+    "Same order cannot be refunded twice",
+    "Invalid or cancelled orders must fail",
+    "Refunded state must be updated after successful refund"
+  ],
+  "spec_hole_categories": [
+    "state_invariant_omission",
+    "conservation_omission",
+    "error_behavior_omission"
+  ],
+  "expected_naive_failure": "The naive public spec can select an implementation that accepts repeated refunds because it only checks that the amount is positive.",
+  "expected_defense": "The omission-aware critic spec should reject implementations that allow double refunds or over-refunds.",
+  "policy_pack_ids": [
+    "generic_critical_requirements",
+    "payments_policy"
+  ],
+  "relevant_policy_card_ids": [
+    "generic.state.update_success",
+    "generic.invalid_inputs_fail",
+    "payments.refund.remaining_balance",
+    "payments.refund.no_double_refund"
+  ],
+  "missing_requirement_severity": {
+    "Refund must not exceed original payment": "medium",
+    "Same order cannot be refunded twice": "high",
+    "Invalid or cancelled orders must fail": "medium",
+    "Refunded state must be updated after successful refund": "medium"
+  },
+  "public_spec_text": {
+    "naive": "Refund amount must be positive.",
+    "critic": "Refund amount must be positive, must not exceed the remaining refundable balance, cancelled orders must fail, and successful refunds must update refunded_total so the same money cannot be refunded twice.",
+    "oracle": "Refund amount must be positive, must not exceed the remaining refundable balance, cancelled orders must fail, and successful refunds must update refunded_total so the same money cannot be refunded twice."
+  },
+  "evaluation_split": "development"
+}

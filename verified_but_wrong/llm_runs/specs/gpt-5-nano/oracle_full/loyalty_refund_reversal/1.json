@@ -1,0 +1,81 @@
+{
+  "timestamp": "2026-05-12T17:29:37.228800+00:00",
+  "task_id": "loyalty_refund_reversal",
+  "task_title": "Loyalty points refund reversal",
+  "condition": "oracle_full",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the full intended behavior.\nThis is an upper-bound condition and is not a deployable retrieval setting.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the full intended behavior. This is an upper-bound condition.\n\nTask title: Loyalty points refund reversal\nFunction entrypoint: process_refund\n\nFull intended behavior:\nRefund amounts must be positive and cannot exceed the remaining paid amount. Only paid orders can be refunded. Successful refunds must update refunded_total. If the original order awarded loyalty points, the refunded portion must reverse the corresponding loyalty points from the customer balance, without making loyalty points negative.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "57201ebf884feb6ebbbddfdfc2bce21a444ce1cd7dd2554d78935ab8af252efa",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Loyalty points refund reversal\",\n  \"behavior_requirements\": [\n    \"process_refund(order_id, refund_amount) must accept only positive refund_amount values.\",\n    \"refund_amount must be <= remaining_paid_amount for the original order; otherwise reject.\",\n    \"Only orders with status 'paid' (or equivalent) are eligible for refunds.\",\n    \"On successful refund, update refunded_total for the order by adding refund_amount.\",\n    \"If the original order awarded loyalty points, compute the loyalty points corresponding to the refunded amount and deduct them from the customer's loyalty balance.\",\n    \"Loyalty balance deduction must not reduce the balance below zero; if calculation would exceed, cap at zero balance and adjust refunded points accordingly.\",\n    \"If loyalty points were not awarded for the original order, no loyalty points adjustment should occur.\",\n    \"Refund operation must be atomic: either all of the above succeeds or the operation fails without partial side effects.\",\n    \"Return a success response with updated order and customer loyalty state; on failure, provide a clear error reason.\"\n  ],\n  \"edge_cases\": [\n    \"refund_amount exactly equals remaining_paid_amount.\",\n    \"refund_amount equals zero or negative (should be rejected).\",\n    \"order has no recorded loyalty points from the original purchase.\",\n    \"loyalty points deduction would cause balance to go negative; cap at zero and do not exceed original awarded points.\",\n    \"rounding issues with monetary values; use fixed decimal representation and tolerance of 0.0001.\",\n    \"concurrent refunds on the same order; ensure idempotency or proper locking to prevent double refunds.\",\n    \"refund request for non-paid or canceled orders should be rejected.\",\n    \"partial refunds followed by full refunds on the same order; ensure refunded_total and loyalty points reflect cumulative refunds correctly.\"\n  ],\n  \"acceptance_criteria\": [\n    \"refund_amount > 0 and refund_amount <= (order_total_paid - refunded_total) must be true for success.\",\n    \"order status must be 'paid' at time of refund.\",\n    \"refunded_total is increased by refund_amount after successful refund.\",\n    \"customer_loyalty_balance decreases by loyalty_points_for_refund, not dropping below zero.\",\n    \"loyalty_points_for_refund is computed based on the portion of refund relative to original loyalty-earning rules; if no points were awarded, this is zero.\",\n    \"if any step fails, no state changes occur (atomicity).\",\n    \"response indicates success with updated refunded_total and customer loyalty balance; on failure, response includes a meaningful error message.\",\n    \"no negative loyalty balance and no negative refunded_total.\"\n  ],\n  \"non_goals\": [\n    \"Processing refunds for non-monetary items or non-refundable products (not covered by this spec).\",\n    \"Modifying loyalty rules or earning rates beyond the original order's terms.\",\n    \"Audit logging or notification systems beyond the minimal success/failure indication.\"\n  ],\n  \"testable_assertions\": [\n    \"Given an order with total 100, paid 100, refunded_total 20, and loyalty_points_awarded corresponding to 40 points; a refund of 30 should result in refunded_total 50 and loyalty balance reduced by 12 (assuming 1 point = 0.3 monetary unit, adjust per policy) without going negative.\",\n    \"Attempting refund of 0 or -5 returns an error and no state changes.\",\n    \"Attempting refund of 60 when only 50 remains unpaid should fail with proper error.\",\n    \"Refund on an order with no loyaltyPointsAwarded does not modify customer loyalty balance.\",\n    \"Consecutive refunds totaling the total paid amount should set refunded_total equal to total paid and set loyalty balance to non-negative value without overshoot.\",\n    \"Refund on non-paid or canceled order fails with appropriate error.\",\n    \"Transaction is atomic: if loyalty deduction would fail due to balance underflow, the entire refund is rejected and refunded_total remains unchanged.\"\n  ]\n}",
+  "response_hash": "c5cdec55cebd23f24f9764a27e47e8dad224ffa975dea2d2494ff0b46ad867c5",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0a8ea223e82187ab006a03638033488193a59348b1f2a92381",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 276,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 832,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 1108
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Loyalty points refund reversal",
+    "behavior_requirements": [
+      "process_refund(order_id, refund_amount) must accept only positive refund_amount values.",
+      "refund_amount must be <= remaining_paid_amount for the original order; otherwise reject.",
+      "Only orders with status 'paid' (or equivalent) are eligible for refunds.",
+      "On successful refund, update refunded_total for the order by adding refund_amount.",
+      "If the original order awarded loyalty points, compute the loyalty points corresponding to the refunded amount and deduct them from the customer's loyalty balance.",
+      "Loyalty balance deduction must not reduce the balance below zero; if calculation would exceed, cap at zero balance and adjust refunded points accordingly.",
+      "If loyalty points were not awarded for the original order, no loyalty points adjustment should occur.",
+      "Refund operation must be atomic: either all of the above succeeds or the operation fails without partial side effects.",
+      "Return a success response with updated order and customer loyalty state; on failure, provide a clear error reason."
+    ],
+    "edge_cases": [
+      "refund_amount exactly equals remaining_paid_amount.",
+      "refund_amount equals zero or negative (should be rejected).",
+      "order has no recorded loyalty points from the original purchase.",
+      "loyalty points deduction would cause balance to go negative; cap at zero and do not exceed original awarded points.",
+      "rounding issues with monetary values; use fixed decimal representation and tolerance of 0.0001.",
+      "concurrent refunds on the same order; ensure idempotency or proper locking to prevent double refunds.",
+      "refund request for non-paid or canceled orders should be rejected.",
+      "partial refunds followed by full refunds on the same order; ensure refunded_total and loyalty points reflect cumulative refunds correctly."
+    ],
+    "acceptance_criteria": [
+      "refund_amount > 0 and refund_amount <= (order_total_paid - refunded_total) must be true for success.",
+      "order status must be 'paid' at time of refund.",
+      "refunded_total is increased by refund_amount after successful refund.",
+      "customer_loyalty_balance decreases by loyalty_points_for_refund, not dropping below zero.",
+      "loyalty_points_for_refund is computed based on the portion of refund relative to original loyalty-earning rules; if no points were awarded, this is zero.",
+      "if any step fails, no state changes occur (atomicity).",
+      "response indicates success with updated refunded_total and customer loyalty balance; on failure, response includes a meaningful error message.",
+      "no negative loyalty balance and no negative refunded_total."
+    ],
+    "non_goals": [
+      "Processing refunds for non-monetary items or non-refundable products (not covered by this spec).",
+      "Modifying loyalty rules or earning rates beyond the original order's terms.",
+      "Audit logging or notification systems beyond the minimal success/failure indication."
+    ],
+    "testable_assertions": [
+      "Given an order with total 100, paid 100, refunded_total 20, and loyalty_points_awarded corresponding to 40 points; a refund of 30 should result in refunded_total 50 and loyalty balance reduced by 12 (assuming 1 point = 0.3 monetary unit, adjust per policy) without going negative.",
+      "Attempting refund of 0 or -5 returns an error and no state changes.",
+      "Attempting refund of 60 when only 50 remains unpaid should fail with proper error.",
+      "Refund on an order with no loyaltyPointsAwarded does not modify customer loyalty balance.",
+      "Consecutive refunds totaling the total paid amount should set refunded_total equal to total paid and set loyalty balance to non-negative value without overshoot.",
+      "Refund on non-paid or canceled order fails with appropriate error.",
+      "Transaction is atomic: if loyalty deduction would fail due to balance underflow, the entire refund is rejected and refunded_total remains unchanged."
+    ]
+  },
+  "public_spec": "Title: Loyalty points refund reversal\n\nBehavior requirements:\n- process_refund(order_id, refund_amount) must accept only positive refund_amount values.\n- refund_amount must be <= remaining_paid_amount for the original order; otherwise reject.\n- Only orders with status 'paid' (or equivalent) are eligible for refunds.\n- On successful refund, update refunded_total for the order by adding refund_amount.\n- If the original order awarded loyalty points, compute the loyalty points corresponding to the refunded amount and deduct them from the customer's loyalty balance.\n- Loyalty balance deduction must not reduce the balance below zero; if calculation would exceed, cap at zero balance and adjust refunded points accordingly.\n- If loyalty points were not awarded for the original order, no loyalty points adjustment should occur.\n- Refund operation must be atomic: either all of the above succeeds or the operation fails without partial side effects.\n- Return a success response with updated order and customer loyalty state; on failure, provide a clear error reason.\n\nEdge cases:\n- refund_amount exactly equals remaining_paid_amount.\n- refund_amount equals zero or negative (should be rejected).\n- order has no recorded loyalty points from the original purchase.\n- loyalty points deduction would cause balance to go negative; cap at zero and do not exceed original awarded points.\n- rounding issues with monetary values; use fixed decimal representation and tolerance of 0.0001.\n- concurrent refunds on the same order; ensure idempotency or proper locking to prevent double refunds.\n- refund request for non-paid or canceled orders should be rejected.\n- partial refunds followed by full refunds on the same order; ensure refunded_total and loyalty points reflect cumulative refunds correctly.\n\nAcceptance criteria:\n- refund_amount > 0 and refund_amount <= (order_total_paid - refunded_total) must be true for success.\n- order status must be 'paid' at time of refund.\n- refunded_total is increased by refund_amount after successful refund.\n- customer_loyalty_balance decreases by loyalty_points_for_refund, not dropping below zero.\n- loyalty_points_for_refund is computed based on the portion of refund relative to original loyalty-earning rules; if no points were awarded, this is zero.\n- if any step fails, no state changes occur (atomicity).\n- response indicates success with updated refunded_total and customer loyalty balance; on failure, response includes a meaningful error message.\n- no negative loyalty balance and no negative refunded_total.\n\nNon-goals:\n- Processing refunds for non-monetary items or non-refundable products (not covered by this spec).\n- Modifying loyalty rules or earning rates beyond the original order's terms.\n- Audit logging or notification systems beyond the minimal success/failure indication.\n\nTestable assertions:\n- Given an order with total 100, paid 100, refunded_total 20, and loyalty_points_awarded corresponding to 40 points; a refund of 30 should result in refunded_total 50 and loyalty balance reduced by 12 (assuming 1 point = 0.3 monetary unit, adjust per policy) without going negative.\n- Attempting refund of 0 or -5 returns an error and no state changes.\n- Attempting refund of 60 when only 50 remains unpaid should fail with proper error.\n- Refund on an order with no loyaltyPointsAwarded does not modify customer loyalty balance.\n- Consecutive refunds totaling the total paid amount should set refunded_total equal to total paid and set loyalty balance to non-negative value without overshoot.\n- Refund on non-paid or canceled order fails with appropriate error.\n- Transaction is atomic: if loyalty deduction would fail due to balance underflow, the entire refund is rejected and refunded_total remains unchanged.",
+  "generation_empty": false,
+  "generation_error": null
+}

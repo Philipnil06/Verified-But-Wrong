@@ -1,0 +1,17 @@
+# External Vericoding Fetch
+
+Status: `available`
+
+## Dataset
+
+```json
+{
+  "status": "available",
+  "repo_name": "vericoding-benchmark",
+  "repo_url": "https://github.com/Beneficial-AI-Foundation/vericoding-benchmark",
+  "local_path": "C:\\Users\\Philip Nilsson\\OneDrive - Mälardalens Tekniska Gymnasium\\Skrivbordet\\Hackathon apartresearch The Secure Program Synthesis\\verified_but_wrong\\external_data\\vericoding-benchmark",
+  "jsonl_path": "C:\\Users\\Philip Nilsson\\OneDrive - Mälardalens Tekniska Gymnasium\\Skrivbordet\\Hackathon apartresearch The Secure Program Synthesis\\verified_but_wrong\\external_data\\vericoding-benchmark\\jsonl\\dafny_tasks.jsonl",
+  "commit_hash": "349ee510deeb6e15e1eb0d98174914e7093252fd",
+  "fetch_method": "local"
+}
+```

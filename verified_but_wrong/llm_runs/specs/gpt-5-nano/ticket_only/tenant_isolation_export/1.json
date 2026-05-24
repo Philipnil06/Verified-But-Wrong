@@ -1,0 +1,68 @@
+{
+  "timestamp": "2026-05-12T17:31:35.776164+00:00",
+  "task_id": "tenant_isolation_export",
+  "task_title": "Tenant isolation export",
+  "condition": "ticket_only",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse only the product ticket below.\nDo not assume access to hidden organization policies.\nWrite the best implementation spec you can from the ticket.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse only the product ticket below. Do not assume access to hidden organization policies. Write the best implementation spec you can from the ticket.\n\nTask title: Tenant isolation export\nFunction entrypoint: export_records\n\nProduct ticket:\n# Ticket: tenant-scoped export\n\nExport records matching requested filters, but only records whose tenant_id matches the authenticated actor tenant_id may be returned. User-provided filters must not override tenant scope.\n\nAcceptance criteria:\n- Tenant t1 receives only t1 records.\n- Cross-tenant records are never included.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "869a5788e459748c4b4c0f742aa381d1154cd961194189014e9278a42b54b19b",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Tenant-scoped export by export_records\",\n  \"behavior_requirements\": [\n    \"export_records returns only records where record.tenant_id == authenticated_actor.tenant_id\",\n    \"User-supplied filters are applied, but cannot override tenant_scope; tenant_id filter must be enforced to the authenticated actor's tenant\",\n    \"If no records match within the authenticated tenant, return an empty list with success status\",\n    \"Response is a JSON object containing the exported records with their data fields as per existing schema (no additional fields added by the export layer)\",\n    \"No cross-tenant records are included in the result\",\n    \"Inputs are validated for required filters; invalid filters do not bypass tenant isolation\"\n  ],\n  \"edge_cases\": [\n    \"authenticated_actor.tenant_id is null or missing -> deny export with a clear error\",\n    \"requested filters reference tenant_id different from authenticated actor; tenant scope overrides any such filter\",\n    \"no records exist for the tenant matching filters -> return empty records array\",\n    \"records exist but user lacks permission for tenant's data -> deny with authorization error\",\n    \"large result sets require pagination or streaming according to existing system behavior\"\n  ],\n  \"acceptance_criteria\": [\n    \"Tenant t1 receives only t1 records even if filters would match cross-tenant data\",\n    \"Cross-tenant records are never included in export result\",\n    \"When filters would select records from multiple tenants, only records with tenant_id == authenticated_actor.tenant_id are returned\",\n    \"The exported JSON matches the exact top-level shape discussed in the ticket’s response contract\"\n  ],\n  \"non_goals\": [\n    \"Implementing multi-tenant export across tenants in a single response\",\n    \"Altering tenant_id in data records to match the requester\",\n    \"Exporting records without applying tenant isolation (i.e., no bypass of tenant_id filter)\"\n  ],\n  \"testable_assertions\": [\n    \"Given actor with tenant_id t1 and filters that would match t2 records, exported_records contains only t1 records\",\n    \"Given actor with tenant_id t1 and filters that match no records for t1, exported_records is an empty list\",\n    \"Attempt to export with missing or invalid actor tenant_id results in authorization/validation error\",\n    \"If filters attempt to override tenant_scope, tenant_id constraint remains enforced in the export result\"\n  ]\n}",
+  "response_hash": "c6d79585b2239a9e511186d0e06b4b623d1d192d5a492115e4adafe604bea85f",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0431da9a02cd9fff006a0363f6be1081a0b79836aaa24f4814",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 300,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 509,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 809
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Tenant-scoped export by export_records",
+    "behavior_requirements": [
+      "export_records returns only records where record.tenant_id == authenticated_actor.tenant_id",
+      "User-supplied filters are applied, but cannot override tenant_scope; tenant_id filter must be enforced to the authenticated actor's tenant",
+      "If no records match within the authenticated tenant, return an empty list with success status",
+      "Response is a JSON object containing the exported records with their data fields as per existing schema (no additional fields added by the export layer)",
+      "No cross-tenant records are included in the result",
+      "Inputs are validated for required filters; invalid filters do not bypass tenant isolation"
+    ],
+    "edge_cases": [
+      "authenticated_actor.tenant_id is null or missing -> deny export with a clear error",
+      "requested filters reference tenant_id different from authenticated actor; tenant scope overrides any such filter",
+      "no records exist for the tenant matching filters -> return empty records array",
+      "records exist but user lacks permission for tenant's data -> deny with authorization error",
+      "large result sets require pagination or streaming according to existing system behavior"
+    ],
+    "acceptance_criteria": [
+      "Tenant t1 receives only t1 records even if filters would match cross-tenant data",
+      "Cross-tenant records are never included in export result",
+      "When filters would select records from multiple tenants, only records with tenant_id == authenticated_actor.tenant_id are returned",
+      "The exported JSON matches the exact top-level shape discussed in the ticket’s response contract"
+    ],
+    "non_goals": [
+      "Implementing multi-tenant export across tenants in a single response",
+      "Altering tenant_id in data records to match the requester",
+      "Exporting records without applying tenant isolation (i.e., no bypass of tenant_id filter)"
+    ],
+    "testable_assertions": [
+      "Given actor with tenant_id t1 and filters that would match t2 records, exported_records contains only t1 records",
+      "Given actor with tenant_id t1 and filters that match no records for t1, exported_records is an empty list",
+      "Attempt to export with missing or invalid actor tenant_id results in authorization/validation error",
+      "If filters attempt to override tenant_scope, tenant_id constraint remains enforced in the export result"
+    ]
+  },
+  "public_spec": "Title: Tenant-scoped export by export_records\n\nBehavior requirements:\n- export_records returns only records where record.tenant_id == authenticated_actor.tenant_id\n- User-supplied filters are applied, but cannot override tenant_scope; tenant_id filter must be enforced to the authenticated actor's tenant\n- If no records match within the authenticated tenant, return an empty list with success status\n- Response is a JSON object containing the exported records with their data fields as per existing schema (no additional fields added by the export layer)\n- No cross-tenant records are included in the result\n- Inputs are validated for required filters; invalid filters do not bypass tenant isolation\n\nEdge cases:\n- authenticated_actor.tenant_id is null or missing -> deny export with a clear error\n- requested filters reference tenant_id different from authenticated actor; tenant scope overrides any such filter\n- no records exist for the tenant matching filters -> return empty records array\n- records exist but user lacks permission for tenant's data -> deny with authorization error\n- large result sets require pagination or streaming according to existing system behavior\n\nAcceptance criteria:\n- Tenant t1 receives only t1 records even if filters would match cross-tenant data\n- Cross-tenant records are never included in export result\n- When filters would select records from multiple tenants, only records with tenant_id == authenticated_actor.tenant_id are returned\n- The exported JSON matches the exact top-level shape discussed in the ticket’s response contract\n\nNon-goals:\n- Implementing multi-tenant export across tenants in a single response\n- Altering tenant_id in data records to match the requester\n- Exporting records without applying tenant isolation (i.e., no bypass of tenant_id filter)\n\nTestable assertions:\n- Given actor with tenant_id t1 and filters that would match t2 records, exported_records contains only t1 records\n- Given actor with tenant_id t1 and filters that match no records for t1, exported_records is an empty list\n- Attempt to export with missing or invalid actor tenant_id results in authorization/validation error\n- If filters attempt to override tenant_scope, tenant_id constraint remains enforced in the export result",
+  "generation_empty": false,
+  "generation_error": null
+}

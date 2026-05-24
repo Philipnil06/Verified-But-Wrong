@@ -1,0 +1,78 @@
+{
+  "timestamp": "2026-05-12T17:30:34.347554+00:00",
+  "task_id": "refund_double_refund",
+  "task_title": "Refund function with no double refund",
+  "condition": "ticket_plus_generic_checklist",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the product ticket and the generic checklist.\nThe checklist is generic and may not mention task-specific organization policies.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the product ticket and the generic checklist. The checklist is generic and may not mention task-specific organization policies.\n\nTask title: Refund function with no double refund\nFunction entrypoint: refund\n\nProduct ticket:\nImplement a refund function. Refunds must be positive, must never exceed the original payment, invalid or cancelled orders must fail, and the same order cannot be refunded twice.\n\nGeneric checklist:\n- authorization and access control\n- idempotency and duplicate handling\n- boundary conditions and off-by-one cases\n- state consistency and required state updates\n- audit logging or record retention where relevant\n- tenant or data isolation where relevant\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "555bfbe6569ba0f5b67f4f72c35e8f66fd58b2d51d9c4207a7da18e42e4cf5bf",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Refund function with no double refund\",\n  \"behavior_requirements\": [\n    \"refund(amount, order_id) must accept a positive amount.\",\n    \"refund amount must not exceed the original payment amount for the given order.\",\n    \"refunds are disallowed for invalid or cancelled orders.\",\n    \"an order cannot be refunded more than once (idempotent refund handling).\",\n    \"on successful refund, update order state to reflect refund and adjust remaining refundable balance if applicable.\",\n    \"refund operation requires proper authorization and access control checks.\",\n    \"audit logging must record refund events with order_id, amount, timestamp, and user id.\",\n    \"data isolation ensures refunds are scoped to the tenant/account of the requester.\"\n  ],\n  \"edge_cases\": [\n    \"refund amount exactly equal to original payment for the order.\",\n    \"partial refunds where cumulative refunds equal original payment.\",\n    \"refund requested after order is marked invalid or cancelled – should fail.\",\n    \"refund requested for non-existent order_id – should fail.\",\n    \"refund requested with negative or zero amount – should fail.\",\n    \"concurrent refund requests for the same order_id – ensure idempotent handling and no double refund.\",\n    \"order where no payment was recorded – should fail.\",\n    \"refund when account lacks sufficient permissions – should fail.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Refund succeeds only when: order exists, order is valid/not cancelled, amount is positive, amount <= original_payment, and not previously refunded.\",\n    \"System rejects invalid/cancelled orders and any refund that would cause double refund.\",\n    \"Each refund operation is idempotent for repeated identical requests.\",\n    \"Refund transaction is atomically recorded in audit logs with necessary identifiers.\",\n    \"Post-refund order state reflects updated refunded_amount and remaining_balance consistent with business rules.\",\n    \"Access control enforces that only authorized users can initiate refunds for the tenant's orders.\"\n  ],\n  \"non_goals\": [\n    \"Implementing non-refund related payment adjustments beyond refunds.\",\n    \"Refunds for external payment processors without internal reconciliation.\",\n    \"Full system-wide audit migration or data export features not related to refunds.\"\n  ],\n  \"testable_assertions\": [\n    \"Given a valid order with original_payment = 100, refund(40) succeeds and refunded_amount becomes 40, remaining_balance 60.\",\n    \"Given a valid order with original_payment = 100, refund(120) fails due to exceeding original payment.\",\n    \"Given a cancelled/invalid order, any refund attempt fails.\",\n    \"Two consecutive refund requests for the same order_id with total amount <= original_payment result in a single refund and second attempt is rejected or treated as idempotent without extra refund.\",\n    \"Refund attempt with non-positive amount fails.\",\n    \"Refund operation logs an entry with order_id, user_id, amount, and timestamp.\",\n    \"Unauthorized user attempting refund is rejected with proper error.\"\n  ]\n}",
+  "response_hash": "a9d9ad06eb33804296b197a42eeea87995b35f42d6cef7729ad8fbb1848374e0",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0e28b8ec1a1c8870006a0363b951208195a63ef0c7bbfa0970",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 315,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 620,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 935
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Refund function with no double refund",
+    "behavior_requirements": [
+      "refund(amount, order_id) must accept a positive amount.",
+      "refund amount must not exceed the original payment amount for the given order.",
+      "refunds are disallowed for invalid or cancelled orders.",
+      "an order cannot be refunded more than once (idempotent refund handling).",
+      "on successful refund, update order state to reflect refund and adjust remaining refundable balance if applicable.",
+      "refund operation requires proper authorization and access control checks.",
+      "audit logging must record refund events with order_id, amount, timestamp, and user id.",
+      "data isolation ensures refunds are scoped to the tenant/account of the requester."
+    ],
+    "edge_cases": [
+      "refund amount exactly equal to original payment for the order.",
+      "partial refunds where cumulative refunds equal original payment.",
+      "refund requested after order is marked invalid or cancelled – should fail.",
+      "refund requested for non-existent order_id – should fail.",
+      "refund requested with negative or zero amount – should fail.",
+      "concurrent refund requests for the same order_id – ensure idempotent handling and no double refund.",
+      "order where no payment was recorded – should fail.",
+      "refund when account lacks sufficient permissions – should fail."
+    ],
+    "acceptance_criteria": [
+      "Refund succeeds only when: order exists, order is valid/not cancelled, amount is positive, amount <= original_payment, and not previously refunded.",
+      "System rejects invalid/cancelled orders and any refund that would cause double refund.",
+      "Each refund operation is idempotent for repeated identical requests.",
+      "Refund transaction is atomically recorded in audit logs with necessary identifiers.",
+      "Post-refund order state reflects updated refunded_amount and remaining_balance consistent with business rules.",
+      "Access control enforces that only authorized users can initiate refunds for the tenant's orders."
+    ],
+    "non_goals": [
+      "Implementing non-refund related payment adjustments beyond refunds.",
+      "Refunds for external payment processors without internal reconciliation.",
+      "Full system-wide audit migration or data export features not related to refunds."
+    ],
+    "testable_assertions": [
+      "Given a valid order with original_payment = 100, refund(40) succeeds and refunded_amount becomes 40, remaining_balance 60.",
+      "Given a valid order with original_payment = 100, refund(120) fails due to exceeding original payment.",
+      "Given a cancelled/invalid order, any refund attempt fails.",
+      "Two consecutive refund requests for the same order_id with total amount <= original_payment result in a single refund and second attempt is rejected or treated as idempotent without extra refund.",
+      "Refund attempt with non-positive amount fails.",
+      "Refund operation logs an entry with order_id, user_id, amount, and timestamp.",
+      "Unauthorized user attempting refund is rejected with proper error."
+    ]
+  },
+  "public_spec": "Title: Refund function with no double refund\n\nBehavior requirements:\n- refund(amount, order_id) must accept a positive amount.\n- refund amount must not exceed the original payment amount for the given order.\n- refunds are disallowed for invalid or cancelled orders.\n- an order cannot be refunded more than once (idempotent refund handling).\n- on successful refund, update order state to reflect refund and adjust remaining refundable balance if applicable.\n- refund operation requires proper authorization and access control checks.\n- audit logging must record refund events with order_id, amount, timestamp, and user id.\n- data isolation ensures refunds are scoped to the tenant/account of the requester.\n\nEdge cases:\n- refund amount exactly equal to original payment for the order.\n- partial refunds where cumulative refunds equal original payment.\n- refund requested after order is marked invalid or cancelled – should fail.\n- refund requested for non-existent order_id – should fail.\n- refund requested with negative or zero amount – should fail.\n- concurrent refund requests for the same order_id – ensure idempotent handling and no double refund.\n- order where no payment was recorded – should fail.\n- refund when account lacks sufficient permissions – should fail.\n\nAcceptance criteria:\n- Refund succeeds only when: order exists, order is valid/not cancelled, amount is positive, amount <= original_payment, and not previously refunded.\n- System rejects invalid/cancelled orders and any refund that would cause double refund.\n- Each refund operation is idempotent for repeated identical requests.\n- Refund transaction is atomically recorded in audit logs with necessary identifiers.\n- Post-refund order state reflects updated refunded_amount and remaining_balance consistent with business rules.\n- Access control enforces that only authorized users can initiate refunds for the tenant's orders.\n\nNon-goals:\n- Implementing non-refund related payment adjustments beyond refunds.\n- Refunds for external payment processors without internal reconciliation.\n- Full system-wide audit migration or data export features not related to refunds.\n\nTestable assertions:\n- Given a valid order with original_payment = 100, refund(40) succeeds and refunded_amount becomes 40, remaining_balance 60.\n- Given a valid order with original_payment = 100, refund(120) fails due to exceeding original payment.\n- Given a cancelled/invalid order, any refund attempt fails.\n- Two consecutive refund requests for the same order_id with total amount <= original_payment result in a single refund and second attempt is rejected or treated as idempotent without extra refund.\n- Refund attempt with non-positive amount fails.\n- Refund operation logs an entry with order_id, user_id, amount, and timestamp.\n- Unauthorized user attempting refund is rejected with proper error.",
+  "generation_empty": false,
+  "generation_error": null
+}

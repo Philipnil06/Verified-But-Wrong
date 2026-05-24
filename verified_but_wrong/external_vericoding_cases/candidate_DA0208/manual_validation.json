@@ -1,0 +1,12 @@
+{
+  "status": "validated",
+  "reason": "Clear external target-validity gap: NL requires minimizing uniform box size under packing constraints, while formal target only ensures non-negative output.",
+  "gap_category": "optimization_missing",
+  "nl_requirement": "Return the minimum feasible common box size so all cowbells fit in at most k boxes with capacity constraints.",
+  "formal_spec_gap": "Formal target for solve only ensures result >= 0 and does not encode feasibility/minimization semantics.",
+  "weak_spec_proxy_description": "Proxy models only the weak formal condition by checking output integer non-negativity.",
+  "bad_candidate_behavior": "Always return 0.",
+  "intended_oracle_description": "Oracle brute-forces pair/single assignments for small examples and checks exact minimal required box size.",
+  "demo_type": "fully_executable",
+  "reviewer_notes": "This is an adapted minimal demonstration, not a claim that the external benchmark is a bug or vulnerability."
+}

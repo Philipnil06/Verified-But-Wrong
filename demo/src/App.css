@@ -1,0 +1,184 @@
+.page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 28px 16px 52px;
+}
+
+.hero {
+  margin-bottom: 20px;
+}
+
+.artifact-label {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+h1 {
+  margin: 6px 0 8px;
+  font-size: clamp(1.85rem, 4vw, 2.6rem);
+  line-height: 1.15;
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--muted);
+  max-width: 70ch;
+}
+
+.panel {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 14px;
+  background: var(--panel);
+}
+
+h2 {
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+}
+
+h3 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+}
+
+p {
+  margin: 0;
+}
+
+.panel-copy {
+  margin-bottom: 10px;
+  color: var(--muted);
+}
+
+.tab-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.tab {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 7px 12px;
+  background: #fff;
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tab.active {
+  border-color: var(--blue);
+  background: #ecf4ff;
+}
+
+.steps {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 14px;
+}
+
+.steps li {
+  padding-left: 2px;
+}
+
+pre {
+  margin: 8px 0 0;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #fff;
+  overflow-x: auto;
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.93rem;
+}
+
+.target-block {
+  border-color: #f1c48a;
+  background: #fff8ef;
+}
+
+.action {
+  margin-top: 4px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.action:hover {
+  border-color: var(--blue);
+}
+
+.status {
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+.verified {
+  color: var(--green);
+}
+
+.repaired {
+  color: var(--blue);
+}
+
+.note {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.results {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  color: var(--red);
+  font-weight: 600;
+}
+
+.conclusion {
+  margin-top: 8px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 8px;
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  padding: 10px;
+  font-weight: 600;
+}
+
+.links {
+  margin: 0;
+  padding-left: 18px;
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 18px 12px 34px;
+  }
+
+  .panel {
+    padding: 12px;
+  }
+
+  .tab {
+    flex: 1;
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "status": "bounded_attempt_completed",
+  "timestamp": "2026-05-21T08:48:52.310540+00:00",
+  "attempted_cases": [
+    {
+      "id": "DA0157",
+      "result": "not_promoted",
+      "reason": "direct Dafny verification timed out in bounded run",
+      "evidence": "external_vericoding_cases/candidate_DA0157/dafny_direct/verify_attempt_bounded_stdout.txt"
+    },
+    {
+      "id": "DA0293",
+      "result": "promoted_to_tier1_direct_dafny",
+      "reason": "original target verified with 0 errors; intended examples fail; repaired-target check blocks candidate",
+      "evidence": "external_vericoding_cases/candidate_DA0293/tier1_promotion_report.md"
+    }
+  ],
+  "paper_text_delta": [
+    "Update direct-Dafny case count from 2 to 3.",
+    "Add DA0293 as a direct-Dafny case with range-only postcondition admitting result := 0 while intended examples fail.",
+    "Keep prevalence language unchanged; state this is an additional existence demonstration only."
+  ]
+}

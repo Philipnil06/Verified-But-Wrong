@@ -1,0 +1,56 @@
+[
+  {
+    "suite": "controlled development tasks",
+    "count": 8,
+    "source_type": "author-created executable tasks",
+    "purpose": "development/calibration",
+    "used_for_tuning": true,
+    "heldout": false,
+    "external": false
+  },
+  {
+    "suite": "heldout executable tasks",
+    "count": 4,
+    "source_type": "author-created executable tasks",
+    "purpose": "heldout evaluation",
+    "used_for_tuning": false,
+    "heldout": true,
+    "external": false
+  },
+  {
+    "suite": "naturalistic product-ticket-style fixtures",
+    "count": 12,
+    "source_type": "author-created product-ticket-style fixtures",
+    "purpose": "naturalistic validation",
+    "used_for_tuning": false,
+    "heldout": false,
+    "external": false
+  },
+  {
+    "suite": "external/public adapted issue suite",
+    "count": 4,
+    "source_type": "externally sourced public GitHub issues adapted into minimal case studies",
+    "purpose": "preliminary external validity check",
+    "used_for_tuning": false,
+    "heldout": true,
+    "external": true
+  },
+  {
+    "suite": "saved live LLM specs",
+    "count": 0,
+    "source_type": "saved model outputs",
+    "purpose": "pilot",
+    "used_for_tuning": false,
+    "heldout": false,
+    "external": false
+  },
+  {
+    "suite": "CI/CD demo spec",
+    "count": 2,
+    "source_type": "minimal deployment fixture",
+    "purpose": "CI demonstration",
+    "used_for_tuning": false,
+    "heldout": false,
+    "external": false
+  }
+]

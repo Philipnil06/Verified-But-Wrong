@@ -1,0 +1,71 @@
+{
+  "timestamp": "2026-05-12T17:28:38.199721+00:00",
+  "task_id": "discount_nonnegative_price",
+  "task_title": "Discount with non-negative final price",
+  "condition": "oracle_full",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the full intended behavior.\nThis is an upper-bound condition and is not a deployable retrieval setting.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the full intended behavior. This is an upper-bound condition.\n\nTask title: Discount with non-negative final price\nFunction entrypoint: apply_discount\n\nFull intended behavior:\nApply a discount only when price is non negative and discount percent is between 0 and 100. The final price must never be negative.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "e202f605c6792c55b7077e3962f5b7bcddf5f5677a8988e5bf88eb1bac85f229",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Discount with non-negative final price\",\n  \"behavior_requirements\": [\n    \"If price is negative, do not apply discount; final price equals the negative input price (or treat as invalid) but ensure final result is not negative by clamping to zero if necessary.\",\n    \"Discount percent must be within [0, 100]. If outside this range, do not apply discount; final price equals the input price (or behavior defined as not applying discount).\",\n    \"If both price is non-negative and discount percent is within [0, 100], apply the discount to compute final price.\",\n    \"Final price must never be negative; if calculation would yield a negative value, clamp to zero.\",\n    \"Return final_price derived from input price and discount percent without mutating other inputs.\"\n  ],\n  \"edge_cases\": [\n    \"price = 0 with any discount in [0, 100] -> final_price = 0.\",\n    \"discount_percent = 0 -> final_price = price (assuming price >= 0).\",\n    \"discount_percent = 100 -> final_price = 0 (for non-negative price).\",\n    \"price < 0 -> discount not applied; final_price should reflect non-discounted handling (and not be negative).\",\n    \"discount_percent < 0 or > 100 -> no discount applied; final_price = price.\",\n    \"calculation results in tiny floating precision negative due to rounding -> clamp to zero.\"\n  ],\n  \"acceptance_criteria\": [\n    \"When price >= 0 and 0 <= discount_percent <= 100, final_price = max(0, price * (1 - discount_percent/100)).\",\n    \"When price < 0 or discount_percent outside [0, 100], final_price = price (no discount applied) or final_price equals input price clamped to non-negative if required by spec.\",\n    \"Final price is never negative across all inputs.\",\n    \"All cases are deterministic and do not modify inputs beyond computing final_price.\"\n  ],\n  \"non_goals\": [\n    \"Handling currency formatting, localization, or I/O concerns.\",\n    \"Persisting state or side effects beyond returning final_price.\",\n    \"Behavior outside the specified inputs (e.g., nulls, NaN) unless defined by tests.\"\n  ],\n  \"testable_assertions\": [\n    \"Given price = 100, discount_percent = 20 -> final_price = 80.\",\n    \"Given price = 50, discount_percent = 0 -> final_price = 50.\",\n    \"Given price = 50, discount_percent = 100 -> final_price = 0.\",\n    \"Given price = -10, discount_percent = 50 -> final_price reflects non-discounted handling and is not negative.\",\n    \"Given price = 10, discount_percent = -5 -> final_price = 10.\",\n    \"Given price = 10, discount_percent = 150 -> final_price = 10.\",\n    \"Given price = 0, discount_percent = 50 -> final_price = 0.\"\n  ]\n}",
+  "response_hash": "072efbf64cffc2c88e2e11edcf9395d274419e58943379362bd1950f17b82697",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_07e0eec8066539b7006a036345436081a39f62a3d0289ca292",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 250,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 651,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 901
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Discount with non-negative final price",
+    "behavior_requirements": [
+      "If price is negative, do not apply discount; final price equals the negative input price (or treat as invalid) but ensure final result is not negative by clamping to zero if necessary.",
+      "Discount percent must be within [0, 100]. If outside this range, do not apply discount; final price equals the input price (or behavior defined as not applying discount).",
+      "If both price is non-negative and discount percent is within [0, 100], apply the discount to compute final price.",
+      "Final price must never be negative; if calculation would yield a negative value, clamp to zero.",
+      "Return final_price derived from input price and discount percent without mutating other inputs."
+    ],
+    "edge_cases": [
+      "price = 0 with any discount in [0, 100] -> final_price = 0.",
+      "discount_percent = 0 -> final_price = price (assuming price >= 0).",
+      "discount_percent = 100 -> final_price = 0 (for non-negative price).",
+      "price < 0 -> discount not applied; final_price should reflect non-discounted handling (and not be negative).",
+      "discount_percent < 0 or > 100 -> no discount applied; final_price = price.",
+      "calculation results in tiny floating precision negative due to rounding -> clamp to zero."
+    ],
+    "acceptance_criteria": [
+      "When price >= 0 and 0 <= discount_percent <= 100, final_price = max(0, price * (1 - discount_percent/100)).",
+      "When price < 0 or discount_percent outside [0, 100], final_price = price (no discount applied) or final_price equals input price clamped to non-negative if required by spec.",
+      "Final price is never negative across all inputs.",
+      "All cases are deterministic and do not modify inputs beyond computing final_price."
+    ],
+    "non_goals": [
+      "Handling currency formatting, localization, or I/O concerns.",
+      "Persisting state or side effects beyond returning final_price.",
+      "Behavior outside the specified inputs (e.g., nulls, NaN) unless defined by tests."
+    ],
+    "testable_assertions": [
+      "Given price = 100, discount_percent = 20 -> final_price = 80.",
+      "Given price = 50, discount_percent = 0 -> final_price = 50.",
+      "Given price = 50, discount_percent = 100 -> final_price = 0.",
+      "Given price = -10, discount_percent = 50 -> final_price reflects non-discounted handling and is not negative.",
+      "Given price = 10, discount_percent = -5 -> final_price = 10.",
+      "Given price = 10, discount_percent = 150 -> final_price = 10.",
+      "Given price = 0, discount_percent = 50 -> final_price = 0."
+    ]
+  },
+  "public_spec": "Title: Discount with non-negative final price\n\nBehavior requirements:\n- If price is negative, do not apply discount; final price equals the negative input price (or treat as invalid) but ensure final result is not negative by clamping to zero if necessary.\n- Discount percent must be within [0, 100]. If outside this range, do not apply discount; final price equals the input price (or behavior defined as not applying discount).\n- If both price is non-negative and discount percent is within [0, 100], apply the discount to compute final price.\n- Final price must never be negative; if calculation would yield a negative value, clamp to zero.\n- Return final_price derived from input price and discount percent without mutating other inputs.\n\nEdge cases:\n- price = 0 with any discount in [0, 100] -> final_price = 0.\n- discount_percent = 0 -> final_price = price (assuming price >= 0).\n- discount_percent = 100 -> final_price = 0 (for non-negative price).\n- price < 0 -> discount not applied; final_price should reflect non-discounted handling (and not be negative).\n- discount_percent < 0 or > 100 -> no discount applied; final_price = price.\n- calculation results in tiny floating precision negative due to rounding -> clamp to zero.\n\nAcceptance criteria:\n- When price >= 0 and 0 <= discount_percent <= 100, final_price = max(0, price * (1 - discount_percent/100)).\n- When price < 0 or discount_percent outside [0, 100], final_price = price (no discount applied) or final_price equals input price clamped to non-negative if required by spec.\n- Final price is never negative across all inputs.\n- All cases are deterministic and do not modify inputs beyond computing final_price.\n\nNon-goals:\n- Handling currency formatting, localization, or I/O concerns.\n- Persisting state or side effects beyond returning final_price.\n- Behavior outside the specified inputs (e.g., nulls, NaN) unless defined by tests.\n\nTestable assertions:\n- Given price = 100, discount_percent = 20 -> final_price = 80.\n- Given price = 50, discount_percent = 0 -> final_price = 50.\n- Given price = 50, discount_percent = 100 -> final_price = 0.\n- Given price = -10, discount_percent = 50 -> final_price reflects non-discounted handling and is not negative.\n- Given price = 10, discount_percent = -5 -> final_price = 10.\n- Given price = 10, discount_percent = 150 -> final_price = 10.\n- Given price = 0, discount_percent = 50 -> final_price = 0.",
+  "generation_empty": false,
+  "generation_error": null
+}

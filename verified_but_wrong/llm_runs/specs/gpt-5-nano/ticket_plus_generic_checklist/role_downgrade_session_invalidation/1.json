@@ -1,0 +1,73 @@
+{
+  "timestamp": "2026-05-12T17:31:17.879217+00:00",
+  "task_id": "role_downgrade_session_invalidation",
+  "task_title": "Role downgrade session invalidation",
+  "condition": "ticket_plus_generic_checklist",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the product ticket and the generic checklist.\nThe checklist is generic and may not mention task-specific organization policies.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the product ticket and the generic checklist. The checklist is generic and may not mention task-specific organization policies.\n\nTask title: Role downgrade session invalidation\nFunction entrypoint: update_role\n\nProduct ticket:\n# Ticket: update user role\n\nAdmins can update a user's role to admin, member, or guest. The profile should reflect the new role immediately.\n\nAcceptance criteria:\n- Valid role update succeeds.\n- Invalid roles fail.\n\nGeneric checklist:\n- authorization and access control\n- idempotency and duplicate handling\n- boundary conditions and off-by-one cases\n- state consistency and required state updates\n- audit logging or record retention where relevant\n- tenant or data isolation where relevant\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "7b4a7ae0e6d1b00e7c139de935905e50d780038a760d2fd0f68ac8e5b7620650",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Role downgrade session invalidation\",\n  \"behavior_requirements\": [\n    \"update_role(entrypoint) must accept a user identifier and a target_role value from the set {admin, member, guest}.\",\n    \"Valid role updates must apply immediately to the user's profile in the current session and persisted state.\",\n    \"Only authorized admins can perform role updates; unauthorized attempts must be rejected with a proper error.\",\n    \"Invalid or unsupported target_role values must be rejected with a clear error message.\",\n    \"Session state related to the updated user must be refreshed or invalidated as necessary to reflect the new role without requiring manual re-login.\",\n    \"Return a success response indicating the role change and the new effective role.\"\n  ],\n  \"edge_cases\": [\n    \"Updating a user to the same role as already assigned should be treated as a no-op but return success (idempotent behavior).\",\n    \"Role update for non-existent user should fail with a not-found error.\",\n    \"Role update attempted by a non-admin user should fail with an authorization error.\",\n    \"Role update with missing or malformed target_role should fail with a validation error.\",\n    \"Concurrent role updates for the same user should be serialized or properly handled to prevent race conditions.\",\n    \"If session invalidation fails (e.g., external session store outage), ensure the system logs the failure and returns a result indicating partial success or requires retry.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Valid role update succeeds: admin can set target user to admin, member, or guest, and the change is reflected immediately in user profile and session.\",\n    \"Invalid roles fail: any value outside {admin, member, guest} results in an error and no state change.\",\n    \"Audit or record of the role change is created with actor, target user, previous role, new role, and timestamp.\",\n    \"Tenant/data isolation respected: role changes affect only the targeted user's profile within the correct tenant scope.\",\n    \"Idempotency: repeating the same valid role update yields no additional side effects beyond the initial change.\",\n    \"Boundary and input validation: missing parameters, invalid types, or malformed payload are rejected with clear errors.\"\n  ],\n  \"non_goals\": [\n    \"Changing user permissions beyond role (e.g., granular permissions) in this flow.\",\n    \"Enforcing or changing additional session attributes other than role in the same operation.\",\n    \"Cross-tenant propagation of role changes outside the intended tenant boundary.\"\n  ],\n  \"testable_assertions\": [\n    \"Given an admin user updates a target user to each valid role, the target_profile.role equals the updated role immediately after call.\",\n    \"Given an invalid target_role, the operation fails with a validation error and no profile change occurs.\",\n    \"Given a non-admin user attempts update, operation fails with authorization error.\",\n    \"Consecutive identical role updates result in success with no additional side effects (idempotent).\",\n    \"An audit log entry is created detailing actor, target, previous_role, new_role, timestamp.\",\n    \"Session reflects new role without requiring re-authentication, or explicit session refresh is performed and observable by subsequent requests.\"\n  ]\n}",
+  "response_hash": "b1034c8c273e920fd1f2cb1b04fe8428d6b0298a61724e950d8467abe2a89197",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_02ef78a3ea5bd8d1006a0363e4dde8819e88d0f20c8626ccea",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 325,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 666,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 991
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Role downgrade session invalidation",
+    "behavior_requirements": [
+      "update_role(entrypoint) must accept a user identifier and a target_role value from the set {admin, member, guest}.",
+      "Valid role updates must apply immediately to the user's profile in the current session and persisted state.",
+      "Only authorized admins can perform role updates; unauthorized attempts must be rejected with a proper error.",
+      "Invalid or unsupported target_role values must be rejected with a clear error message.",
+      "Session state related to the updated user must be refreshed or invalidated as necessary to reflect the new role without requiring manual re-login.",
+      "Return a success response indicating the role change and the new effective role."
+    ],
+    "edge_cases": [
+      "Updating a user to the same role as already assigned should be treated as a no-op but return success (idempotent behavior).",
+      "Role update for non-existent user should fail with a not-found error.",
+      "Role update attempted by a non-admin user should fail with an authorization error.",
+      "Role update with missing or malformed target_role should fail with a validation error.",
+      "Concurrent role updates for the same user should be serialized or properly handled to prevent race conditions.",
+      "If session invalidation fails (e.g., external session store outage), ensure the system logs the failure and returns a result indicating partial success or requires retry."
+    ],
+    "acceptance_criteria": [
+      "Valid role update succeeds: admin can set target user to admin, member, or guest, and the change is reflected immediately in user profile and session.",
+      "Invalid roles fail: any value outside {admin, member, guest} results in an error and no state change.",
+      "Audit or record of the role change is created with actor, target user, previous role, new role, and timestamp.",
+      "Tenant/data isolation respected: role changes affect only the targeted user's profile within the correct tenant scope.",
+      "Idempotency: repeating the same valid role update yields no additional side effects beyond the initial change.",
+      "Boundary and input validation: missing parameters, invalid types, or malformed payload are rejected with clear errors."
+    ],
+    "non_goals": [
+      "Changing user permissions beyond role (e.g., granular permissions) in this flow.",
+      "Enforcing or changing additional session attributes other than role in the same operation.",
+      "Cross-tenant propagation of role changes outside the intended tenant boundary."
+    ],
+    "testable_assertions": [
+      "Given an admin user updates a target user to each valid role, the target_profile.role equals the updated role immediately after call.",
+      "Given an invalid target_role, the operation fails with a validation error and no profile change occurs.",
+      "Given a non-admin user attempts update, operation fails with authorization error.",
+      "Consecutive identical role updates result in success with no additional side effects (idempotent).",
+      "An audit log entry is created detailing actor, target, previous_role, new_role, timestamp.",
+      "Session reflects new role without requiring re-authentication, or explicit session refresh is performed and observable by subsequent requests."
+    ]
+  },
+  "public_spec": "Title: Role downgrade session invalidation\n\nBehavior requirements:\n- update_role(entrypoint) must accept a user identifier and a target_role value from the set {admin, member, guest}.\n- Valid role updates must apply immediately to the user's profile in the current session and persisted state.\n- Only authorized admins can perform role updates; unauthorized attempts must be rejected with a proper error.\n- Invalid or unsupported target_role values must be rejected with a clear error message.\n- Session state related to the updated user must be refreshed or invalidated as necessary to reflect the new role without requiring manual re-login.\n- Return a success response indicating the role change and the new effective role.\n\nEdge cases:\n- Updating a user to the same role as already assigned should be treated as a no-op but return success (idempotent behavior).\n- Role update for non-existent user should fail with a not-found error.\n- Role update attempted by a non-admin user should fail with an authorization error.\n- Role update with missing or malformed target_role should fail with a validation error.\n- Concurrent role updates for the same user should be serialized or properly handled to prevent race conditions.\n- If session invalidation fails (e.g., external session store outage), ensure the system logs the failure and returns a result indicating partial success or requires retry.\n\nAcceptance criteria:\n- Valid role update succeeds: admin can set target user to admin, member, or guest, and the change is reflected immediately in user profile and session.\n- Invalid roles fail: any value outside {admin, member, guest} results in an error and no state change.\n- Audit or record of the role change is created with actor, target user, previous role, new role, and timestamp.\n- Tenant/data isolation respected: role changes affect only the targeted user's profile within the correct tenant scope.\n- Idempotency: repeating the same valid role update yields no additional side effects beyond the initial change.\n- Boundary and input validation: missing parameters, invalid types, or malformed payload are rejected with clear errors.\n\nNon-goals:\n- Changing user permissions beyond role (e.g., granular permissions) in this flow.\n- Enforcing or changing additional session attributes other than role in the same operation.\n- Cross-tenant propagation of role changes outside the intended tenant boundary.\n\nTestable assertions:\n- Given an admin user updates a target user to each valid role, the target_profile.role equals the updated role immediately after call.\n- Given an invalid target_role, the operation fails with a validation error and no profile change occurs.\n- Given a non-admin user attempts update, operation fails with authorization error.\n- Consecutive identical role updates result in success with no additional side effects (idempotent).\n- An audit log entry is created detailing actor, target, previous_role, new_role, timestamp.\n- Session reflects new role without requiring re-authentication, or explicit session refresh is performed and observable by subsequent requests.",
+  "generation_empty": false,
+  "generation_error": null
+}

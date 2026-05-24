@@ -1,0 +1,28 @@
+{
+  "id": "external_case.prisma_tenant_isolation_export",
+  "source_type": "externally sourced adapted issue case",
+  "policy_cards": [
+    {
+      "id": "tenant.export.isolation",
+      "title": "Tenant exports must not cross tenant boundary",
+      "requirement": "Export must not include records from other tenants.",
+      "category": "tenant_isolation_omission",
+      "severity": "critical",
+      "keywords": ["tenant", "tenant_id", "other tenants", "tenant boundary", "cross tenant", "requesting tenant"],
+      "suggested_spec_patch": "Exports must include only records whose tenant_id matches the requesting actor tenant_id, regardless of other filters.",
+      "audit_questions": ["Does the spec require tenant_id scoping for every exported record?"],
+      "requirement_test": "Export must not include records from other tenants"
+    },
+    {
+      "id": "tenant.export.filter_override",
+      "title": "Filters must not override tenant isolation",
+      "requirement": "User-provided filters must not override tenant scope; actor.tenant_id is authoritative.",
+      "category": "tenant_isolation_omission",
+      "severity": "critical",
+      "keywords": ["filters must not override", "actor tenant", "requesting tenant", "tenant scope"],
+      "suggested_spec_patch": "User-provided filters must not override tenant scope; actor.tenant_id is authoritative.",
+      "audit_questions": ["Does the spec say user filters cannot override actor tenant scope?"],
+      "requirement_test": "Filters must not override tenant isolation"
+    }
+  ]
+}

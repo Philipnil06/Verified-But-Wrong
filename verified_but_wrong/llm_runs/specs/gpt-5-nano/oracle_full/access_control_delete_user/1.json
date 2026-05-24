@@ -1,0 +1,74 @@
+{
+  "timestamp": "2026-05-12T17:27:42.335654+00:00",
+  "task_id": "access_control_delete_user",
+  "task_title": "Access control for deleting users",
+  "condition": "oracle_full",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the full intended behavior.\nThis is an upper-bound condition and is not a deployable retrieval setting.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the full intended behavior. This is an upper-bound condition.\n\nTask title: Access control for deleting users\nFunction entrypoint: delete_user\n\nFull intended behavior:\nThe function should delete a target user only if the actor is an admin, the target exists, and the actor is not deleting themselves. Members and guests must be rejected.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "57fa67ba96f05d66c3b71c881486a80158612d04ac873a117dc6b9205087b180",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Access control for deleting users\",\n  \"behavior_requirements\": [\n    \"delete_user(actor, target) deletes target user only if all conditions are met: actor is admin, target exists, and actor is not deleting themselves.\",\n    \"If actor is not admin, reject deletion with appropriate error.\",\n    \"If target does not exist, reject deletion with appropriate error.\",\n    \"If actor_id equals target_id (self-deletion attempt), reject with appropriate error.\",\n    \"Roles 'member' and 'guest' must be rejected regardless of target existence or identity.\",\n    \"On successful deletion, return a success indication and updated user store state (target removed).\",\n    \"On failure, return a structured error detailing the reason (permission, not found, self-deletion, invalid role).\"\n  ],\n  \"edge_cases\": [\n    \"Actor or target identifiers are null or undefined.\",\n    \"Target exists but already has a deleted/archived status; interpret as non-existent or handle per policy.\",\n    \"Actor is admin but target is the same as actor (self-deletion attempt) with different case sensitivity or whitespace; treat as self-deletion.\",\n    \"Target exists but deletion triggers cascading effects (e.g., associated resources); ensure these are either prevented or documented in behavior.\",\n    \"Concurrent deletion attempts for the same target by different admins results in consistent error or race handling.\",\n    \"Invalid actor roles or missing role data for actor (not clearly admin) treated as non-admin.\"\n  ],\n  \"acceptance_criteria\": [\n    \"delete_user succeeds only when actor.role == 'admin' AND target exists AND actor.id != target.id.\",\n    \"delete_user fails with 'permission' error if actor.role != 'admin' or actor lacks admin privileges.\",\n    \"delete_user fails with 'not_found' error if target does not exist.\",\n    \"delete_user fails with 'forbidden_self' error if actor attempts to delete themselves.\",\n    \"Members and guests cannot delete users under any circumstances.\",\n    \"On success, the target user is removed from the user store and no residual references remain.\",\n    \"All error responses are deterministic and do not reveal sensitive information beyond the error type.\"\n  ],\n  \"non_goals\": [\n    \"Implementing partial deletions, soft deletes, or archiving as an alternative to hard delete.\",\n    \"Handling deletion of non-user entities or related resources beyond user records.\",\n    \"Granting delete permissions to non-admin roles or performing role escalation within this function.\"\n  ],\n  \"testable_assertions\": [\n    \"Given actor with role 'admin' and existing target user not equal to actor, delete_user returns success and target is removed.\",\n    \"Given actor with role 'member' or 'guest', delete_user returns a permission error and target is unchanged.\",\n    \"Given actor with role 'admin' and non-existent target, delete_user returns a not_found error and user store remains unchanged.\",\n    \"Given actor attempting to delete themselves (actor.id == target.id) while admin, delete_user returns forbidden_self error and target remains.\",\n    \"Given concurrent deletion attempt by two admins for the same target, the system returns a consistent result without corrupting user store.\"\n  ]\n}",
+  "response_hash": "22d6b639ed2635e8c7b171f1d77f12c8d28376b0354c27066a861f2e27217b09",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_042724a1e0ae8c3d006a03630d8104819fb19db29a5963fcaf",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 255,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 672,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 927
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Access control for deleting users",
+    "behavior_requirements": [
+      "delete_user(actor, target) deletes target user only if all conditions are met: actor is admin, target exists, and actor is not deleting themselves.",
+      "If actor is not admin, reject deletion with appropriate error.",
+      "If target does not exist, reject deletion with appropriate error.",
+      "If actor_id equals target_id (self-deletion attempt), reject with appropriate error.",
+      "Roles 'member' and 'guest' must be rejected regardless of target existence or identity.",
+      "On successful deletion, return a success indication and updated user store state (target removed).",
+      "On failure, return a structured error detailing the reason (permission, not found, self-deletion, invalid role)."
+    ],
+    "edge_cases": [
+      "Actor or target identifiers are null or undefined.",
+      "Target exists but already has a deleted/archived status; interpret as non-existent or handle per policy.",
+      "Actor is admin but target is the same as actor (self-deletion attempt) with different case sensitivity or whitespace; treat as self-deletion.",
+      "Target exists but deletion triggers cascading effects (e.g., associated resources); ensure these are either prevented or documented in behavior.",
+      "Concurrent deletion attempts for the same target by different admins results in consistent error or race handling.",
+      "Invalid actor roles or missing role data for actor (not clearly admin) treated as non-admin."
+    ],
+    "acceptance_criteria": [
+      "delete_user succeeds only when actor.role == 'admin' AND target exists AND actor.id != target.id.",
+      "delete_user fails with 'permission' error if actor.role != 'admin' or actor lacks admin privileges.",
+      "delete_user fails with 'not_found' error if target does not exist.",
+      "delete_user fails with 'forbidden_self' error if actor attempts to delete themselves.",
+      "Members and guests cannot delete users under any circumstances.",
+      "On success, the target user is removed from the user store and no residual references remain.",
+      "All error responses are deterministic and do not reveal sensitive information beyond the error type."
+    ],
+    "non_goals": [
+      "Implementing partial deletions, soft deletes, or archiving as an alternative to hard delete.",
+      "Handling deletion of non-user entities or related resources beyond user records.",
+      "Granting delete permissions to non-admin roles or performing role escalation within this function."
+    ],
+    "testable_assertions": [
+      "Given actor with role 'admin' and existing target user not equal to actor, delete_user returns success and target is removed.",
+      "Given actor with role 'member' or 'guest', delete_user returns a permission error and target is unchanged.",
+      "Given actor with role 'admin' and non-existent target, delete_user returns a not_found error and user store remains unchanged.",
+      "Given actor attempting to delete themselves (actor.id == target.id) while admin, delete_user returns forbidden_self error and target remains.",
+      "Given concurrent deletion attempt by two admins for the same target, the system returns a consistent result without corrupting user store."
+    ]
+  },
+  "public_spec": "Title: Access control for deleting users\n\nBehavior requirements:\n- delete_user(actor, target) deletes target user only if all conditions are met: actor is admin, target exists, and actor is not deleting themselves.\n- If actor is not admin, reject deletion with appropriate error.\n- If target does not exist, reject deletion with appropriate error.\n- If actor_id equals target_id (self-deletion attempt), reject with appropriate error.\n- Roles 'member' and 'guest' must be rejected regardless of target existence or identity.\n- On successful deletion, return a success indication and updated user store state (target removed).\n- On failure, return a structured error detailing the reason (permission, not found, self-deletion, invalid role).\n\nEdge cases:\n- Actor or target identifiers are null or undefined.\n- Target exists but already has a deleted/archived status; interpret as non-existent or handle per policy.\n- Actor is admin but target is the same as actor (self-deletion attempt) with different case sensitivity or whitespace; treat as self-deletion.\n- Target exists but deletion triggers cascading effects (e.g., associated resources); ensure these are either prevented or documented in behavior.\n- Concurrent deletion attempts for the same target by different admins results in consistent error or race handling.\n- Invalid actor roles or missing role data for actor (not clearly admin) treated as non-admin.\n\nAcceptance criteria:\n- delete_user succeeds only when actor.role == 'admin' AND target exists AND actor.id != target.id.\n- delete_user fails with 'permission' error if actor.role != 'admin' or actor lacks admin privileges.\n- delete_user fails with 'not_found' error if target does not exist.\n- delete_user fails with 'forbidden_self' error if actor attempts to delete themselves.\n- Members and guests cannot delete users under any circumstances.\n- On success, the target user is removed from the user store and no residual references remain.\n- All error responses are deterministic and do not reveal sensitive information beyond the error type.\n\nNon-goals:\n- Implementing partial deletions, soft deletes, or archiving as an alternative to hard delete.\n- Handling deletion of non-user entities or related resources beyond user records.\n- Granting delete permissions to non-admin roles or performing role escalation within this function.\n\nTestable assertions:\n- Given actor with role 'admin' and existing target user not equal to actor, delete_user returns success and target is removed.\n- Given actor with role 'member' or 'guest', delete_user returns a permission error and target is unchanged.\n- Given actor with role 'admin' and non-existent target, delete_user returns a not_found error and user store remains unchanged.\n- Given actor attempting to delete themselves (actor.id == target.id) while admin, delete_user returns forbidden_self error and target remains.\n- Given concurrent deletion attempt by two admins for the same target, the system returns a consistent result without corrupting user store.",
+  "generation_empty": false,
+  "generation_error": null
+}

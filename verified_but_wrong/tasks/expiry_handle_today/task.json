@@ -1,0 +1,45 @@
+{
+  "id": "expiry_handle_today",
+  "title": "Expiry handling with lead time",
+  "entrypoint": "should_handle_today",
+  "intent": "Implement should_handle_today. An item should be marked handle_today if expiry_date minus category_lead_time_days is today or earlier. Already expired items must also be handled. Invalid dates must fail.",
+  "ai_generated_spec": "Mark items as handle_today when they expire today.",
+  "critic_improved_spec": "Mark items as handle_today when expiry_date minus category_lead_time_days is today or earlier. Already expired items must be handled. Invalid dates must return an error.",
+  "missing_requirements": [
+    "Category lead time must be applied",
+    "Items that should have been handled earlier are still handle_today",
+    "Already expired items must be handled",
+    "Invalid date input must fail",
+    "Boundary condition uses today or earlier, not only exact equality"
+  ],
+  "spec_hole_categories": [
+    "temporal_omission",
+    "boundary_omission",
+    "domain_rule_omission",
+    "error_behavior_omission"
+  ],
+  "expected_naive_failure": "The naive public spec can select an implementation that only checks whether expiry_date equals today.",
+  "expected_defense": "The omission-aware critic spec should reject implementations that ignore lead time, expired items, and invalid dates.",
+  "policy_pack_ids": [
+    "generic_critical_requirements",
+    "inventory_policy"
+  ],
+  "relevant_policy_card_ids": [
+    "generic.invalid_inputs_fail",
+    "inventory.expiry.lead_time",
+    "inventory.expiry.expired_items"
+  ],
+  "missing_requirement_severity": {
+    "Category lead time must be applied": "high",
+    "Items that should have been handled earlier are still handle_today": "medium",
+    "Already expired items must be handled": "high",
+    "Invalid date input must fail": "medium",
+    "Boundary condition uses today or earlier, not only exact equality": "medium"
+  },
+  "public_spec_text": {
+    "naive": "Mark items as handle_today when they expire today.",
+    "critic": "Mark items as handle_today when expiry_date minus category_lead_time_days is today or earlier. Already expired items must be handled. Invalid dates must return an error.",
+    "oracle": "Mark items as handle_today when expiry_date minus category_lead_time_days is today or earlier. Already expired items must be handled. Invalid dates must return an error."
+  },
+  "evaluation_split": "development"
+}

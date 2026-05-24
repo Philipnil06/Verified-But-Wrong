@@ -1,0 +1,51 @@
+{
+  "id": "payment_webhook_idempotency",
+  "title": "Payment webhook idempotency",
+  "entrypoint": "process_payment_event",
+  "visible_intent": "Implement a function that processes payment webhook events. Successful payment events should increase the merchant balance by the event amount. Failed payment events should not increase the balance.",
+  "intent": "Implement a function that processes payment webhook events. Successful payment events should increase the merchant balance by the event amount. Failed payment events should not increase the balance.",
+  "ai_generated_spec": "Successful payment events should increase the merchant balance by the event amount. Failed payment events should not increase the balance.",
+  "critic_improved_spec": "Successful payment events should increase the merchant balance exactly once per event_id. Failed payments must not increase balance. Missing event_id, non-positive amounts, unsupported currencies, and duplicate events must fail or be ignored without changing balance.",
+  "missing_requirements": [
+    "The same event_id must not be credited twice",
+    "Missing event_id must fail",
+    "Amount must be positive",
+    "Unsupported currency must fail",
+    "Failed payments must not credit balance",
+    "Processed successful event IDs must be recorded"
+  ],
+  "spec_hole_categories": [
+    "idempotency_omission",
+    "state_invariant_omission",
+    "conservation_omission",
+    "error_behavior_omission",
+    "invalid_input_omission",
+    "domain_rule_omission"
+  ],
+  "expected_naive_failure": "The naive public spec can select an implementation that credits the same payment event more than once because it only checks happy-path balance updates.",
+  "expected_defense": "The omission-aware critic spec should reject implementations that do not record processed event IDs or allow duplicate payment credits.",
+  "policy_pack_ids": [
+    "generic_critical_requirements",
+    "payments_policy"
+  ],
+  "relevant_policy_card_ids": [
+    "generic.invalid_inputs_fail",
+    "payments.webhook.idempotent_event",
+    "payments.webhook.failed_no_credit",
+    "payments.webhook.event_id_required"
+  ],
+  "missing_requirement_severity": {
+    "The same event_id must not be credited twice": "critical",
+    "Missing event_id must fail": "high",
+    "Amount must be positive": "medium",
+    "Unsupported currency must fail": "medium",
+    "Failed payments must not credit balance": "high",
+    "Processed successful event IDs must be recorded": "medium"
+  },
+  "public_spec_text": {
+    "naive": "Successful payment events should increase the merchant balance by the event amount. Failed payment events should not increase the balance.",
+    "critic": "Successful payment events should increase the merchant balance exactly once per event_id. Failed payments must not increase balance. Missing event_id, non-positive amounts, unsupported currencies, and duplicate events must fail or be ignored without changing balance.",
+    "oracle": "Successful payment events should increase the merchant balance exactly once per event_id. Failed payments must not increase balance. Missing event_id, non-positive amounts, unsupported currencies, and duplicate events must fail or be ignored without changing balance."
+  },
+  "evaluation_split": "development"
+}

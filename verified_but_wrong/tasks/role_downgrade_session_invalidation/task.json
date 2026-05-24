@@ -1,0 +1,37 @@
+{
+  "id": "role_downgrade_session_invalidation",
+  "title": "Role downgrade session invalidation",
+  "entrypoint": "update_role",
+  "intent": "Update a user role. When a user loses admin privileges, existing privileged sessions must be invalidated.",
+  "ai_generated_spec": "Set user role to requested value.",
+  "critic_improved_spec": "Set user role to requested value and reject invalid roles or missing users.",
+  "full_oracle_spec": "Set user role to requested value. When a user loses admin privileges, invalidate existing privileged sessions for that user. Reject invalid roles or missing users.",
+  "missing_requirements": [
+    "Admin role downgrade must invalidate privileged sessions",
+    "Invalid roles must fail",
+    "Missing users must fail",
+    "Session state must be updated after downgrade"
+  ],
+  "spec_hole_categories": [
+    "session_invalidation_omission",
+    "authorization_omission",
+    "state_invariant_omission"
+  ],
+  "expected_naive_failure": "The public spec omits a heldout policy invariant that changes implementation selection.",
+  "expected_defense": "The oracle spec includes the heldout policy invariant.",
+  "policy_pack_ids": [
+    "generic_critical_requirements",
+    "access_control_policy"
+  ],
+  "relevant_policy_card_ids": [
+    "generic.invalid_inputs_fail",
+    "access.role_downgrade.invalidate_sessions",
+    "access.role.invalid_roles_fail"
+  ],
+  "evaluation_split": "heldout",
+  "public_spec_text": {
+    "naive": "Set user role to requested value.",
+    "critic": "Set user role to requested value and reject invalid roles or missing users.",
+    "oracle": "Set user role to requested value. When a user loses admin privileges, invalidate existing privileged sessions for that user. Reject invalid roles or missing users."
+  }
+}

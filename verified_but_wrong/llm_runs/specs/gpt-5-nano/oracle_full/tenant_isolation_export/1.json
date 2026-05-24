@@ -1,0 +1,73 @@
+{
+  "timestamp": "2026-05-12T17:31:50.294589+00:00",
+  "task_id": "tenant_isolation_export",
+  "task_title": "Tenant isolation export",
+  "condition": "oracle_full",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the full intended behavior.\nThis is an upper-bound condition and is not a deployable retrieval setting.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the full intended behavior. This is an upper-bound condition.\n\nTask title: Tenant isolation export\nFunction entrypoint: export_records\n\nFull intended behavior:\nExport records matching requested filters only for the requesting tenant. Never include records from other tenants, even if filters match. Reject missing actors or invalid filters.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "746237d630bc8bbea12a49005b8e71e682437468b882ec3b983e5de499750cc5",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Tenant-isolated export of records\",\n  \"behavior_requirements\": [\n    \"Export records that match the requested filters only for the requesting tenant.\",\n    \"Do not include any records belonging to other tenants, even if filters would match those records.\",\n    \"Reject requests when the actor (requesting user/service) is missing (null) or cannot be authenticated/identified.\",\n    \"Reject requests with invalid or malformed filter specifications.\",\n    \"Return a JSON payload containing only records belonging to the tenant, respecting the filters, and no extra data.\"\n  ],\n  \"edge_cases\": [\n    \"Filters that would match no records for the tenant return an empty records set with a successful response.\",\n    \"Filters that could match cross-tenant data are scoped to the tenant and thus yield no cross-tenant results.\",\n    \"Actors with insufficient permissions for export are rejected (authentication succeeds but authorization denies export).\",\n    \"Corrupted or partial export data is not returned; either full valid export is returned or request is rejected.\",\n    \"Large result sets are paginated or chunked according to system limits while maintaining tenant isolation.\",\n    \"Records associated with a tenant but marked as soft-deleted or archived are excluded unless policy explicitly allows export of such records.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Export only includes records whose tenant_id equals the requesting tenant_id.\",\n    \"No records from other tenants appear in the export payload.\",\n    \"Invalid or missing actor results in a 4xx rejection with an explanatory error.\",\n    \"Invalid filters result in a 4xx rejection with a validation error detailing the issue.\",\n    \"Export respects filtering semantics (AND/OR as defined by filter spec) without leaking outside-tenant data.\",\n    \"Export payload is well-formed JSON containing an array of records matching filters for the tenant.\"\n  ],\n  \"non_goals\": [\n    \"Cross-tenant data export or any form of data leakage.\",\n    \"Export of records without explicit tenant scoping, even if filters superficially match.\",\n    \"Handling of non-export-related features (e.g., editing, deleting) within the export workflow.\",\n    \"Providing exports for multiple tenants in a single request.\"\n  ],\n  \"testable_assertions\": [\n    \"Given a tenant T with records, exporting with filters returns only records where tenant_id == T and that match filters.\",\n    \"Export does not include any records with tenant_id != T.\",\n    \"Requests with missing or invalid actor are rejected (HTTP 4xx) and no data is returned.\",\n    \"Requests with invalid filters are rejected (HTTP 4xx) with details about the invalid filters.\",\n    \"When no records match for tenant T, the export returns an empty records array and success status.\",\n    \"Pagination, if applicable, enforces tenant isolation across pages.\"\n  ]\n}",
+  "response_hash": "b524c016349ed3bb38254bd8913f72f02b157fee4a4b6bd96c87c9d39e120a90",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0a22a418dc91d3a9006a036405543081939574aae46b42dcec",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 249,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 595,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 844
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Tenant-isolated export of records",
+    "behavior_requirements": [
+      "Export records that match the requested filters only for the requesting tenant.",
+      "Do not include any records belonging to other tenants, even if filters would match those records.",
+      "Reject requests when the actor (requesting user/service) is missing (null) or cannot be authenticated/identified.",
+      "Reject requests with invalid or malformed filter specifications.",
+      "Return a JSON payload containing only records belonging to the tenant, respecting the filters, and no extra data."
+    ],
+    "edge_cases": [
+      "Filters that would match no records for the tenant return an empty records set with a successful response.",
+      "Filters that could match cross-tenant data are scoped to the tenant and thus yield no cross-tenant results.",
+      "Actors with insufficient permissions for export are rejected (authentication succeeds but authorization denies export).",
+      "Corrupted or partial export data is not returned; either full valid export is returned or request is rejected.",
+      "Large result sets are paginated or chunked according to system limits while maintaining tenant isolation.",
+      "Records associated with a tenant but marked as soft-deleted or archived are excluded unless policy explicitly allows export of such records."
+    ],
+    "acceptance_criteria": [
+      "Export only includes records whose tenant_id equals the requesting tenant_id.",
+      "No records from other tenants appear in the export payload.",
+      "Invalid or missing actor results in a 4xx rejection with an explanatory error.",
+      "Invalid filters result in a 4xx rejection with a validation error detailing the issue.",
+      "Export respects filtering semantics (AND/OR as defined by filter spec) without leaking outside-tenant data.",
+      "Export payload is well-formed JSON containing an array of records matching filters for the tenant."
+    ],
+    "non_goals": [
+      "Cross-tenant data export or any form of data leakage.",
+      "Export of records without explicit tenant scoping, even if filters superficially match.",
+      "Handling of non-export-related features (e.g., editing, deleting) within the export workflow.",
+      "Providing exports for multiple tenants in a single request."
+    ],
+    "testable_assertions": [
+      "Given a tenant T with records, exporting with filters returns only records where tenant_id == T and that match filters.",
+      "Export does not include any records with tenant_id != T.",
+      "Requests with missing or invalid actor are rejected (HTTP 4xx) and no data is returned.",
+      "Requests with invalid filters are rejected (HTTP 4xx) with details about the invalid filters.",
+      "When no records match for tenant T, the export returns an empty records array and success status.",
+      "Pagination, if applicable, enforces tenant isolation across pages."
+    ]
+  },
+  "public_spec": "Title: Tenant-isolated export of records\n\nBehavior requirements:\n- Export records that match the requested filters only for the requesting tenant.\n- Do not include any records belonging to other tenants, even if filters would match those records.\n- Reject requests when the actor (requesting user/service) is missing (null) or cannot be authenticated/identified.\n- Reject requests with invalid or malformed filter specifications.\n- Return a JSON payload containing only records belonging to the tenant, respecting the filters, and no extra data.\n\nEdge cases:\n- Filters that would match no records for the tenant return an empty records set with a successful response.\n- Filters that could match cross-tenant data are scoped to the tenant and thus yield no cross-tenant results.\n- Actors with insufficient permissions for export are rejected (authentication succeeds but authorization denies export).\n- Corrupted or partial export data is not returned; either full valid export is returned or request is rejected.\n- Large result sets are paginated or chunked according to system limits while maintaining tenant isolation.\n- Records associated with a tenant but marked as soft-deleted or archived are excluded unless policy explicitly allows export of such records.\n\nAcceptance criteria:\n- Export only includes records whose tenant_id equals the requesting tenant_id.\n- No records from other tenants appear in the export payload.\n- Invalid or missing actor results in a 4xx rejection with an explanatory error.\n- Invalid filters result in a 4xx rejection with a validation error detailing the issue.\n- Export respects filtering semantics (AND/OR as defined by filter spec) without leaking outside-tenant data.\n- Export payload is well-formed JSON containing an array of records matching filters for the tenant.\n\nNon-goals:\n- Cross-tenant data export or any form of data leakage.\n- Export of records without explicit tenant scoping, even if filters superficially match.\n- Handling of non-export-related features (e.g., editing, deleting) within the export workflow.\n- Providing exports for multiple tenants in a single request.\n\nTestable assertions:\n- Given a tenant T with records, exporting with filters returns only records where tenant_id == T and that match filters.\n- Export does not include any records with tenant_id != T.\n- Requests with missing or invalid actor are rejected (HTTP 4xx) and no data is returned.\n- Requests with invalid filters are rejected (HTTP 4xx) with details about the invalid filters.\n- When no records match for tenant T, the export returns an empty records array and success status.\n- Pagination, if applicable, enforces tenant isolation across pages.",
+  "generation_empty": false,
+  "generation_error": null
+}

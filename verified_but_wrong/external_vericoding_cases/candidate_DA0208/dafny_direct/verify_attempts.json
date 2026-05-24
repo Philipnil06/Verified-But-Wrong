@@ -1,0 +1,16 @@
+[
+  {
+    "command": "dotnet tool run dafny --version",
+    "returncode": 0,
+    "stdout": "4.11.0+fcb2042d6d043a2634f0854338c08feeaaaf4ae2\n",
+    "stderr": "",
+    "not_found": false
+  },
+  {
+    "command": "dotnet tool run dafny verify C:\\Users\\Philip Nilsson\\OneDrive - Mälardalens Tekniska Gymnasium\\Skrivbordet\\Hackathon apartresearch The Secure Program Synthesis\\verified_but_wrong\\external_vericoding_cases\\candidate_DA0208\\dafny_direct\\bad_candidate.dfy",
+    "returncode": 0,
+    "stdout": "\nDafny program verifier finished with 5 verified, 0 errors\n",
+    "stderr": "",
+    "not_found": false
+  }
+]

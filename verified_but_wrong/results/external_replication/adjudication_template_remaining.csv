@@ -1,0 +1,24 @@
+case_id,scanner_gap_category,scanner_reason
+DA0152,trivial_postcondition,formal postcondition appears to contain only weak result/range/shape constraints; spec appears trivial or shape/range-only; spec has few semantic-strength tokens
+DA0515,trivial_postcondition,formal postcondition appears to contain only weak result/range/shape constraints; spec appears trivial or shape/range-only; spec has few semantic-strength tokens
+DA0673,trivial_postcondition,formal postcondition appears to contain only weak result/range/shape constraints; spec appears trivial or shape/range-only; spec has few semantic-strength tokens
+DA0082,trivial_postcondition,formal postcondition appears to contain only weak result/range/shape constraints; spec appears trivial or shape/range-only
+DA0281,trivial_postcondition,formal postcondition appears to contain only weak result/range/shape constraints; spec appears trivial or shape/range-only
+DA0315,trivial_postcondition,formal postcondition appears to contain only weak result/range/shape constraints; spec appears trivial or shape/range-only
+DA0359,trivial_postcondition,formal postcondition appears to contain only weak result/range/shape constraints; spec appears trivial or shape/range-only
+DA0363,trivial_postcondition,formal postcondition appears to contain only weak result/range/shape constraints; spec appears trivial or shape/range-only
+DA0406,trivial_postcondition,formal postcondition appears to contain only weak result/range/shape constraints; spec appears trivial or shape/range-only
+DA0409,trivial_postcondition,formal postcondition appears to contain only weak result/range/shape constraints; spec appears trivial or shape/range-only
+DA0417,trivial_postcondition,formal postcondition appears to contain only weak result/range/shape constraints; spec appears trivial or shape/range-only
+DA0438,trivial_postcondition,formal postcondition appears to contain only weak result/range/shape constraints; spec appears trivial or shape/range-only
+DA0445,trivial_postcondition,formal postcondition appears to contain only weak result/range/shape constraints; spec appears trivial or shape/range-only
+DA0454,trivial_postcondition,formal postcondition appears to contain only weak result/range/shape constraints; spec appears trivial or shape/range-only
+DA0525,trivial_postcondition,formal postcondition appears to contain only weak result/range/shape constraints; spec appears trivial or shape/range-only
+DA0538,trivial_postcondition,formal postcondition appears to contain only weak result/range/shape constraints; spec appears trivial or shape/range-only
+DA0650,trivial_postcondition,formal postcondition appears to contain only weak result/range/shape constraints; spec appears trivial or shape/range-only
+DH0057,trivial_postcondition,formal postcondition appears to contain only weak result/range/shape constraints; spec appears trivial or shape/range-only; spec has few semantic-strength tokens
+DH0136,trivial_postcondition,formal postcondition appears to contain only weak result/range/shape constraints; spec appears trivial or shape/range-only; spec has few semantic-strength tokens
+DA0152,exact_value_missing,NL contains exact value missing cues; spec lacks expected patterns for semantic definition of the exact returned value; spec appears trivial or shape/range-only; spec has few semantic-strength tokens
+DA0515,exact_value_missing,NL contains exact value missing cues; spec lacks expected patterns for semantic definition of the exact returned value; spec appears trivial or shape/range-only; spec has few semantic-strength tokens
+DA0673,output_format_missing,NL contains output format missing cues; spec lacks expected patterns for exact output formatting/order/string constraints; spec appears trivial or shape/range-only; spec has few semantic-strength tokens
+DH0160,trivial_postcondition,formal postcondition appears to contain only weak result/range/shape constraints; spec appears trivial or shape/range-only

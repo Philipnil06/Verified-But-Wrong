@@ -1,0 +1,44 @@
+{
+  "id": "rate_limiter_boundary",
+  "title": "Rate limiter boundary and per-user state",
+  "entrypoint": "allow_request",
+  "intent": "Implement a per user rate limiter. A user may make at most 5 requests in any 60 second window. The 6th request inside the same window must be blocked. Different users must have independent limits.",
+  "ai_generated_spec": "Track requests per user and allow normal requests.",
+  "critic_improved_spec": "Track requests per user in a 60 second rolling window. Allow at most 5 requests per user. The 6th request in the window must be blocked. Different users must be independent.",
+  "missing_requirements": [
+    "The 6th request must be blocked",
+    "The limit is per user, not global",
+    "Old requests outside 60 seconds must expire",
+    "Boundary behavior at exactly 5 requests must be correct"
+  ],
+  "spec_hole_categories": [
+    "boundary_omission",
+    "temporal_omission",
+    "state_invariant_omission"
+  ],
+  "expected_naive_failure": "The naive public spec can select an implementation that always allows requests and only appends state.",
+  "expected_defense": "The omission-aware critic spec should reject off-by-one limits, global state, and stale-window bugs.",
+  "policy_pack_ids": [
+    "generic_critical_requirements",
+    "multi_tenant_policy"
+  ],
+  "relevant_policy_card_ids": [
+    "generic.state.update_success",
+    "generic.invalid_inputs_fail",
+    "rate.limit.window_count",
+    "rate.limit.per_user",
+    "rate.limit.sixth_blocked"
+  ],
+  "missing_requirement_severity": {
+    "The 6th request must be blocked": "medium",
+    "The limit is per user, not global": "medium",
+    "Old requests outside 60 seconds must expire": "medium",
+    "Boundary behavior at exactly 5 requests must be correct": "medium"
+  },
+  "public_spec_text": {
+    "naive": "Track requests per user and allow normal requests.",
+    "critic": "Track requests per user in a 60 second rolling window. Allow at most 5 requests per user. The 6th request in the window must be blocked. Different users must be independent.",
+    "oracle": "Track requests per user in a 60 second rolling window. Allow at most 5 requests per user. The 6th request in the window must be blocked. Different users must be independent."
+  },
+  "evaluation_split": "development"
+}

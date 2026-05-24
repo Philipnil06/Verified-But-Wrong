@@ -1,0 +1,39 @@
+{
+  "id": "tenant_isolation_export",
+  "title": "Tenant isolation export",
+  "entrypoint": "export_records",
+  "intent": "Export records for a tenant. Exports should return records matching requested filters for the requesting tenant only.",
+  "ai_generated_spec": "Export records matching requested filters.",
+  "critic_improved_spec": "Export records matching requested filters and reject missing actors or invalid filters.",
+  "full_oracle_spec": "Export records matching requested filters only for the requesting tenant. Never include records from other tenants, even if filters match. Reject missing actors or invalid filters.",
+  "missing_requirements": [
+    "Export must not include records from other tenants",
+    "Requester tenant_id must be required",
+    "Filters must not override tenant isolation",
+    "Exported record count must match tenant-scoped results"
+  ],
+  "spec_hole_categories": [
+    "tenant_isolation_omission",
+    "authorization_omission",
+    "security_omission",
+    "state_invariant_omission"
+  ],
+  "expected_naive_failure": "The public spec omits a heldout policy invariant that changes implementation selection.",
+  "expected_defense": "The oracle spec includes the heldout policy invariant.",
+  "policy_pack_ids": [
+    "generic_critical_requirements",
+    "multi_tenant_policy",
+    "access_control_policy"
+  ],
+  "relevant_policy_card_ids": [
+    "generic.invalid_inputs_fail",
+    "tenant.export.isolation",
+    "tenant.export.filter_override"
+  ],
+  "evaluation_split": "heldout",
+  "public_spec_text": {
+    "naive": "Export records matching requested filters.",
+    "critic": "Export records matching requested filters and reject missing actors or invalid filters.",
+    "oracle": "Export records matching requested filters only for the requesting tenant. Never include records from other tenants, even if filters match. Reject missing actors or invalid filters."
+  }
+}

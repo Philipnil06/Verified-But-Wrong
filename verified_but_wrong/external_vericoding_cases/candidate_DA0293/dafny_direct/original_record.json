@@ -1,0 +1,23 @@
+{
+  "id": "DA0293",
+  "language": "dafny",
+  "source": "apps",
+  "source-id": "apps_test_1430",
+  "source-notes": "",
+  "vc-description": "Given a binary string S of length N and an integer K, find the maximum length of \nconsecutive '1's achievable using at most K flip operations. Each flip operation \nchooses a contiguous range and flips all bits in that range (0\u21921, 1\u21920).",
+  "vc-preamble": "predicate ValidInput(N: int, K: int, S: string)\n{\n    N > 0 && K >= 0 && |S| == N && \n    forall i :: 0 <= i < |S| ==> S[i] == '0' || S[i] == '1'\n}\n\nfunction StringToBits(S: string): seq<int>\n    requires forall i :: 0 <= i < |S| ==> S[i] == '0' || S[i] == '1'\n{\n    seq(|S|, i requires 0 <= i < |S| => if S[i] == '0' then 0 else 1)\n}\n\npredicate ValidResult(result: int, N: int)\n{\n    0 <= result <= N\n}",
+  "vc-helpers": "",
+  "vc-spec": "method solve(N: int, K: int, S: string) returns (result: int)\n    requires ValidInput(N, K, S)\n    ensures ValidResult(result, N)",
+  "vc-code": "{\n  assume {:axiom} false;\n}",
+  "vc-postamble": "",
+  "qa-issue": 0,
+  "qa-issue-type": "",
+  "qa-functions-with-default-values": 0,
+  "qa-methods-with-bodies": 0,
+  "qa-specs-with-default-values": -1,
+  "qa-execs-with-bodies": -1,
+  "qa-execs-with-ghost-types": -1,
+  "qa-definitions-with-sorry": -1,
+  "qa-near-duplicate-group": "",
+  "qa-score": 1.0
+}

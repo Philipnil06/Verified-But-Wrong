@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-05-12T17:30:17.950914+00:00",
+  "task_id": "rate_limiter_boundary",
+  "task_title": "Rate limiter boundary and per-user state",
+  "condition": "ticket_plus_retrieved_policy",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the product ticket and the retrieved policy card.\nThe policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the product ticket and the retrieved policy card. The policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nTask title: Rate limiter boundary and per-user state\nFunction entrypoint: allow_request\n\nProduct ticket:\n# Product ticket: request rate limiter\n\n## Background\nThe API should track recent requests and block excessive traffic.\n\n## Happy path\n- First normal requests are allowed.\n- Request state is updated when a request is allowed.\n\n## Policy note\nThe intended quota is five requests per rolling minute.\n\n## Acceptance criteria\n- First request is allowed.\n- State stores allowed request timestamps.\n\nRetrieved policy card:\nPolicy card ID: rate.limit.sixth_blocked\nTitle: The first request over the limit must be blocked\nRequirement: The 6th request inside a 60 second window must be blocked.\nWhy it matters: The limiter can appear implemented while allowing the first abusive request over the limit.\nAudit questions:\n- Does the spec explicitly block the 6th request?\nKeywords:\n- 6th\n- sixth\n- blocked\n- limit exceeded\n- at most 5\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "3c15fa26e9aa49e691920385d73306e3bb5f7690df040ed6842b838687b56316",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Rate limiter boundary and per-user state\",\n  \"behavior_requirements\": [\n    \"The system must allow up to 5 requests per rolling 60-second window per user.\",\n    \"The 6th request within any 60-second window must be blocked.\",\n    \"Per-user state must record timestamps of allowed requests to enforce the rolling window.\",\n    \"Timestamps used for the window must be stored in a per-user non-volatile or in-memory store with correct eviction policy to reflect a rolling window.\",\n    \"First request is allowed and updates per-user state with its timestamp.\"\n  ],\n  \"edge_cases\": [\n    \"Requests at the boundary of the 60-second window should be considered in the current window; those exactly 60 seconds older than current time are not counted.\",\n    \"Multiple users must have isolated per-user state; one user's activity must not affect another.\",\n    \"Clock drift or time skew should not cause incorrect allowance/denial; use monotonic or NTP-corrected timestamps where possible.\",\n    \"Handling of missing or corrupted per-user state should default to allowing the first request and initializing state.\",\n    \"High-frequency bursts should be correctly throttled after the 5th allowed request within any rolling window.\"\n  ],\n  \"acceptance_criteria\": [\n    \"AC1: The very first request from a user is allowed.\",\n    \"AC2: The system stores the timestamp of each allowed request per user.\",\n    \"AC3: No more than 5 requests per user are allowed within any rolling 60-second window.\",\n    \"AC4: The 6th or more requests within the same rolling 60-second window are blocked.\",\n    \"AC5: Per-user state is correctly updated after each allowed request, and old timestamps older than 60 seconds are pruned.\"\n  ],\n  \"non_goals\": [\n    \"Implementing a fixed 60-second window (non-rolling) is not required; the policy specifies a rolling window.\",\n    \"Cross-user state sharing (global quotas) is not allowed; quotas are per-user.\",\n    \"Guaranteed throughput beyond allowed requests is not required; the limiter may introduce latency on blocked requests.\",\n    \"Persisting state across restarts is outside current scope unless specified.\"\n  ],\n  \"testable_assertions\": [\n    \"Given a new user, the first request is allowed.\",\n    \"After 5 allowed requests within 60 seconds, a 6th request is blocked.\",\n    \"Requests spaced beyond 60 seconds from their corresponding timestamps are counted in a new window and allowed up to five again.\",\n    \"Per-user state contains a list of at most the timestamps of the last allowed requests within the rolling window, pruned as older timestamps fall outside the 60-second window.\",\n    \"Blocking is strictly enforced for the 6th request within the window; identical timestamps or clock anomalies do not bypass the rule.\"\n  ]\n}",
+  "response_hash": "5961694a6759fff908a4dc57a83c9a42d63c95437bcf0a6c5ed5a613e449584b",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_053020cde5dd5e19006a0363a8e9c48191b9b1fb7867267785",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 417,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 611,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 1028
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Rate limiter boundary and per-user state",
+    "behavior_requirements": [
+      "The system must allow up to 5 requests per rolling 60-second window per user.",
+      "The 6th request within any 60-second window must be blocked.",
+      "Per-user state must record timestamps of allowed requests to enforce the rolling window.",
+      "Timestamps used for the window must be stored in a per-user non-volatile or in-memory store with correct eviction policy to reflect a rolling window.",
+      "First request is allowed and updates per-user state with its timestamp."
+    ],
+    "edge_cases": [
+      "Requests at the boundary of the 60-second window should be considered in the current window; those exactly 60 seconds older than current time are not counted.",
+      "Multiple users must have isolated per-user state; one user's activity must not affect another.",
+      "Clock drift or time skew should not cause incorrect allowance/denial; use monotonic or NTP-corrected timestamps where possible.",
+      "Handling of missing or corrupted per-user state should default to allowing the first request and initializing state.",
+      "High-frequency bursts should be correctly throttled after the 5th allowed request within any rolling window."
+    ],
+    "acceptance_criteria": [
+      "AC1: The very first request from a user is allowed.",
+      "AC2: The system stores the timestamp of each allowed request per user.",
+      "AC3: No more than 5 requests per user are allowed within any rolling 60-second window.",
+      "AC4: The 6th or more requests within the same rolling 60-second window are blocked.",
+      "AC5: Per-user state is correctly updated after each allowed request, and old timestamps older than 60 seconds are pruned."
+    ],
+    "non_goals": [
+      "Implementing a fixed 60-second window (non-rolling) is not required; the policy specifies a rolling window.",
+      "Cross-user state sharing (global quotas) is not allowed; quotas are per-user.",
+      "Guaranteed throughput beyond allowed requests is not required; the limiter may introduce latency on blocked requests.",
+      "Persisting state across restarts is outside current scope unless specified."
+    ],
+    "testable_assertions": [
+      "Given a new user, the first request is allowed.",
+      "After 5 allowed requests within 60 seconds, a 6th request is blocked.",
+      "Requests spaced beyond 60 seconds from their corresponding timestamps are counted in a new window and allowed up to five again.",
+      "Per-user state contains a list of at most the timestamps of the last allowed requests within the rolling window, pruned as older timestamps fall outside the 60-second window.",
+      "Blocking is strictly enforced for the 6th request within the window; identical timestamps or clock anomalies do not bypass the rule."
+    ]
+  },
+  "public_spec": "Title: Rate limiter boundary and per-user state\n\nBehavior requirements:\n- The system must allow up to 5 requests per rolling 60-second window per user.\n- The 6th request within any 60-second window must be blocked.\n- Per-user state must record timestamps of allowed requests to enforce the rolling window.\n- Timestamps used for the window must be stored in a per-user non-volatile or in-memory store with correct eviction policy to reflect a rolling window.\n- First request is allowed and updates per-user state with its timestamp.\n\nEdge cases:\n- Requests at the boundary of the 60-second window should be considered in the current window; those exactly 60 seconds older than current time are not counted.\n- Multiple users must have isolated per-user state; one user's activity must not affect another.\n- Clock drift or time skew should not cause incorrect allowance/denial; use monotonic or NTP-corrected timestamps where possible.\n- Handling of missing or corrupted per-user state should default to allowing the first request and initializing state.\n- High-frequency bursts should be correctly throttled after the 5th allowed request within any rolling window.\n\nAcceptance criteria:\n- AC1: The very first request from a user is allowed.\n- AC2: The system stores the timestamp of each allowed request per user.\n- AC3: No more than 5 requests per user are allowed within any rolling 60-second window.\n- AC4: The 6th or more requests within the same rolling 60-second window are blocked.\n- AC5: Per-user state is correctly updated after each allowed request, and old timestamps older than 60 seconds are pruned.\n\nNon-goals:\n- Implementing a fixed 60-second window (non-rolling) is not required; the policy specifies a rolling window.\n- Cross-user state sharing (global quotas) is not allowed; quotas are per-user.\n- Guaranteed throughput beyond allowed requests is not required; the limiter may introduce latency on blocked requests.\n- Persisting state across restarts is outside current scope unless specified.\n\nTestable assertions:\n- Given a new user, the first request is allowed.\n- After 5 allowed requests within 60 seconds, a 6th request is blocked.\n- Requests spaced beyond 60 seconds from their corresponding timestamps are counted in a new window and allowed up to five again.\n- Per-user state contains a list of at most the timestamps of the last allowed requests within the rolling window, pruned as older timestamps fall outside the 60-second window.\n- Blocking is strictly enforced for the 6th request within the window; identical timestamps or clock anomalies do not bypass the rule.",
+  "generation_empty": false,
+  "generation_error": null
+}

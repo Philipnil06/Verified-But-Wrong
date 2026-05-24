@@ -1,0 +1,12 @@
+{
+  "status": "validated",
+  "reason": "Clear external target-validity gap: NL requires decryption semantics, while the formal target only constrains output length.",
+  "gap_category": "output_format_missing",
+  "nl_requirement": "Decrypt Right-Left cipher text back to the original plaintext.",
+  "formal_spec_gap": "Method postcondition enforces only |result| == |t| and omits any content/semantic relation to ciphertext.",
+  "weak_spec_proxy_description": "Adapted spec check verifies only output length equality with input.",
+  "bad_candidate_behavior": "Return a same-length constant string.",
+  "intended_oracle_description": "Construct encrypted strings from known plaintext samples and require exact plaintext recovery.",
+  "demo_type": "fully_executable",
+  "reviewer_notes": "This is an adapted minimal demonstration, not a claim that the external benchmark is a bug or vulnerability."
+}

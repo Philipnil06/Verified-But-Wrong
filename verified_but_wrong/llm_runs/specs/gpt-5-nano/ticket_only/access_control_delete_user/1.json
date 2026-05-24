@@ -1,0 +1,71 @@
+{
+  "timestamp": "2026-05-12T17:27:25.026413+00:00",
+  "task_id": "access_control_delete_user",
+  "task_title": "Access control for deleting users",
+  "condition": "ticket_only",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse only the product ticket below.\nDo not assume access to hidden organization policies.\nWrite the best implementation spec you can from the ticket.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse only the product ticket below. Do not assume access to hidden organization policies. Write the best implementation spec you can from the ticket.\n\nTask title: Access control for deleting users\nFunction entrypoint: delete_user\n\nProduct ticket:\n# Product ticket: delete user\n\n## Background\nSupport administrators need to delete active users that should no longer exist in the system.\n\n## Happy path\n- Admin deletes an active target user.\n- Target status becomes deleted.\n\n## Edge cases\n- Missing targets should fail.\n- Deleted targets should not be deleted again.\n\n## Acceptance criteria\n- Admin delete succeeds.\n- Target state is updated.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "7b72718907f17b6797f1db48533ed7f4d4d05ab3be7a9302540920c41720eb02",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Access control for deleting users\",\n  \"behavior_requirements\": [\n    \"Only users with administrative privileges can invoke delete_user.\",\n    \"delete_user(target_user_id) marks the target user as deleted (status = 'deleted') and ensures the user is no longer active in system operations.\",\n    \"If the target user is currently active, perform a state transition to deleted and return success.\",\n    \"All changes must be persisted atomically to prevent partial updates.\",\n    \"Audit log entry must be created recording admin performing deletion and target user id.\",\n    \"Input validation: target_user_id must be provided and reference an existing user.\",\n    \"Access control checks fail securely with a proper error and do not modify state when permission is denied.\"\n  ],\n  \"edge_cases\": [\n    \"Missing targets should fail with a clearly defined error and no state changes.\",\n    \"Deleted targets should not be deleted again; attempting to delete an already deleted user should return an idempotent response and no further state change.\",\n    \"Concurrent delete attempts by admins should be serialized to prevent race conditions causing inconsistent state.\",\n    \"If persistence layer fails during delete, the operation should be atomic and rollback to previous state.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Admin delete succeeds for an active target user.\",\n    \"Target state is updated to 'deleted' and persisted.\",\n    \"Attempt to delete a non-existent user fails with appropriate error.\",\n    \"Attempt to delete an already deleted user results in no state change and a consistent response.\",\n    \"An audit log entry is created for successful deletions.\"\n  ],\n  \"non_goals\": [\n    \"Reactivating a deleted user.\",\n    \"Deleting users without admin privileges in a non-secure way.\",\n    \"Any behavior related to non-user entities or unrelated system records.\",\n    \"Mutating non-user related fields beyond setting status to 'deleted'.\"\n  ],\n  \"testable_assertions\": [\n    \"Call delete_user with admin and active user -> response indicates success and target status == 'deleted'.\",\n    \"Call delete_user with admin and non-existent user -> failure with appropriate error, no state change.\",\n    \"Call delete_user with admin and already deleted user -> no state change, idempotent success or explicit no-op return.\",\n    \"Call delete_user with non-admin -> access denied error and no state change.\",\n    \"Audit log contains entry with admin_id and target_user_id for successful deletions.\"\n  ]\n}",
+  "response_hash": "863cc20667c5e6d714d03e106383f915a2dc1f30c3ecc141b8a12ecf41c86576",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0984b414337748c1006a0362fdc4b08191815123c2f64c6d96",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 318,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 521,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 839
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Access control for deleting users",
+    "behavior_requirements": [
+      "Only users with administrative privileges can invoke delete_user.",
+      "delete_user(target_user_id) marks the target user as deleted (status = 'deleted') and ensures the user is no longer active in system operations.",
+      "If the target user is currently active, perform a state transition to deleted and return success.",
+      "All changes must be persisted atomically to prevent partial updates.",
+      "Audit log entry must be created recording admin performing deletion and target user id.",
+      "Input validation: target_user_id must be provided and reference an existing user.",
+      "Access control checks fail securely with a proper error and do not modify state when permission is denied."
+    ],
+    "edge_cases": [
+      "Missing targets should fail with a clearly defined error and no state changes.",
+      "Deleted targets should not be deleted again; attempting to delete an already deleted user should return an idempotent response and no further state change.",
+      "Concurrent delete attempts by admins should be serialized to prevent race conditions causing inconsistent state.",
+      "If persistence layer fails during delete, the operation should be atomic and rollback to previous state."
+    ],
+    "acceptance_criteria": [
+      "Admin delete succeeds for an active target user.",
+      "Target state is updated to 'deleted' and persisted.",
+      "Attempt to delete a non-existent user fails with appropriate error.",
+      "Attempt to delete an already deleted user results in no state change and a consistent response.",
+      "An audit log entry is created for successful deletions."
+    ],
+    "non_goals": [
+      "Reactivating a deleted user.",
+      "Deleting users without admin privileges in a non-secure way.",
+      "Any behavior related to non-user entities or unrelated system records.",
+      "Mutating non-user related fields beyond setting status to 'deleted'."
+    ],
+    "testable_assertions": [
+      "Call delete_user with admin and active user -> response indicates success and target status == 'deleted'.",
+      "Call delete_user with admin and non-existent user -> failure with appropriate error, no state change.",
+      "Call delete_user with admin and already deleted user -> no state change, idempotent success or explicit no-op return.",
+      "Call delete_user with non-admin -> access denied error and no state change.",
+      "Audit log contains entry with admin_id and target_user_id for successful deletions."
+    ]
+  },
+  "public_spec": "Title: Access control for deleting users\n\nBehavior requirements:\n- Only users with administrative privileges can invoke delete_user.\n- delete_user(target_user_id) marks the target user as deleted (status = 'deleted') and ensures the user is no longer active in system operations.\n- If the target user is currently active, perform a state transition to deleted and return success.\n- All changes must be persisted atomically to prevent partial updates.\n- Audit log entry must be created recording admin performing deletion and target user id.\n- Input validation: target_user_id must be provided and reference an existing user.\n- Access control checks fail securely with a proper error and do not modify state when permission is denied.\n\nEdge cases:\n- Missing targets should fail with a clearly defined error and no state changes.\n- Deleted targets should not be deleted again; attempting to delete an already deleted user should return an idempotent response and no further state change.\n- Concurrent delete attempts by admins should be serialized to prevent race conditions causing inconsistent state.\n- If persistence layer fails during delete, the operation should be atomic and rollback to previous state.\n\nAcceptance criteria:\n- Admin delete succeeds for an active target user.\n- Target state is updated to 'deleted' and persisted.\n- Attempt to delete a non-existent user fails with appropriate error.\n- Attempt to delete an already deleted user results in no state change and a consistent response.\n- An audit log entry is created for successful deletions.\n\nNon-goals:\n- Reactivating a deleted user.\n- Deleting users without admin privileges in a non-secure way.\n- Any behavior related to non-user entities or unrelated system records.\n- Mutating non-user related fields beyond setting status to 'deleted'.\n\nTestable assertions:\n- Call delete_user with admin and active user -> response indicates success and target status == 'deleted'.\n- Call delete_user with admin and non-existent user -> failure with appropriate error, no state change.\n- Call delete_user with admin and already deleted user -> no state change, idempotent success or explicit no-op return.\n- Call delete_user with non-admin -> access denied error and no state change.\n- Audit log contains entry with admin_id and target_user_id for successful deletions.",
+  "generation_empty": false,
+  "generation_error": null
+}

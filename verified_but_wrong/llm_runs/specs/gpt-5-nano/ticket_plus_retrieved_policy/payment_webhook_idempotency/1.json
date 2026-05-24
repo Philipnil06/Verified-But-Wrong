@@ -1,0 +1,73 @@
+{
+  "timestamp": "2026-05-12T17:29:56.365890+00:00",
+  "task_id": "payment_webhook_idempotency",
+  "task_title": "Payment webhook idempotency",
+  "condition": "ticket_plus_retrieved_policy",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the product ticket and the retrieved policy card.\nThe policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the product ticket and the retrieved policy card. The policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nTask title: Payment webhook idempotency\nFunction entrypoint: process_payment_event\n\nProduct ticket:\n# Product ticket: payment webhook processing\n\n## Background\nThe payments provider sends webhook events for payment outcomes. The service updates merchant balances for successful payments.\n\n## Happy path\n- Successful payment events increase merchant balance by the event amount.\n- Failed payment events do not increase balance.\n- The event has merchant, amount, currency, and status fields.\n\n## Acceptance criteria\n- Successful payment credits the merchant balance.\n- Failed payment does not credit balance.\n\nRetrieved policy card:\nPolicy card ID: payments.webhook.idempotent_event\nTitle: Payment webhooks must be idempotent\nRequirement: Payment webhook events must be processed at most once per event_id and duplicate events must not credit balances twice.\nWhy it matters: Duplicate webhook delivery can double-credit merchant balances.\nAudit questions:\n- Does the spec explicitly require duplicate event IDs to be ignored or processed once?\nKeywords:\n- idempotent\n- idempotency\n- duplicate event\n- duplicate webhook\n- same event_id\n- already processed\n- process once\n- credited twice\n- double credit\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "d6eb48f6cd02bbf04d055262676b306d97d95af989c8dff6b6e665da1a0afd8a",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Payment webhook idempotent processing for process_payment_event\",\n  \"behavior_requirements\": [\n    \"Process each webhook event at most once per event_id.\",\n    \"If duplicate event_id is received (same event_id as a previously processed event), do not alter merchant balance again.\",\n    \"On successful payment events, credit merchant balance by the event amount exactly once.\",\n    \"On failed payment events, do not credit merchant balance.\",\n    \"Event payload must include: merchant_id, amount, currency, status, and event_id; system must validate presence before processing.\",\n    \"Persist event_id processing state to detect duplicates (e.g., idempotency store) before updating balances.\",\n    \"If event_id has been seen, return success acknowledgment without side effects.\",\n    \"All operations encountering errors during processing must be idempotent (no partial credits) and should not re-credit on retries.\"\n  ],\n  \"edge_cases\": [\n    \"Duplicate events arriving after a prior successful processing must not credit again.\",\n    \"Out-of-order delivery where a later event with same event_id arrives after processing a similar but different event_id (should not occur if event_id is unique per event).\",\n    \"Malformed or missing fields (merchant_id, amount, currency, status, event_id) should reject processing and not modify balances.\",\n    \"Non-integer or negative amount values must be rejected and not affect balances.\",\n    \"Currency mismatch handling when amount is in a different currency than merchant baseline (define whether currencies must match or amount is always in the merchant currency).\",\n    \"Processing failures (e.g., downstream service outage) must not allow double credits on retry.\"\n  ],\n  \"acceptance_criteria\": [\n    \"A successful payment event with a new event_id credits the merchant balance by the event amount exactly once.\",\n    \"A failed payment event does not change merchant balance.\",\n    \"Receiving a duplicate event with the same event_id does not change the balance and is acknowledged as processed.\",\n    \"No scenario allows a single event_id to credit the balance more than once.\",\n    \"System records event_id as processed after first handling to guarantee idempotency across retries.\"\n  ],\n  \"non_goals\": [\n    \"Handling of non-payment events outside the defined status set (e.g., refunds) unless explicitly described.\",\n    \"Guaranteeing end-to-end delivery of webhooks (retries and fan-out are out of scope).\",\n    \"Audit log formatting or long-term retention policies beyond idempotency tracking.\"\n  ],\n  \"testable_assertions\": [\n    \"Processing a new successful event with event_id E credits merchant by amount A exactly once.\",\n    \"Processing a duplicate event with event_id E does not change merchant balance.\",\n    \"Processing a failed event with event_id F does not credit balance.\",\n    \"Processing two consecutive events with distinct event_ids E1, E2 where both are successful results in two separate credits totaling A1 + A2.\",\n    \"Missing required fields or invalid amount values cause a rejection and no balance change.\"\n  ]\n}",
+  "response_hash": "fe17d5fe17251653af85a48162cf8b00d22700fc72d88a27560f3fd543bb912a",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0716018ba72da174006a03639355c0819eaef8d961ba3f194b",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 451,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 639,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 1090
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Payment webhook idempotent processing for process_payment_event",
+    "behavior_requirements": [
+      "Process each webhook event at most once per event_id.",
+      "If duplicate event_id is received (same event_id as a previously processed event), do not alter merchant balance again.",
+      "On successful payment events, credit merchant balance by the event amount exactly once.",
+      "On failed payment events, do not credit merchant balance.",
+      "Event payload must include: merchant_id, amount, currency, status, and event_id; system must validate presence before processing.",
+      "Persist event_id processing state to detect duplicates (e.g., idempotency store) before updating balances.",
+      "If event_id has been seen, return success acknowledgment without side effects.",
+      "All operations encountering errors during processing must be idempotent (no partial credits) and should not re-credit on retries."
+    ],
+    "edge_cases": [
+      "Duplicate events arriving after a prior successful processing must not credit again.",
+      "Out-of-order delivery where a later event with same event_id arrives after processing a similar but different event_id (should not occur if event_id is unique per event).",
+      "Malformed or missing fields (merchant_id, amount, currency, status, event_id) should reject processing and not modify balances.",
+      "Non-integer or negative amount values must be rejected and not affect balances.",
+      "Currency mismatch handling when amount is in a different currency than merchant baseline (define whether currencies must match or amount is always in the merchant currency).",
+      "Processing failures (e.g., downstream service outage) must not allow double credits on retry."
+    ],
+    "acceptance_criteria": [
+      "A successful payment event with a new event_id credits the merchant balance by the event amount exactly once.",
+      "A failed payment event does not change merchant balance.",
+      "Receiving a duplicate event with the same event_id does not change the balance and is acknowledged as processed.",
+      "No scenario allows a single event_id to credit the balance more than once.",
+      "System records event_id as processed after first handling to guarantee idempotency across retries."
+    ],
+    "non_goals": [
+      "Handling of non-payment events outside the defined status set (e.g., refunds) unless explicitly described.",
+      "Guaranteeing end-to-end delivery of webhooks (retries and fan-out are out of scope).",
+      "Audit log formatting or long-term retention policies beyond idempotency tracking."
+    ],
+    "testable_assertions": [
+      "Processing a new successful event with event_id E credits merchant by amount A exactly once.",
+      "Processing a duplicate event with event_id E does not change merchant balance.",
+      "Processing a failed event with event_id F does not credit balance.",
+      "Processing two consecutive events with distinct event_ids E1, E2 where both are successful results in two separate credits totaling A1 + A2.",
+      "Missing required fields or invalid amount values cause a rejection and no balance change."
+    ]
+  },
+  "public_spec": "Title: Payment webhook idempotent processing for process_payment_event\n\nBehavior requirements:\n- Process each webhook event at most once per event_id.\n- If duplicate event_id is received (same event_id as a previously processed event), do not alter merchant balance again.\n- On successful payment events, credit merchant balance by the event amount exactly once.\n- On failed payment events, do not credit merchant balance.\n- Event payload must include: merchant_id, amount, currency, status, and event_id; system must validate presence before processing.\n- Persist event_id processing state to detect duplicates (e.g., idempotency store) before updating balances.\n- If event_id has been seen, return success acknowledgment without side effects.\n- All operations encountering errors during processing must be idempotent (no partial credits) and should not re-credit on retries.\n\nEdge cases:\n- Duplicate events arriving after a prior successful processing must not credit again.\n- Out-of-order delivery where a later event with same event_id arrives after processing a similar but different event_id (should not occur if event_id is unique per event).\n- Malformed or missing fields (merchant_id, amount, currency, status, event_id) should reject processing and not modify balances.\n- Non-integer or negative amount values must be rejected and not affect balances.\n- Currency mismatch handling when amount is in a different currency than merchant baseline (define whether currencies must match or amount is always in the merchant currency).\n- Processing failures (e.g., downstream service outage) must not allow double credits on retry.\n\nAcceptance criteria:\n- A successful payment event with a new event_id credits the merchant balance by the event amount exactly once.\n- A failed payment event does not change merchant balance.\n- Receiving a duplicate event with the same event_id does not change the balance and is acknowledged as processed.\n- No scenario allows a single event_id to credit the balance more than once.\n- System records event_id as processed after first handling to guarantee idempotency across retries.\n\nNon-goals:\n- Handling of non-payment events outside the defined status set (e.g., refunds) unless explicitly described.\n- Guaranteeing end-to-end delivery of webhooks (retries and fan-out are out of scope).\n- Audit log formatting or long-term retention policies beyond idempotency tracking.\n\nTestable assertions:\n- Processing a new successful event with event_id E credits merchant by amount A exactly once.\n- Processing a duplicate event with event_id E does not change merchant balance.\n- Processing a failed event with event_id F does not credit balance.\n- Processing two consecutive events with distinct event_ids E1, E2 where both are successful results in two separate credits totaling A1 + A2.\n- Missing required fields or invalid amount values cause a rejection and no balance change.",
+  "generation_empty": false,
+  "generation_error": null
+}

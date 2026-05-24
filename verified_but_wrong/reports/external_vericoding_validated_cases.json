@@ -1,0 +1,458 @@
+{
+  "status": "validated_cases_executed",
+  "validated_case_count": 7,
+  "verified_but_wrong_demo_count": 7,
+  "paper_ready": true,
+  "validated_cases": [
+    {
+      "status": "validated_manual_entry",
+      "reason": "Clear external target-validity gap: NL requires maximizing chocolates with divisibility/tie semantics, while the formal method postcondition only requires a non-negative integer.",
+      "gap_category": "trivial_postcondition",
+      "nl_requirement": "Return the maximum total chocolates under red/blue divisibility rules and choose the better reward when divisible by both.",
+      "formal_spec_gap": "Formal target for solve only ensures result >= 0 and does not encode optimization or divisibility counting semantics.",
+      "weak_spec_proxy_description": "Proxy models the weak formal requirement by only checking that output is an integer >= 0.",
+      "bad_candidate_behavior": "Always return 0.",
+      "intended_oracle_description": "Oracle computes exact optimum using inclusion-exclusion and common-multiple overlap handling on concrete examples.",
+      "demo_type": "fully_executable",
+      "reviewer_notes": "This is an adapted minimal demonstration, not a claim that the external benchmark is a bug or vulnerability.",
+      "id": "DA0003",
+      "case_dir": "C:\\Users\\Philip Nilsson\\OneDrive - Mälardalens Tekniska Gymnasium\\Skrivbordet\\Hackathon apartresearch The Secure Program Synthesis\\verified_but_wrong\\external_vericoding_cases\\candidate_DA0003",
+      "weak_spec_proxy_pass": true,
+      "intended_oracle_pass": false,
+      "verified_but_wrong_demo": true,
+      "weak_spec_proxy_results": [
+        {
+          "input": "(10, 2, 3, 5, 7)",
+          "actual": 0,
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models weak formal target: ensures result >= 0"
+        },
+        {
+          "input": "(7, 2, 5, 100, 1)",
+          "actual": 0,
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models weak formal target: ensures result >= 0"
+        },
+        {
+          "input": "(1, 1, 1, 1, 1)",
+          "actual": 0,
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models weak formal target: ensures result >= 0"
+        }
+      ],
+      "intended_oracle_results": [
+        {
+          "input": "(5, 2, 3, 4, 5)",
+          "expected": 13,
+          "actual": 0,
+          "intended_oracle_pass": false,
+          "oracle_note": "NL requires maximizing total chocolates under divisibility/tie rule."
+        },
+        {
+          "input": "(10, 2, 5, 3, 8)",
+          "expected": 28,
+          "actual": 0,
+          "intended_oracle_pass": false,
+          "oracle_note": "NL requires maximizing total chocolates under divisibility/tie rule."
+        },
+        {
+          "input": "(12, 3, 4, 7, 2)",
+          "expected": 32,
+          "actual": 0,
+          "intended_oracle_pass": false,
+          "oracle_note": "NL requires maximizing total chocolates under divisibility/tie rule."
+        }
+      ]
+    },
+    {
+      "status": "validated_manual_entry",
+      "reason": "Clear external target-validity gap: NL requires simulation of overflow dynamics, but formal target mainly constrains range and a few edge cases.",
+      "gap_category": "simulation_semantics_missing",
+      "nl_requirement": "Simulate pouring and overflow split through the pyramid and count fully filled glasses after t seconds.",
+      "formal_spec_gap": "Formal target constrains result bounds plus selected edge conditions, without encoding full per-step flow semantics.",
+      "weak_spec_proxy_description": "Proxy checks only non-negativity/range and listed edge-case conditions from the weak target.",
+      "bad_candidate_behavior": "Return 0 for t=0 and 1 otherwise, ignoring simulation.",
+      "intended_oracle_description": "Oracle runs an explicit small-step champagne simulation on concrete inputs and checks exact full-glass counts.",
+      "demo_type": "fully_executable",
+      "reviewer_notes": "This is an adapted minimal demonstration, not a claim that the external benchmark is a bug or vulnerability.",
+      "id": "DA0010",
+      "case_dir": "C:\\Users\\Philip Nilsson\\OneDrive - Mälardalens Tekniska Gymnasium\\Skrivbordet\\Hackathon apartresearch The Secure Program Synthesis\\verified_but_wrong\\external_vericoding_cases\\candidate_DA0010",
+      "weak_spec_proxy_pass": true,
+      "intended_oracle_pass": false,
+      "verified_but_wrong_demo": true,
+      "weak_spec_proxy_results": [
+        {
+          "input": "(1, 0)",
+          "actual": 0,
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models ValidResult + CorrectForEdgeCases only"
+        },
+        {
+          "input": "(1, 3)",
+          "actual": 1,
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models ValidResult + CorrectForEdgeCases only"
+        },
+        {
+          "input": "(3, 1)",
+          "actual": 1,
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models ValidResult + CorrectForEdgeCases only"
+        },
+        {
+          "input": "(4, 8)",
+          "actual": 1,
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models ValidResult + CorrectForEdgeCases only"
+        }
+      ],
+      "intended_oracle_results": [
+        {
+          "input": "(2, 2)",
+          "expected": 1,
+          "actual": 1,
+          "intended_oracle_pass": true,
+          "oracle_note": "NL requires process simulation and full-glass count."
+        },
+        {
+          "input": "(3, 4)",
+          "expected": 3,
+          "actual": 1,
+          "intended_oracle_pass": false,
+          "oracle_note": "NL requires process simulation and full-glass count."
+        },
+        {
+          "input": "(4, 6)",
+          "expected": 4,
+          "actual": 1,
+          "intended_oracle_pass": false,
+          "oracle_note": "NL requires process simulation and full-glass count."
+        }
+      ]
+    },
+    {
+      "status": "validated_manual_entry",
+      "reason": "Clear external target-validity gap: NL requires minimum-area construction, while formal target only checks a valid enlarged rectangle.",
+      "gap_category": "optimization_missing",
+      "nl_requirement": "Find minimum possible area (and corresponding dimensions) meeting area >= 6*n and dimension-growth constraints.",
+      "formal_spec_gap": "Formal target enforces only validity/shape constraints and omits minimality optimization over feasible dimensions.",
+      "weak_spec_proxy_description": "Proxy checks result structure, area/product consistency, and dimension feasibility, but not minimal area.",
+      "bad_candidate_behavior": "Always output a deliberately oversized valid rectangle.",
+      "intended_oracle_description": "Oracle computes minimal area for small inputs by bounded search over feasible dimensions and compares exact minimum area.",
+      "demo_type": "fully_executable",
+      "reviewer_notes": "This is an adapted minimal demonstration, not a claim that the external benchmark is a bug or vulnerability.",
+      "id": "DA0157",
+      "case_dir": "C:\\Users\\Philip Nilsson\\OneDrive - Mälardalens Tekniska Gymnasium\\Skrivbordet\\Hackathon apartresearch The Secure Program Synthesis\\verified_but_wrong\\external_vericoding_cases\\candidate_DA0157",
+      "weak_spec_proxy_pass": true,
+      "intended_oracle_pass": false,
+      "verified_but_wrong_demo": true,
+      "weak_spec_proxy_results": [
+        {
+          "input": "(1, 1, 1)",
+          "actual": [
+            14,
+            2,
+            7
+          ],
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models shape/range/output-structure but not minimality"
+        },
+        {
+          "input": "(5, 2, 3)",
+          "actual": [
+            124,
+            4,
+            31
+          ],
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models shape/range/output-structure but not minimality"
+        },
+        {
+          "input": "(10, 7, 8)",
+          "actual": [
+            549,
+            9,
+            61
+          ],
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models shape/range/output-structure but not minimality"
+        }
+      ],
+      "intended_oracle_results": [
+        {
+          "input": "(1, 1, 1)",
+          "expected_min_area": 6,
+          "actual": [
+            14,
+            2,
+            7
+          ],
+          "intended_oracle_pass": false,
+          "oracle_note": "NL requires minimum possible area, not merely a valid enlarged room."
+        },
+        {
+          "input": "(5, 2, 3)",
+          "expected_min_area": 30,
+          "actual": [
+            124,
+            4,
+            31
+          ],
+          "intended_oracle_pass": false,
+          "oracle_note": "NL requires minimum possible area, not merely a valid enlarged room."
+        },
+        {
+          "input": "(10, 7, 8)",
+          "expected_min_area": 63,
+          "actual": [
+            549,
+            9,
+            61
+          ],
+          "intended_oracle_pass": false,
+          "oracle_note": "NL requires minimum possible area, not merely a valid enlarged room."
+        }
+      ]
+    },
+    {
+      "status": "validated_manual_entry",
+      "reason": "Clear external target-validity gap: NL requires minimizing uniform box size under packing constraints, while formal target only ensures non-negative output.",
+      "gap_category": "optimization_missing",
+      "nl_requirement": "Return the minimum feasible common box size so all cowbells fit in at most k boxes with capacity constraints.",
+      "formal_spec_gap": "Formal target for solve only ensures result >= 0 and does not encode feasibility/minimization semantics.",
+      "weak_spec_proxy_description": "Proxy models only the weak formal condition by checking output integer non-negativity.",
+      "bad_candidate_behavior": "Always return 0.",
+      "intended_oracle_description": "Oracle brute-forces pair/single assignments for small examples and checks exact minimal required box size.",
+      "demo_type": "fully_executable",
+      "reviewer_notes": "This is an adapted minimal demonstration, not a claim that the external benchmark is a bug or vulnerability.",
+      "id": "DA0208",
+      "case_dir": "C:\\Users\\Philip Nilsson\\OneDrive - Mälardalens Tekniska Gymnasium\\Skrivbordet\\Hackathon apartresearch The Secure Program Synthesis\\verified_but_wrong\\external_vericoding_cases\\candidate_DA0208",
+      "weak_spec_proxy_pass": true,
+      "intended_oracle_pass": false,
+      "verified_but_wrong_demo": true,
+      "weak_spec_proxy_results": [
+        {
+          "input": "(3, 2, [2, 3, 5])",
+          "actual": 0,
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models weak formal target: ensures result >= 0"
+        },
+        {
+          "input": "(4, 2, [1, 2, 7, 9])",
+          "actual": 0,
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models weak formal target: ensures result >= 0"
+        },
+        {
+          "input": "(5, 3, [1, 1, 1, 1, 10])",
+          "actual": 0,
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models weak formal target: ensures result >= 0"
+        }
+      ],
+      "intended_oracle_results": [
+        {
+          "input": "(3, 2, [2, 3, 5])",
+          "expected": 5,
+          "actual": 0,
+          "intended_oracle_pass": false,
+          "oracle_note": "NL requires minimum uniform box capacity that can pack all cowbells."
+        },
+        {
+          "input": "(4, 2, [1, 2, 7, 9])",
+          "expected": 10,
+          "actual": 0,
+          "intended_oracle_pass": false,
+          "oracle_note": "NL requires minimum uniform box capacity that can pack all cowbells."
+        },
+        {
+          "input": "(5, 3, [1, 1, 1, 1, 10])",
+          "expected": 10,
+          "actual": 0,
+          "intended_oracle_pass": false,
+          "oracle_note": "NL requires minimum uniform box capacity that can pack all cowbells."
+        }
+      ]
+    },
+    {
+      "status": "validated_manual_entry",
+      "reason": "Clear external target-validity gap: NL requires minimizing a cross-day objective, while the formal target only enforces non-negative output.",
+      "gap_category": "optimization_missing",
+      "nl_requirement": "Return the minimum possible total number of marks below water level across all days.",
+      "formal_spec_gap": "Method postcondition enforces only result >= 0 and omits the minimization relation.",
+      "weak_spec_proxy_description": "Adapted spec check verifies only integer non-negativity.",
+      "bad_candidate_behavior": "Always return 0.",
+      "intended_oracle_description": "Oracle computes the minimum objective for concrete examples using the monotone dm model present in preamble helpers.",
+      "demo_type": "fully_executable",
+      "reviewer_notes": "This is an adapted minimal demonstration, not a claim that the external benchmark is a bug or vulnerability.",
+      "id": "DA0244",
+      "case_dir": "C:\\Users\\Philip Nilsson\\OneDrive - Mälardalens Tekniska Gymnasium\\Skrivbordet\\Hackathon apartresearch The Secure Program Synthesis\\verified_but_wrong\\external_vericoding_cases\\candidate_DA0244",
+      "weak_spec_proxy_pass": true,
+      "intended_oracle_pass": false,
+      "verified_but_wrong_demo": true,
+      "weak_spec_proxy_results": [
+        {
+          "input": "(3, [0, 1, 0])",
+          "actual": 0,
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models weak formal target: ensures result >= 0"
+        },
+        {
+          "input": "(4, [0, 0, 1, 0])",
+          "actual": 0,
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models weak formal target: ensures result >= 0"
+        },
+        {
+          "input": "(3, [0, 0, 0])",
+          "actual": 0,
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models weak formal target: ensures result >= 0"
+        }
+      ],
+      "intended_oracle_results": [
+        {
+          "input": "(3, [0, 1, 0])",
+          "expected": 1,
+          "actual": 0,
+          "intended_oracle_pass": false,
+          "oracle_note": "NL requires minimizing the total below-water marks across days."
+        },
+        {
+          "input": "(4, [0, 0, 1, 0])",
+          "expected": 1,
+          "actual": 0,
+          "intended_oracle_pass": false,
+          "oracle_note": "NL requires minimizing the total below-water marks across days."
+        },
+        {
+          "input": "(3, [0, 0, 0])",
+          "expected": 0,
+          "actual": 0,
+          "intended_oracle_pass": true,
+          "oracle_note": "NL requires minimizing the total below-water marks across days."
+        }
+      ]
+    },
+    {
+      "status": "validated_manual_entry",
+      "reason": "Clear external target-validity gap: NL requires optimization over flip operations, while the formal target constrains only result range.",
+      "gap_category": "optimization_missing",
+      "nl_requirement": "Find the maximum consecutive ones achievable with at most K contiguous-range bit flips.",
+      "formal_spec_gap": "Method postcondition enforces only 0 <= result <= N and omits optimization/flip semantics.",
+      "weak_spec_proxy_description": "Adapted spec check verifies only output range 0..N.",
+      "bad_candidate_behavior": "Always return 0.",
+      "intended_oracle_description": "Brute-force all strings reachable by up to K range flips for small examples and compute true maximum run of ones.",
+      "demo_type": "fully_executable",
+      "reviewer_notes": "This is an adapted minimal demonstration, not a claim that the external benchmark is a bug or vulnerability.",
+      "id": "DA0293",
+      "case_dir": "C:\\Users\\Philip Nilsson\\OneDrive - Mälardalens Tekniska Gymnasium\\Skrivbordet\\Hackathon apartresearch The Secure Program Synthesis\\verified_but_wrong\\external_vericoding_cases\\candidate_DA0293",
+      "weak_spec_proxy_pass": true,
+      "intended_oracle_pass": false,
+      "verified_but_wrong_demo": true,
+      "weak_spec_proxy_results": [
+        {
+          "input": "(5, 1, '00101')",
+          "actual": 0,
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models weak formal target: 0 <= result <= N"
+        },
+        {
+          "input": "(6, 2, '010101')",
+          "actual": 0,
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models weak formal target: 0 <= result <= N"
+        },
+        {
+          "input": "(4, 0, '1111')",
+          "actual": 0,
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models weak formal target: 0 <= result <= N"
+        }
+      ],
+      "intended_oracle_results": [
+        {
+          "input": "(5, 1, '00101')",
+          "expected": 3,
+          "actual": 0,
+          "intended_oracle_pass": false,
+          "oracle_note": "NL requires maximizing consecutive ones after at most K range flips."
+        },
+        {
+          "input": "(6, 2, '010101')",
+          "expected": 5,
+          "actual": 0,
+          "intended_oracle_pass": false,
+          "oracle_note": "NL requires maximizing consecutive ones after at most K range flips."
+        },
+        {
+          "input": "(4, 0, '1111')",
+          "expected": 4,
+          "actual": 0,
+          "intended_oracle_pass": false,
+          "oracle_note": "NL requires maximizing consecutive ones after at most K range flips."
+        }
+      ]
+    },
+    {
+      "status": "validated_manual_entry",
+      "reason": "Clear external target-validity gap: NL requires decryption semantics, while the formal target only constrains output length.",
+      "gap_category": "output_format_missing",
+      "nl_requirement": "Decrypt Right-Left cipher text back to the original plaintext.",
+      "formal_spec_gap": "Method postcondition enforces only |result| == |t| and omits any content/semantic relation to ciphertext.",
+      "weak_spec_proxy_description": "Adapted spec check verifies only output length equality with input.",
+      "bad_candidate_behavior": "Return a same-length constant string.",
+      "intended_oracle_description": "Construct encrypted strings from known plaintext samples and require exact plaintext recovery.",
+      "demo_type": "fully_executable",
+      "reviewer_notes": "This is an adapted minimal demonstration, not a claim that the external benchmark is a bug or vulnerability.",
+      "id": "DA0306",
+      "case_dir": "C:\\Users\\Philip Nilsson\\OneDrive - Mälardalens Tekniska Gymnasium\\Skrivbordet\\Hackathon apartresearch The Secure Program Synthesis\\verified_but_wrong\\external_vericoding_cases\\candidate_DA0306",
+      "weak_spec_proxy_pass": true,
+      "intended_oracle_pass": false,
+      "verified_but_wrong_demo": true,
+      "weak_spec_proxy_results": [
+        {
+          "input": "('bacde',)",
+          "actual": "xxxxx",
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models weak formal target: |result| == |t|"
+        },
+        {
+          "input": "('ehllo',)",
+          "actual": "xxxxx",
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models weak formal target: |result| == |t|"
+        },
+        {
+          "input": "('lrc',)",
+          "actual": "xxx",
+          "weak_spec_proxy_pass": true,
+          "proxy_note": "models weak formal target: |result| == |t|"
+        }
+      ],
+      "intended_oracle_results": [
+        {
+          "input": "('dbace',)",
+          "expected": "abcde",
+          "actual": "xxxxx",
+          "intended_oracle_pass": false,
+          "oracle_note": "NL requires decryption of Right-Left cipher, not just matching output length."
+        },
+        {
+          "input": "('lehlo',)",
+          "expected": "hello",
+          "actual": "xxxxx",
+          "intended_oracle_pass": false,
+          "oracle_note": "NL requires decryption of Right-Left cipher, not just matching output length."
+        },
+        {
+          "input": "('rcl',)",
+          "expected": "crl",
+          "actual": "xxx",
+          "intended_oracle_pass": false,
+          "oracle_note": "NL requires decryption of Right-Left cipher, not just matching output length."
+        }
+      ]
+    }
+  ]
+}

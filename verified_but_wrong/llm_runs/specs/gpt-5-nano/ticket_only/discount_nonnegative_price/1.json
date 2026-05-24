@@ -1,0 +1,75 @@
+{
+  "timestamp": "2026-05-12T17:28:20.763978+00:00",
+  "task_id": "discount_nonnegative_price",
+  "task_title": "Discount with non-negative final price",
+  "condition": "ticket_only",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse only the product ticket below.\nDo not assume access to hidden organization policies.\nWrite the best implementation spec you can from the ticket.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse only the product ticket below. Do not assume access to hidden organization policies. Write the best implementation spec you can from the ticket.\n\nTask title: Discount with non-negative final price\nFunction entrypoint: apply_discount\n\nProduct ticket:\nImplement apply_discount. Price must be non negative. Discount percent must be between 0 and 100 inclusive. Final price must never be negative.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "b46c154a597f22f96cf1b19e6366e3f14fc8ca0c536cf3ebfed1d0b194f7a6bc",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Discount with non-negative final price\",\n  \"behavior_requirements\": [\n    \"apply_discount(price, discount_percent) returns final_price.\",\n    \"price must be a non-negative number (price >= 0).\",\n    \"discount_percent must be a number in [0, 100].\",\n    \"final_price = price * (1 - discount_percent / 100).\",\n    \"final_price must be >= 0 for all valid inputs (including edge cases).\",\n    \"If inputs are invalid, function should raise a clear, deterministic error (e.g., ValueError) with a descriptive message.\",\n    \"The function should not mutate input arguments (pure function behavior).\",\n    \"Return value must be a numeric type (e.g., int or float) representing currency units.\"\n  ],\n  \"edge_cases\": [\n    \"price = 0 with any discount_percent in [0, 100] -> final_price = 0.\",\n    \"discount_percent = 0 -> final_price = price.\",\n    \"discount_percent = 100 -> final_price = 0.\",\n    \"price > 0 and discount_percent = 100 -> final_price = 0.\",\n    \"price and discount_percent provided as integers and/or floats.\",\n    \"very large price with small fraction discount results in valid final_price within numeric range.\",\n    \"invalid inputs (price < 0, discount_percent < 0, discount_percent > 100, non-numeric types) raise errors.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Given price >= 0 and 0 <= discount_percent <= 100, applying discount yields final_price = price * (1 - discount_percent/100) and final_price >= 0.\",\n    \"Given price < 0 or discount_percent outside [0, 100], function raises a clear error.\",\n    \"Final price for edge cases matches expectations: 0 when discount is 100 or price is 0; unchanged when discount is 0.\",\n    \"No side effects; input parameters unchanged.\"\n  ],\n  \"non_goals\": [\n    \"Handling currencies, formatting output as string, or localization concerns.\",\n    \"Supporting negative prices or negative discounts.\",\n    \"Rounding behavior beyond returning a numeric final_price.\"\n  ],\n  \"testable_assertions\": [\n    \"assert apply_discount(100, 20) == 80\",\n    \"assert apply_discount(0, 50) == 0\",\n    \"assert apply_discount(50, 0) == 50\",\n    \"assert apply_discount(50, 100) == 0\",\n    \"assert raises ValueError for apply_discount(-10, 10)\",\n    \"assert raises ValueError for apply_discount(10, -5)\",\n    \"assert raises ValueError for apply_discount(10, 105)\"\n  ]\n}",
+  "response_hash": "aa65c802fbb3e56a1f30a9f81dfa5d4e99705b4c74058e313814f36cce4dcb3f",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0600226bb0085d19006a036333fa8c819e8492b57d6d52e790",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 270,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 596,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 866
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Discount with non-negative final price",
+    "behavior_requirements": [
+      "apply_discount(price, discount_percent) returns final_price.",
+      "price must be a non-negative number (price >= 0).",
+      "discount_percent must be a number in [0, 100].",
+      "final_price = price * (1 - discount_percent / 100).",
+      "final_price must be >= 0 for all valid inputs (including edge cases).",
+      "If inputs are invalid, function should raise a clear, deterministic error (e.g., ValueError) with a descriptive message.",
+      "The function should not mutate input arguments (pure function behavior).",
+      "Return value must be a numeric type (e.g., int or float) representing currency units."
+    ],
+    "edge_cases": [
+      "price = 0 with any discount_percent in [0, 100] -> final_price = 0.",
+      "discount_percent = 0 -> final_price = price.",
+      "discount_percent = 100 -> final_price = 0.",
+      "price > 0 and discount_percent = 100 -> final_price = 0.",
+      "price and discount_percent provided as integers and/or floats.",
+      "very large price with small fraction discount results in valid final_price within numeric range.",
+      "invalid inputs (price < 0, discount_percent < 0, discount_percent > 100, non-numeric types) raise errors."
+    ],
+    "acceptance_criteria": [
+      "Given price >= 0 and 0 <= discount_percent <= 100, applying discount yields final_price = price * (1 - discount_percent/100) and final_price >= 0.",
+      "Given price < 0 or discount_percent outside [0, 100], function raises a clear error.",
+      "Final price for edge cases matches expectations: 0 when discount is 100 or price is 0; unchanged when discount is 0.",
+      "No side effects; input parameters unchanged."
+    ],
+    "non_goals": [
+      "Handling currencies, formatting output as string, or localization concerns.",
+      "Supporting negative prices or negative discounts.",
+      "Rounding behavior beyond returning a numeric final_price."
+    ],
+    "testable_assertions": [
+      "assert apply_discount(100, 20) == 80",
+      "assert apply_discount(0, 50) == 0",
+      "assert apply_discount(50, 0) == 50",
+      "assert apply_discount(50, 100) == 0",
+      "assert raises ValueError for apply_discount(-10, 10)",
+      "assert raises ValueError for apply_discount(10, -5)",
+      "assert raises ValueError for apply_discount(10, 105)"
+    ]
+  },
+  "public_spec": "Title: Discount with non-negative final price\n\nBehavior requirements:\n- apply_discount(price, discount_percent) returns final_price.\n- price must be a non-negative number (price >= 0).\n- discount_percent must be a number in [0, 100].\n- final_price = price * (1 - discount_percent / 100).\n- final_price must be >= 0 for all valid inputs (including edge cases).\n- If inputs are invalid, function should raise a clear, deterministic error (e.g., ValueError) with a descriptive message.\n- The function should not mutate input arguments (pure function behavior).\n- Return value must be a numeric type (e.g., int or float) representing currency units.\n\nEdge cases:\n- price = 0 with any discount_percent in [0, 100] -> final_price = 0.\n- discount_percent = 0 -> final_price = price.\n- discount_percent = 100 -> final_price = 0.\n- price > 0 and discount_percent = 100 -> final_price = 0.\n- price and discount_percent provided as integers and/or floats.\n- very large price with small fraction discount results in valid final_price within numeric range.\n- invalid inputs (price < 0, discount_percent < 0, discount_percent > 100, non-numeric types) raise errors.\n\nAcceptance criteria:\n- Given price >= 0 and 0 <= discount_percent <= 100, applying discount yields final_price = price * (1 - discount_percent/100) and final_price >= 0.\n- Given price < 0 or discount_percent outside [0, 100], function raises a clear error.\n- Final price for edge cases matches expectations: 0 when discount is 100 or price is 0; unchanged when discount is 0.\n- No side effects; input parameters unchanged.\n\nNon-goals:\n- Handling currencies, formatting output as string, or localization concerns.\n- Supporting negative prices or negative discounts.\n- Rounding behavior beyond returning a numeric final_price.\n\nTestable assertions:\n- assert apply_discount(100, 20) == 80\n- assert apply_discount(0, 50) == 0\n- assert apply_discount(50, 0) == 50\n- assert apply_discount(50, 100) == 0\n- assert raises ValueError for apply_discount(-10, 10)\n- assert raises ValueError for apply_discount(10, -5)\n- assert raises ValueError for apply_discount(10, 105)",
+  "generation_empty": false,
+  "generation_error": null
+}

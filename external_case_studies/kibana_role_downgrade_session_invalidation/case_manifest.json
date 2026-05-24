@@ -1,0 +1,22 @@
+{
+  "case_id": "kibana_role_downgrade_session_invalidation",
+  "external_source_artifact": "source/source_artifact.md",
+  "source_json": "source/github_issue_192346.json",
+  "source_html": "source/github_issue_192346.html",
+  "public_spec_path": "extracted_public_spec.md",
+  "policy_pack_path": "policy_pack.yaml",
+  "candidate_paths": [
+    "candidates/impl_1_update_role_only.py",
+    "candidates/impl_2_ui_refresh_only.py",
+    "candidates/impl_3_revalidate_permissions.py",
+    "candidates/impl_4_invalidate_sessions_on_downgrade.py",
+    "candidates/impl_5_correct.py"
+  ],
+  "public_spec_tests_path": "public_spec_tests.py",
+  "hidden_oracle_path": "hidden_oracle.py",
+  "gate_can_access_oracle": false,
+  "gate_can_access_selected_candidate": false,
+  "gate_can_access_verified_but_wrong": false,
+  "use_in_paper": "preliminary external validity check",
+  "limitation": "adapted case study, not original bug reproduction"
+}

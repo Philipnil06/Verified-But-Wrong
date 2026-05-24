@@ -1,0 +1,39 @@
+{
+  "id": "audit_log_retention_delete_user",
+  "title": "Audit log retention on delete user",
+  "entrypoint": "delete_user",
+  "intent": "Delete or deactivate a user while preserving required audit records and recording deletion metadata.",
+  "ai_generated_spec": "Delete the user record.",
+  "critic_improved_spec": "Only admins may delete users and deleted state must be updated.",
+  "full_oracle_spec": "Only admins may delete users. Required audit records must be preserved and deletion metadata must be recorded.",
+  "missing_requirements": [
+    "Required audit records must be preserved",
+    "Deletion metadata must be recorded",
+    "Only admins may delete users",
+    "Deleted state must be updated"
+  ],
+  "spec_hole_categories": [
+    "audit_log_omission",
+    "business_rule_omission",
+    "state_invariant_omission",
+    "authorization_omission"
+  ],
+  "expected_naive_failure": "The public spec omits a heldout policy invariant that changes implementation selection.",
+  "expected_defense": "The oracle spec includes the heldout policy invariant.",
+  "policy_pack_ids": [
+    "generic_critical_requirements",
+    "access_control_policy",
+    "audit_logging_policy"
+  ],
+  "relevant_policy_card_ids": [
+    "generic.invalid_inputs_fail",
+    "audit.delete.preserve_records",
+    "audit.delete.metadata_recorded"
+  ],
+  "evaluation_split": "heldout",
+  "public_spec_text": {
+    "naive": "Delete the user record.",
+    "critic": "Only admins may delete users and deleted state must be updated.",
+    "oracle": "Only admins may delete users. Required audit records must be preserved and deletion metadata must be recorded."
+  }
+}

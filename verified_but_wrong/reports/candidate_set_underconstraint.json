@@ -1,0 +1,1613 @@
+{
+  "result_type": "candidate_set_underconstraint",
+  "timestamp": "2026-05-13T13:28:29.962610+00:00",
+  "tasks": 12,
+  "rows": [
+    {
+      "task_id": "access_control_delete_user",
+      "task_title": "Access control for deleting users",
+      "split": "development",
+      "spec_mode": "naive",
+      "selected_candidate": "impl_1_no_auth.py",
+      "selected_vbw": true,
+      "public_passing_candidates": [
+        "impl_1_no_auth.py",
+        "impl_2_correct.py",
+        "impl_3_admin_only_but_allows_self_delete.py",
+        "impl_4_role_string_bug.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_1_no_auth.py",
+        "impl_3_admin_only_but_allows_self_delete.py",
+        "impl_4_role_string_bug.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 4,
+      "public_passing_hidden_failing_count": 3,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.75,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.75
+    },
+    {
+      "task_id": "access_control_delete_user",
+      "task_title": "Access control for deleting users",
+      "split": "development",
+      "spec_mode": "critic",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "access_control_delete_user",
+      "task_title": "Access control for deleting users",
+      "split": "development",
+      "spec_mode": "oracle",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "access_control_delete_user",
+      "task_title": "Access control for deleting users",
+      "split": "development",
+      "spec_mode": "repaired_naive",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Admin can delete active target",
+        "Successful refunds must update refunded_total",
+        "Only admins may delete users",
+        "Users cannot delete themselves",
+        "Missing target users must fail"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py",
+        "impl_4_role_string_bug.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_4_role_string_bug.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 2,
+      "public_passing_hidden_failing_count": 1,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.5,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.5
+    },
+    {
+      "task_id": "access_control_delete_user",
+      "task_title": "Access control for deleting users",
+      "split": "development",
+      "spec_mode": "repaired_critic",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Admin can delete active target",
+        "Successful refunds must update refunded_total",
+        "Only admins may delete users",
+        "Users cannot delete themselves",
+        "Missing target users must fail"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py",
+        "impl_4_role_string_bug.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_4_role_string_bug.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 2,
+      "public_passing_hidden_failing_count": 1,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.5,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.5
+    },
+    {
+      "task_id": "audit_log_retention_delete_user",
+      "task_title": "Audit log retention on delete user",
+      "split": "heldout",
+      "spec_mode": "naive",
+      "selected_candidate": "impl_1_deletes_audit_history.py",
+      "selected_vbw": true,
+      "public_passing_candidates": [
+        "impl_1_deletes_audit_history.py",
+        "impl_2_correct.py",
+        "impl_3_no_metadata.py",
+        "impl_4_no_auth.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_1_deletes_audit_history.py",
+        "impl_3_no_metadata.py",
+        "impl_4_no_auth.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 4,
+      "public_passing_hidden_failing_count": 3,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.75,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.75
+    },
+    {
+      "task_id": "audit_log_retention_delete_user",
+      "task_title": "Audit log retention on delete user",
+      "split": "heldout",
+      "spec_mode": "critic",
+      "selected_candidate": "impl_1_deletes_audit_history.py",
+      "selected_vbw": true,
+      "public_passing_candidates": [
+        "impl_1_deletes_audit_history.py",
+        "impl_2_correct.py",
+        "impl_3_no_metadata.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_1_deletes_audit_history.py",
+        "impl_3_no_metadata.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 3,
+      "public_passing_hidden_failing_count": 2,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.6666666666666666,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.6666666666666666
+    },
+    {
+      "task_id": "audit_log_retention_delete_user",
+      "task_title": "Audit log retention on delete user",
+      "split": "heldout",
+      "spec_mode": "oracle",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "audit_log_retention_delete_user",
+      "task_title": "Audit log retention on delete user",
+      "split": "heldout",
+      "spec_mode": "repaired_naive",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Valid delete succeeds",
+        "Required audit records must be preserved",
+        "Deletion metadata must be recorded"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py",
+        "impl_4_no_auth.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_4_no_auth.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 2,
+      "public_passing_hidden_failing_count": 1,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.5,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.5
+    },
+    {
+      "task_id": "audit_log_retention_delete_user",
+      "task_title": "Audit log retention on delete user",
+      "split": "heldout",
+      "spec_mode": "repaired_critic",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Valid delete succeeds",
+        "Required audit records must be preserved",
+        "Deletion metadata must be recorded"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py",
+        "impl_4_no_auth.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_4_no_auth.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 2,
+      "public_passing_hidden_failing_count": 1,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.5,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.5
+    },
+    {
+      "task_id": "discount_nonnegative_price",
+      "task_title": "Discount with non-negative final price",
+      "split": "development",
+      "spec_mode": "naive",
+      "selected_candidate": "impl_1_simple_discount.py",
+      "selected_vbw": true,
+      "public_passing_candidates": [
+        "impl_1_simple_discount.py",
+        "impl_2_correct.py",
+        "impl_3_no_discount_bounds.py",
+        "impl_4_rounding_bug.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_1_simple_discount.py",
+        "impl_3_no_discount_bounds.py",
+        "impl_4_rounding_bug.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 4,
+      "public_passing_hidden_failing_count": 3,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.75,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.75
+    },
+    {
+      "task_id": "discount_nonnegative_price",
+      "task_title": "Discount with non-negative final price",
+      "split": "development",
+      "spec_mode": "critic",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "discount_nonnegative_price",
+      "task_title": "Discount with non-negative final price",
+      "split": "development",
+      "spec_mode": "oracle",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "discount_nonnegative_price",
+      "task_title": "Discount with non-negative final price",
+      "split": "development",
+      "spec_mode": "repaired_naive",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Normal discount works",
+        "Discount percent must be between 0 and 100",
+        "Final price must never be negative"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py",
+        "impl_4_rounding_bug.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_4_rounding_bug.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 2,
+      "public_passing_hidden_failing_count": 1,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.5,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.5
+    },
+    {
+      "task_id": "discount_nonnegative_price",
+      "task_title": "Discount with non-negative final price",
+      "split": "development",
+      "spec_mode": "repaired_critic",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Normal discount works",
+        "Discount percent must be between 0 and 100",
+        "Final price must never be negative"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py",
+        "impl_4_rounding_bug.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_4_rounding_bug.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 2,
+      "public_passing_hidden_failing_count": 1,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.5,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.5
+    },
+    {
+      "task_id": "expiry_handle_today",
+      "task_title": "Expiry handling with lead time",
+      "split": "development",
+      "spec_mode": "naive",
+      "selected_candidate": "impl_1_expiry_today_only.py",
+      "selected_vbw": true,
+      "public_passing_candidates": [
+        "impl_1_expiry_today_only.py",
+        "impl_2_correct.py",
+        "impl_3_ignores_lead_time.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_1_expiry_today_only.py",
+        "impl_3_ignores_lead_time.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 3,
+      "public_passing_hidden_failing_count": 2,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.6666666666666666,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.6666666666666666
+    },
+    {
+      "task_id": "expiry_handle_today",
+      "task_title": "Expiry handling with lead time",
+      "split": "development",
+      "spec_mode": "critic",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "expiry_handle_today",
+      "task_title": "Expiry handling with lead time",
+      "split": "development",
+      "spec_mode": "oracle",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "expiry_handle_today",
+      "task_title": "Expiry handling with lead time",
+      "split": "development",
+      "spec_mode": "repaired_naive",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Item expiring today is handle_today",
+        "Category lead time must be applied",
+        "Already expired items must be handled"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "expiry_handle_today",
+      "task_title": "Expiry handling with lead time",
+      "split": "development",
+      "spec_mode": "repaired_critic",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Item expiring today is handle_today",
+        "Category lead time must be applied",
+        "Already expired items must be handled"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "invoice_cancellation_stock_restore",
+      "task_title": "Invoice cancellation restores stock",
+      "split": "heldout",
+      "spec_mode": "naive",
+      "selected_candidate": "impl_1_marks_cancelled_only.py",
+      "selected_vbw": true,
+      "public_passing_candidates": [
+        "impl_1_marks_cancelled_only.py",
+        "impl_2_correct.py",
+        "impl_3_restores_available_only.py",
+        "impl_4_allows_paid_cancel.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_1_marks_cancelled_only.py",
+        "impl_3_restores_available_only.py",
+        "impl_4_allows_paid_cancel.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 4,
+      "public_passing_hidden_failing_count": 3,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.75,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.75
+    },
+    {
+      "task_id": "invoice_cancellation_stock_restore",
+      "task_title": "Invoice cancellation restores stock",
+      "split": "heldout",
+      "spec_mode": "critic",
+      "selected_candidate": "impl_1_marks_cancelled_only.py",
+      "selected_vbw": true,
+      "public_passing_candidates": [
+        "impl_1_marks_cancelled_only.py",
+        "impl_2_correct.py",
+        "impl_3_restores_available_only.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_1_marks_cancelled_only.py",
+        "impl_3_restores_available_only.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 3,
+      "public_passing_hidden_failing_count": 2,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.6666666666666666,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.6666666666666666
+    },
+    {
+      "task_id": "invoice_cancellation_stock_restore",
+      "task_title": "Invoice cancellation restores stock",
+      "split": "heldout",
+      "spec_mode": "oracle",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "invoice_cancellation_stock_restore",
+      "task_title": "Invoice cancellation restores stock",
+      "split": "heldout",
+      "spec_mode": "repaired_naive",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Valid cancellation succeeds",
+        "Reserved inventory must be restored when invoice is cancelled",
+        "Paid invoices cannot be cancelled"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py",
+        "impl_3_restores_available_only.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_3_restores_available_only.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 2,
+      "public_passing_hidden_failing_count": 1,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.5,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.5
+    },
+    {
+      "task_id": "invoice_cancellation_stock_restore",
+      "task_title": "Invoice cancellation restores stock",
+      "split": "heldout",
+      "spec_mode": "repaired_critic",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Valid cancellation succeeds",
+        "Reserved inventory must be restored when invoice is cancelled",
+        "Paid invoices cannot be cancelled"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py",
+        "impl_3_restores_available_only.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_3_restores_available_only.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 2,
+      "public_passing_hidden_failing_count": 1,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.5,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.5
+    },
+    {
+      "task_id": "loyalty_refund_reversal",
+      "task_title": "Loyalty points refund reversal",
+      "split": "development",
+      "spec_mode": "naive",
+      "selected_candidate": "impl_1_refund_only_no_loyalty.py",
+      "selected_vbw": true,
+      "public_passing_candidates": [
+        "impl_1_refund_only_no_loyalty.py",
+        "impl_2_correct.py",
+        "impl_3_reverses_all_points.py",
+        "impl_4_loyalty_can_go_negative.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_1_refund_only_no_loyalty.py",
+        "impl_3_reverses_all_points.py",
+        "impl_4_loyalty_can_go_negative.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 4,
+      "public_passing_hidden_failing_count": 3,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.75,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.75
+    },
+    {
+      "task_id": "loyalty_refund_reversal",
+      "task_title": "Loyalty points refund reversal",
+      "split": "development",
+      "spec_mode": "critic",
+      "selected_candidate": "impl_1_refund_only_no_loyalty.py",
+      "selected_vbw": true,
+      "public_passing_candidates": [
+        "impl_1_refund_only_no_loyalty.py",
+        "impl_2_correct.py",
+        "impl_3_reverses_all_points.py",
+        "impl_4_loyalty_can_go_negative.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_1_refund_only_no_loyalty.py",
+        "impl_3_reverses_all_points.py",
+        "impl_4_loyalty_can_go_negative.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 4,
+      "public_passing_hidden_failing_count": 3,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.75,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.75
+    },
+    {
+      "task_id": "loyalty_refund_reversal",
+      "task_title": "Loyalty points refund reversal",
+      "split": "development",
+      "spec_mode": "oracle",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "loyalty_refund_reversal",
+      "task_title": "Loyalty points refund reversal",
+      "split": "development",
+      "spec_mode": "repaired_naive",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Valid refund succeeds",
+        "Successful refunds must update refunded_total",
+        "Refund cannot exceed remaining paid amount",
+        "Successful refunds must reverse proportional loyalty points awarded by the original purchase",
+        "Loyalty points must not become negative",
+        "Cancelled or chargeback orders cannot be refunded"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "loyalty_refund_reversal",
+      "task_title": "Loyalty points refund reversal",
+      "split": "development",
+      "spec_mode": "repaired_critic",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Valid refund succeeds",
+        "Successful refunds must update refunded_total",
+        "Refund cannot exceed remaining paid amount",
+        "Successful refunds must reverse proportional loyalty points awarded by the original purchase",
+        "Loyalty points must not become negative",
+        "Cancelled or chargeback orders cannot be refunded"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "payment_webhook_idempotency",
+      "task_title": "Payment webhook idempotency",
+      "split": "development",
+      "spec_mode": "naive",
+      "selected_candidate": "impl_1_happy_path_only.py",
+      "selected_vbw": true,
+      "public_passing_candidates": [
+        "impl_1_happy_path_only.py",
+        "impl_2_correct.py",
+        "impl_3_no_idempotency.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_1_happy_path_only.py",
+        "impl_3_no_idempotency.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 3,
+      "public_passing_hidden_failing_count": 2,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.6666666666666666,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.6666666666666666
+    },
+    {
+      "task_id": "payment_webhook_idempotency",
+      "task_title": "Payment webhook idempotency",
+      "split": "development",
+      "spec_mode": "critic",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "payment_webhook_idempotency",
+      "task_title": "Payment webhook idempotency",
+      "split": "development",
+      "spec_mode": "oracle",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "payment_webhook_idempotency",
+      "task_title": "Payment webhook idempotency",
+      "split": "development",
+      "spec_mode": "repaired_naive",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Successful payment events should increase merchant balance",
+        "The same event_id must not be credited twice",
+        "Failed payments must not credit balance",
+        "Missing event_id must fail"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "payment_webhook_idempotency",
+      "task_title": "Payment webhook idempotency",
+      "split": "development",
+      "spec_mode": "repaired_critic",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Successful payment events should increase merchant balance",
+        "The same event_id must not be credited twice",
+        "Failed payments must not credit balance",
+        "Missing event_id must fail"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "rate_limiter_boundary",
+      "task_title": "Rate limiter boundary and per-user state",
+      "split": "development",
+      "spec_mode": "naive",
+      "selected_candidate": "impl_1_always_allow.py",
+      "selected_vbw": true,
+      "public_passing_candidates": [
+        "impl_1_always_allow.py",
+        "impl_2_correct.py",
+        "impl_3_off_by_one.py",
+        "impl_4_global_not_per_user.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_1_always_allow.py",
+        "impl_3_off_by_one.py",
+        "impl_4_global_not_per_user.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 4,
+      "public_passing_hidden_failing_count": 3,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.75,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.75
+    },
+    {
+      "task_id": "rate_limiter_boundary",
+      "task_title": "Rate limiter boundary and per-user state",
+      "split": "development",
+      "spec_mode": "critic",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "rate_limiter_boundary",
+      "task_title": "Rate limiter boundary and per-user state",
+      "split": "development",
+      "spec_mode": "oracle",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "rate_limiter_boundary",
+      "task_title": "Rate limiter boundary and per-user state",
+      "split": "development",
+      "spec_mode": "repaired_naive",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "First request is allowed",
+        "Successful refunds must update refunded_total",
+        "Boundary behavior at exactly 5 requests must be correct",
+        "The limit is per user, not global",
+        "The 6th request must be blocked"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "rate_limiter_boundary",
+      "task_title": "Rate limiter boundary and per-user state",
+      "split": "development",
+      "spec_mode": "repaired_critic",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "First request is allowed",
+        "Successful refunds must update refunded_total",
+        "Boundary behavior at exactly 5 requests must be correct",
+        "The limit is per user, not global",
+        "The 6th request must be blocked"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "refund_double_refund",
+      "task_title": "Refund function with no double refund",
+      "split": "development",
+      "spec_mode": "naive",
+      "selected_candidate": "impl_1_naive.py",
+      "selected_vbw": true,
+      "public_passing_candidates": [
+        "impl_1_naive.py",
+        "impl_2_correct.py",
+        "impl_3_no_state_update.py",
+        "impl_4_allows_over_refund.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_1_naive.py",
+        "impl_3_no_state_update.py",
+        "impl_4_allows_over_refund.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 4,
+      "public_passing_hidden_failing_count": 3,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.75,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.75
+    },
+    {
+      "task_id": "refund_double_refund",
+      "task_title": "Refund function with no double refund",
+      "split": "development",
+      "spec_mode": "critic",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "refund_double_refund",
+      "task_title": "Refund function with no double refund",
+      "split": "development",
+      "spec_mode": "oracle",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "refund_double_refund",
+      "task_title": "Refund function with no double refund",
+      "split": "development",
+      "spec_mode": "repaired_naive",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Valid positive refund on paid order succeeds",
+        "Successful refunds must update refunded_total",
+        "Refund cannot exceed remaining paid amount",
+        "Same order cannot be refunded twice"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "refund_double_refund",
+      "task_title": "Refund function with no double refund",
+      "split": "development",
+      "spec_mode": "repaired_critic",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Valid positive refund on paid order succeeds",
+        "Successful refunds must update refunded_total",
+        "Refund cannot exceed remaining paid amount",
+        "Same order cannot be refunded twice"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "refund_window_expiry",
+      "task_title": "Refund window expiry",
+      "split": "development",
+      "spec_mode": "naive",
+      "selected_candidate": "impl_1_no_window_check.py",
+      "selected_vbw": true,
+      "public_passing_candidates": [
+        "impl_1_no_window_check.py",
+        "impl_2_correct.py",
+        "impl_3_off_by_one_window.py",
+        "impl_4_ignores_manual_override.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_1_no_window_check.py",
+        "impl_3_off_by_one_window.py",
+        "impl_4_ignores_manual_override.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 4,
+      "public_passing_hidden_failing_count": 3,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.75,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.75
+    },
+    {
+      "task_id": "refund_window_expiry",
+      "task_title": "Refund window expiry",
+      "split": "development",
+      "spec_mode": "critic",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "refund_window_expiry",
+      "task_title": "Refund window expiry",
+      "split": "development",
+      "spec_mode": "oracle",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "refund_window_expiry",
+      "task_title": "Refund window expiry",
+      "split": "development",
+      "spec_mode": "repaired_naive",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Valid paid order refund succeeds",
+        "Successful refunds must update refunded_total",
+        "Refund cannot exceed remaining paid amount",
+        "Refunds are only allowed within 30 days of purchase unless manual_override is true",
+        "Day 30 is still allowed but day 31 is rejected without manual_override",
+        "Cancelled or chargeback orders cannot be refunded"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py",
+        "impl_4_ignores_manual_override.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_4_ignores_manual_override.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 2,
+      "public_passing_hidden_failing_count": 1,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.5,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.5
+    },
+    {
+      "task_id": "refund_window_expiry",
+      "task_title": "Refund window expiry",
+      "split": "development",
+      "spec_mode": "repaired_critic",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Valid paid order refund succeeds",
+        "Successful refunds must update refunded_total",
+        "Refund cannot exceed remaining paid amount",
+        "Refunds are only allowed within 30 days of purchase unless manual_override is true",
+        "Day 30 is still allowed but day 31 is rejected without manual_override",
+        "Cancelled or chargeback orders cannot be refunded"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py",
+        "impl_4_ignores_manual_override.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_4_ignores_manual_override.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 2,
+      "public_passing_hidden_failing_count": 1,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.5,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.5
+    },
+    {
+      "task_id": "role_downgrade_session_invalidation",
+      "task_title": "Role downgrade session invalidation",
+      "split": "heldout",
+      "spec_mode": "naive",
+      "selected_candidate": "impl_1_updates_role_only.py",
+      "selected_vbw": true,
+      "public_passing_candidates": [
+        "impl_1_updates_role_only.py",
+        "impl_2_correct.py",
+        "impl_3_invalidates_all_sessions.py",
+        "impl_4_allows_invalid_roles.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_1_updates_role_only.py",
+        "impl_3_invalidates_all_sessions.py",
+        "impl_4_allows_invalid_roles.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 4,
+      "public_passing_hidden_failing_count": 3,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.75,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.75
+    },
+    {
+      "task_id": "role_downgrade_session_invalidation",
+      "task_title": "Role downgrade session invalidation",
+      "split": "heldout",
+      "spec_mode": "critic",
+      "selected_candidate": "impl_1_updates_role_only.py",
+      "selected_vbw": true,
+      "public_passing_candidates": [
+        "impl_1_updates_role_only.py",
+        "impl_2_correct.py",
+        "impl_3_invalidates_all_sessions.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_1_updates_role_only.py",
+        "impl_3_invalidates_all_sessions.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 3,
+      "public_passing_hidden_failing_count": 2,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.6666666666666666,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.6666666666666666
+    },
+    {
+      "task_id": "role_downgrade_session_invalidation",
+      "task_title": "Role downgrade session invalidation",
+      "split": "heldout",
+      "spec_mode": "oracle",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "role_downgrade_session_invalidation",
+      "task_title": "Role downgrade session invalidation",
+      "split": "heldout",
+      "spec_mode": "repaired_naive",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Valid role update succeeds",
+        "Admin role downgrade must invalidate privileged sessions",
+        "Invalid roles must fail"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py",
+        "impl_3_invalidates_all_sessions.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_3_invalidates_all_sessions.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 2,
+      "public_passing_hidden_failing_count": 1,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.5,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.5
+    },
+    {
+      "task_id": "role_downgrade_session_invalidation",
+      "task_title": "Role downgrade session invalidation",
+      "split": "heldout",
+      "spec_mode": "repaired_critic",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Valid role update succeeds",
+        "Admin role downgrade must invalidate privileged sessions",
+        "Invalid roles must fail"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py",
+        "impl_3_invalidates_all_sessions.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_3_invalidates_all_sessions.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 2,
+      "public_passing_hidden_failing_count": 1,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.5,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.5
+    },
+    {
+      "task_id": "tenant_isolation_export",
+      "task_title": "Tenant isolation export",
+      "split": "heldout",
+      "spec_mode": "naive",
+      "selected_candidate": "impl_1_filters_only.py",
+      "selected_vbw": true,
+      "public_passing_candidates": [
+        "impl_1_filters_only.py",
+        "impl_2_correct.py",
+        "impl_3_tenant_filter_but_ignores_status.py",
+        "impl_4_allows_filter_tenant_override.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_1_filters_only.py",
+        "impl_3_tenant_filter_but_ignores_status.py",
+        "impl_4_allows_filter_tenant_override.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 4,
+      "public_passing_hidden_failing_count": 3,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.75,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.75
+    },
+    {
+      "task_id": "tenant_isolation_export",
+      "task_title": "Tenant isolation export",
+      "split": "heldout",
+      "spec_mode": "critic",
+      "selected_candidate": "impl_1_filters_only.py",
+      "selected_vbw": true,
+      "public_passing_candidates": [
+        "impl_1_filters_only.py",
+        "impl_2_correct.py",
+        "impl_3_tenant_filter_but_ignores_status.py",
+        "impl_4_allows_filter_tenant_override.py"
+      ],
+      "public_passing_hidden_failing_candidates": [
+        "impl_1_filters_only.py",
+        "impl_3_tenant_filter_but_ignores_status.py",
+        "impl_4_allows_filter_tenant_override.py"
+      ],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 4,
+      "public_passing_hidden_failing_count": 3,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.75,
+      "existence_risk": true,
+      "random_selection_vbw_probability": 0.75
+    },
+    {
+      "task_id": "tenant_isolation_export",
+      "task_title": "Tenant isolation export",
+      "split": "heldout",
+      "spec_mode": "oracle",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "tenant_isolation_export",
+      "task_title": "Tenant isolation export",
+      "split": "heldout",
+      "spec_mode": "repaired_naive",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Valid tenant export succeeds",
+        "Export must not include records from other tenants",
+        "Filters must not override tenant isolation"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    },
+    {
+      "task_id": "tenant_isolation_export",
+      "task_title": "Tenant isolation export",
+      "split": "heldout",
+      "spec_mode": "repaired_critic",
+      "selected_candidate": "impl_2_correct.py",
+      "selected_vbw": false,
+      "selected_requirements": [
+        "Valid tenant export succeeds",
+        "Export must not include records from other tenants",
+        "Filters must not override tenant isolation"
+      ],
+      "public_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_hidden_failing_candidates": [],
+      "public_passing_hidden_passing_candidates": [
+        "impl_2_correct.py"
+      ],
+      "public_passing_candidates_count": 1,
+      "public_passing_hidden_failing_count": 0,
+      "public_passing_hidden_passing_count": 1,
+      "underconstraint_risk": 0.0,
+      "existence_risk": false,
+      "random_selection_vbw_probability": 0.0
+    }
+  ],
+  "aggregate": [
+    {
+      "spec_mode": "naive",
+      "tasks": 12,
+      "public_passing_candidates": 46,
+      "hidden_failing_among_public_passing": 34,
+      "hidden_passing_among_public_passing": 12,
+      "mean_underconstraint_risk": 0.7361111111111112,
+      "tasks_with_existence_risk": 12,
+      "selected_vbw_count": 12,
+      "random_selection_vbw_probability_mean": 0.7361111111111112
+    },
+    {
+      "spec_mode": "critic",
+      "tasks": 12,
+      "public_passing_candidates": 24,
+      "hidden_failing_among_public_passing": 12,
+      "hidden_passing_among_public_passing": 12,
+      "mean_underconstraint_risk": 0.2916666666666667,
+      "tasks_with_existence_risk": 5,
+      "selected_vbw_count": 5,
+      "random_selection_vbw_probability_mean": 0.2916666666666667
+    },
+    {
+      "spec_mode": "oracle",
+      "tasks": 12,
+      "public_passing_candidates": 12,
+      "hidden_failing_among_public_passing": 0,
+      "hidden_passing_among_public_passing": 12,
+      "mean_underconstraint_risk": 0.0,
+      "tasks_with_existence_risk": 0,
+      "selected_vbw_count": 0,
+      "random_selection_vbw_probability_mean": 0.0
+    },
+    {
+      "spec_mode": "repaired_naive",
+      "tasks": 12,
+      "public_passing_candidates": 18,
+      "hidden_failing_among_public_passing": 6,
+      "hidden_passing_among_public_passing": 12,
+      "mean_underconstraint_risk": 0.25,
+      "tasks_with_existence_risk": 6,
+      "selected_vbw_count": 0,
+      "random_selection_vbw_probability_mean": 0.25
+    },
+    {
+      "spec_mode": "repaired_critic",
+      "tasks": 12,
+      "public_passing_candidates": 18,
+      "hidden_failing_among_public_passing": 6,
+      "hidden_passing_among_public_passing": 12,
+      "mean_underconstraint_risk": 0.25,
+      "tasks_with_existence_risk": 6,
+      "selected_vbw_count": 0,
+      "random_selection_vbw_probability_mean": 0.25
+    }
+  ]
+}

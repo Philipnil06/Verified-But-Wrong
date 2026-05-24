@@ -1,0 +1,12 @@
+{
+  "status": "validated",
+  "reason": "Clear external target-validity gap: NL requires maximizing chocolates with divisibility/tie semantics, while the formal method postcondition only requires a non-negative integer.",
+  "gap_category": "trivial_postcondition",
+  "nl_requirement": "Return the maximum total chocolates under red/blue divisibility rules and choose the better reward when divisible by both.",
+  "formal_spec_gap": "Formal target for solve only ensures result >= 0 and does not encode optimization or divisibility counting semantics.",
+  "weak_spec_proxy_description": "Proxy models the weak formal requirement by only checking that output is an integer >= 0.",
+  "bad_candidate_behavior": "Always return 0.",
+  "intended_oracle_description": "Oracle computes exact optimum using inclusion-exclusion and common-multiple overlap handling on concrete examples.",
+  "demo_type": "fully_executable",
+  "reviewer_notes": "This is an adapted minimal demonstration, not a claim that the external benchmark is a bug or vulnerability."
+}

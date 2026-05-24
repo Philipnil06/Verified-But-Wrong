@@ -1,0 +1,12 @@
+{
+  "status": "validated",
+  "reason": "Clear external target-validity gap: NL requires simulation of overflow dynamics, but formal target mainly constrains range and a few edge cases.",
+  "gap_category": "simulation_semantics_missing",
+  "nl_requirement": "Simulate pouring and overflow split through the pyramid and count fully filled glasses after t seconds.",
+  "formal_spec_gap": "Formal target constrains result bounds plus selected edge conditions, without encoding full per-step flow semantics.",
+  "weak_spec_proxy_description": "Proxy checks only non-negativity/range and listed edge-case conditions from the weak target.",
+  "bad_candidate_behavior": "Return 0 for t=0 and 1 otherwise, ignoring simulation.",
+  "intended_oracle_description": "Oracle runs an explicit small-step champagne simulation on concrete inputs and checks exact full-glass counts.",
+  "demo_type": "fully_executable",
+  "reviewer_notes": "This is an adapted minimal demonstration, not a claim that the external benchmark is a bug or vulnerability."
+}

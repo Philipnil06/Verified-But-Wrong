@@ -1,0 +1,76 @@
+{
+  "timestamp": "2026-05-12T17:30:01.094659+00:00",
+  "task_id": "payment_webhook_idempotency",
+  "task_title": "Payment webhook idempotency",
+  "condition": "oracle_full",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the full intended behavior.\nThis is an upper-bound condition and is not a deployable retrieval setting.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the full intended behavior. This is an upper-bound condition.\n\nTask title: Payment webhook idempotency\nFunction entrypoint: process_payment_event\n\nFull intended behavior:\nSuccessful payment events should increase the merchant balance exactly once per event_id. Failed payments must not increase balance. Missing event_id, non-positive amounts, unsupported currencies, and duplicate events must fail or be ignored without changing balance.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "333a5221127e5eb5df50389e5fd9b5b79770e09d216b9bde5b6e81297b471e03",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Payment webhook idempotency for process_payment_event\",\n  \"behavior_requirements\": [\n    \"Increment merchant balance exactly once per unique event_id for successful payments.\",\n    \"Do not modify balance for failed payments.\",\n    \" Ignore or fail gracefully when event_id is missing.\",\n    \" Ignore or fail gracefully for non-positive amounts.\",\n    \" Ignore or fail gracefully for unsupported currencies.\",\n    \" Ignore duplicate event_id to ensure idempotency and no double-counting.\",\n    \" Persist a durable record of processed event_ids to prevent re-processing across restarts.\",\n    \" Return a deterministic, machine-readable response indicating success or failure without revealing sensitive details.\"\n  ],\n  \"edge_cases\": [\n    \" Duplicate event_id received for a successful payment after initial processing.\",\n    \" Missing event_id with a valid amount and currency.\",\n    \" Zero or negative amount with valid event_id.\",\n    \" Unsupported currency with valid event_id and positive amount.\",\n    \" Simulated downstream persistence failure after balance update.\",\n    \" Processed event_id exists in log but balance is inconsistent; detect and correct.\"\n  ],\n  \"acceptance_criteria\": [\n    \" When a single successful webhook with event_id arrives once, balance increases by amount exactly once.\",\n    \" When the same event_id arrives again (duplicate), balance does not change.\",\n    \" When event lacks event_id, or amount <= 0, or currency unsupported, balance remains unchanged and a failure is returned/logged.\",\n    \" Supported currencies are checked prior to any balance modification; unsupported currencies cause no balance change.\",\n    \" Processed event_ids are durably recorded and survive restarts, ensuring idempotent behavior.\",\n    \" The API returns a JSON response indicating success or failure without exposing sensitive data.\"\n  ],\n  \"non_goals\": [\n    \" Handling of non-webhook inputs other than process_payment_event payloads.\",\n    \" Reconciliation of historical payments outside the webhook flow.\",\n    \" Providing user-facing refund or chargeback logic within this endpoint.\",\n    \" Implementing UI or external notification systems.\"\n  ],\n  \"testable_assertions\": [\n    \" process_payment_event with event_id EA1, amount 100, currency USD returns success and increases balance by 100 exactly once.\",\n    \" Re-sending process_payment_event with same event_id EA1 does not increase balance again and returns success or idempotent acknowledgement without error.\",\n    \" process_payment_event with missing event_id returns failure and balance unchanged.\",\n    \" process_payment_event with amount -50 returns failure and balance unchanged.\",\n    \" process_payment_event with amount 50 and currency EUR when USD is the only supported currency returns failure and balance unchanged.\",\n    \" After processing a valid event, event_id EA2 is stored in processed-events log and survives simulated restart; reprocessing EA2 does not modify balance.\"\n  ]\n}",
+  "response_hash": "958153c957803b91d3336c6e4b36f5fecc9f2aeaed094b479b50dee2a78b4e96",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_03524d9dac1a15b4006a03639810188196a355fd740e2852fc",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 266,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 590,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 856
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Payment webhook idempotency for process_payment_event",
+    "behavior_requirements": [
+      "Increment merchant balance exactly once per unique event_id for successful payments.",
+      "Do not modify balance for failed payments.",
+      "Ignore or fail gracefully when event_id is missing.",
+      "Ignore or fail gracefully for non-positive amounts.",
+      "Ignore or fail gracefully for unsupported currencies.",
+      "Ignore duplicate event_id to ensure idempotency and no double-counting.",
+      "Persist a durable record of processed event_ids to prevent re-processing across restarts.",
+      "Return a deterministic, machine-readable response indicating success or failure without revealing sensitive details."
+    ],
+    "edge_cases": [
+      "Duplicate event_id received for a successful payment after initial processing.",
+      "Missing event_id with a valid amount and currency.",
+      "Zero or negative amount with valid event_id.",
+      "Unsupported currency with valid event_id and positive amount.",
+      "Simulated downstream persistence failure after balance update.",
+      "Processed event_id exists in log but balance is inconsistent; detect and correct."
+    ],
+    "acceptance_criteria": [
+      "When a single successful webhook with event_id arrives once, balance increases by amount exactly once.",
+      "When the same event_id arrives again (duplicate), balance does not change.",
+      "When event lacks event_id, or amount <= 0, or currency unsupported, balance remains unchanged and a failure is returned/logged.",
+      "Supported currencies are checked prior to any balance modification; unsupported currencies cause no balance change.",
+      "Processed event_ids are durably recorded and survive restarts, ensuring idempotent behavior.",
+      "The API returns a JSON response indicating success or failure without exposing sensitive data."
+    ],
+    "non_goals": [
+      "Handling of non-webhook inputs other than process_payment_event payloads.",
+      "Reconciliation of historical payments outside the webhook flow.",
+      "Providing user-facing refund or chargeback logic within this endpoint.",
+      "Implementing UI or external notification systems."
+    ],
+    "testable_assertions": [
+      "process_payment_event with event_id EA1, amount 100, currency USD returns success and increases balance by 100 exactly once.",
+      "Re-sending process_payment_event with same event_id EA1 does not increase balance again and returns success or idempotent acknowledgement without error.",
+      "process_payment_event with missing event_id returns failure and balance unchanged.",
+      "process_payment_event with amount -50 returns failure and balance unchanged.",
+      "process_payment_event with amount 50 and currency EUR when USD is the only supported currency returns failure and balance unchanged.",
+      "After processing a valid event, event_id EA2 is stored in processed-events log and survives simulated restart; reprocessing EA2 does not modify balance."
+    ]
+  },
+  "public_spec": "Title: Payment webhook idempotency for process_payment_event\n\nBehavior requirements:\n- Increment merchant balance exactly once per unique event_id for successful payments.\n- Do not modify balance for failed payments.\n- Ignore or fail gracefully when event_id is missing.\n- Ignore or fail gracefully for non-positive amounts.\n- Ignore or fail gracefully for unsupported currencies.\n- Ignore duplicate event_id to ensure idempotency and no double-counting.\n- Persist a durable record of processed event_ids to prevent re-processing across restarts.\n- Return a deterministic, machine-readable response indicating success or failure without revealing sensitive details.\n\nEdge cases:\n- Duplicate event_id received for a successful payment after initial processing.\n- Missing event_id with a valid amount and currency.\n- Zero or negative amount with valid event_id.\n- Unsupported currency with valid event_id and positive amount.\n- Simulated downstream persistence failure after balance update.\n- Processed event_id exists in log but balance is inconsistent; detect and correct.\n\nAcceptance criteria:\n- When a single successful webhook with event_id arrives once, balance increases by amount exactly once.\n- When the same event_id arrives again (duplicate), balance does not change.\n- When event lacks event_id, or amount <= 0, or currency unsupported, balance remains unchanged and a failure is returned/logged.\n- Supported currencies are checked prior to any balance modification; unsupported currencies cause no balance change.\n- Processed event_ids are durably recorded and survive restarts, ensuring idempotent behavior.\n- The API returns a JSON response indicating success or failure without exposing sensitive data.\n\nNon-goals:\n- Handling of non-webhook inputs other than process_payment_event payloads.\n- Reconciliation of historical payments outside the webhook flow.\n- Providing user-facing refund or chargeback logic within this endpoint.\n- Implementing UI or external notification systems.\n\nTestable assertions:\n- process_payment_event with event_id EA1, amount 100, currency USD returns success and increases balance by 100 exactly once.\n- Re-sending process_payment_event with same event_id EA1 does not increase balance again and returns success or idempotent acknowledgement without error.\n- process_payment_event with missing event_id returns failure and balance unchanged.\n- process_payment_event with amount -50 returns failure and balance unchanged.\n- process_payment_event with amount 50 and currency EUR when USD is the only supported currency returns failure and balance unchanged.\n- After processing a valid event, event_id EA2 is stored in processed-events log and survives simulated restart; reprocessing EA2 does not modify balance.",
+  "generation_empty": false,
+  "generation_error": null
+}

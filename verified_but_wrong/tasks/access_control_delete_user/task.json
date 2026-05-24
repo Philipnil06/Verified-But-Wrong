@@ -1,0 +1,47 @@
+{
+  "id": "access_control_delete_user",
+  "title": "Access control for deleting users",
+  "entrypoint": "delete_user",
+  "intent": "Implement a delete_user function. Only admins may delete users. Normal users and guests must be rejected. A user must not be able to delete themselves. Missing or invalid target users must fail.",
+  "ai_generated_spec": "The function should delete a target user.",
+  "critic_improved_spec": "The function should delete a target user only if the actor is an admin, the target exists, and the actor is not deleting themselves. Members and guests must be rejected.",
+  "missing_requirements": [
+    "Only admins may delete users",
+    "Members and guests must be rejected",
+    "Users cannot delete themselves",
+    "Missing target users must fail",
+    "Deleted state must be updated"
+  ],
+  "spec_hole_categories": [
+    "security_omission",
+    "authorization_omission",
+    "state_invariant_omission",
+    "error_behavior_omission"
+  ],
+  "expected_naive_failure": "The naive public spec can select an implementation that deletes users without checking authorization.",
+  "expected_defense": "The omission-aware critic spec should reject implementations that allow members, guests, or self-deletes.",
+  "policy_pack_ids": [
+    "generic_critical_requirements",
+    "access_control_policy"
+  ],
+  "relevant_policy_card_ids": [
+    "generic.state.update_success",
+    "generic.invalid_inputs_fail",
+    "access.destructive.admin_only",
+    "access.self_delete.rejected",
+    "access.delete.target_exists"
+  ],
+  "missing_requirement_severity": {
+    "Only admins may delete users": "high",
+    "Members and guests must be rejected": "medium",
+    "Users cannot delete themselves": "high",
+    "Missing target users must fail": "medium",
+    "Deleted state must be updated": "medium"
+  },
+  "public_spec_text": {
+    "naive": "The function should delete a target user.",
+    "critic": "The function should delete a target user only if the actor is an admin, the target exists, and the actor is not deleting themselves. Members and guests must be rejected.",
+    "oracle": "The function should delete a target user only if the actor is an admin, the target exists, and the actor is not deleting themselves. Members and guests must be rejected."
+  },
+  "evaluation_split": "development"
+}

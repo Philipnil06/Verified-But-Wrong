@@ -1,0 +1,74 @@
+{
+  "timestamp": "2026-05-12T17:30:39.270194+00:00",
+  "task_id": "refund_double_refund",
+  "task_title": "Refund function with no double refund",
+  "condition": "ticket_plus_retrieved_policy",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the product ticket and the retrieved policy card.\nThe policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the product ticket and the retrieved policy card. The policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nTask title: Refund function with no double refund\nFunction entrypoint: refund\n\nProduct ticket:\nImplement a refund function. Refunds must be positive, must never exceed the original payment, invalid or cancelled orders must fail, and the same order cannot be refunded twice.\n\nRetrieved policy card:\nPolicy card ID: payments.refund.no_double_refund\nTitle: Refunds must not be processed twice for the same money\nRequirement: The same order, refund, or paid amount must not be refunded twice.\nWhy it matters: Duplicate refunds can return more money than the customer paid.\nAudit questions:\n- Does the spec prevent double refunds for the same order?\nKeywords:\n- double refund\n- same order\n- already refunded\n- refunded twice\n- remaining refundable\n- refunded_total\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "2c2dcc23fbe9e4248088612fc065b0b21990ae18755b4c0c9830bc3f859163fb",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Refund function with no double refund\",\n  \"behavior_requirements\": [\n    \"refund amount must be positive\",\n    \"refund amount must not exceed the original payment amount\",\n    \"refunds are only allowed for valid, non-cancelled orders\",\n    \"an order cannot be refunded more than once for the same paid amount\",\n    \"each refund request is linked to a single order and a single paid amount\",\n    \"if an order has already been refunded for a given amount, subsequent refunds for that amount are rejected\",\n    \"the system tracks refunded_total per order and validates new refunds against remaining refundable amount\"\n  ],\n  \"edge_cases\": [\n    \"refund request equals the original payment amount (full refund) on a valid order\",\n    \"partial refunds across multiple refund requests for the same order\",\n    \"refund request for a cancelled or invalid order\",\n    \"refund request with amount zero or negative\",\n    \"concurrent refund requests hitting the same order simultaneously\",\n    \"order with multiple payment chunks or refunds should not allow double refund of any chunk\",\n    \"rounding issues when amounts involve fractions of the smallest currency unit\"\n  ],\n  \"acceptance_criteria\": [\n    \"refund is rejected if order is invalid or cancelled\",\n    \"refund amount > 0\",\n    \"refund amount <= original_payment_amount\",\n    \"no refund processed if same order/payment amount has already been refunded\",\n    \"refunded_total for the order is updated correctly after each successful refund\",\n    \"system indicates exactly one of: success with updated refunded_total, or failure with a clear reason (e.g., double refund, over-refund, invalid order)\"\n  ],\n  \"non_goals\": [\n    \"implementing business logic unrelated to refunds (e.g., purchase flow, checkout validation)\",\n    \"automatic refunds without explicit request\",\n    \"support for currency conversion or multi-currency refunds beyond the original payment currency\"\n  ],\n  \"testable_assertions\": [\n    \"given a valid order with original_payment of X, a refund request of Y (0 < Y <= X) succeeds and refunded_total becomes Y\",\n    \"subsequent refund requests for the same order with any amount > 0 fail if they would cause total refunds to exceed original_payment\",\n    \"refund request for an invalid or cancelled order fails\",\n    \"refund request with amount 0 or negative fails\",\n    \"concurrent identical refund requests for the same order and amount fail safely without double-refunding\"\n  ]\n}",
+  "response_hash": "7224428e745cbf38935a4f5fb4e2d7a29c9b9f244662ab775e1e45fa2ac6b55e",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0ca811ef6d879ed3006a0363be47188196b97fb86022482ef8",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 375,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 526,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 901
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Refund function with no double refund",
+    "behavior_requirements": [
+      "refund amount must be positive",
+      "refund amount must not exceed the original payment amount",
+      "refunds are only allowed for valid, non-cancelled orders",
+      "an order cannot be refunded more than once for the same paid amount",
+      "each refund request is linked to a single order and a single paid amount",
+      "if an order has already been refunded for a given amount, subsequent refunds for that amount are rejected",
+      "the system tracks refunded_total per order and validates new refunds against remaining refundable amount"
+    ],
+    "edge_cases": [
+      "refund request equals the original payment amount (full refund) on a valid order",
+      "partial refunds across multiple refund requests for the same order",
+      "refund request for a cancelled or invalid order",
+      "refund request with amount zero or negative",
+      "concurrent refund requests hitting the same order simultaneously",
+      "order with multiple payment chunks or refunds should not allow double refund of any chunk",
+      "rounding issues when amounts involve fractions of the smallest currency unit"
+    ],
+    "acceptance_criteria": [
+      "refund is rejected if order is invalid or cancelled",
+      "refund amount > 0",
+      "refund amount <= original_payment_amount",
+      "no refund processed if same order/payment amount has already been refunded",
+      "refunded_total for the order is updated correctly after each successful refund",
+      "system indicates exactly one of: success with updated refunded_total, or failure with a clear reason (e.g., double refund, over-refund, invalid order)"
+    ],
+    "non_goals": [
+      "implementing business logic unrelated to refunds (e.g., purchase flow, checkout validation)",
+      "automatic refunds without explicit request",
+      "support for currency conversion or multi-currency refunds beyond the original payment currency"
+    ],
+    "testable_assertions": [
+      "given a valid order with original_payment of X, a refund request of Y (0 < Y <= X) succeeds and refunded_total becomes Y",
+      "subsequent refund requests for the same order with any amount > 0 fail if they would cause total refunds to exceed original_payment",
+      "refund request for an invalid or cancelled order fails",
+      "refund request with amount 0 or negative fails",
+      "concurrent identical refund requests for the same order and amount fail safely without double-refunding"
+    ]
+  },
+  "public_spec": "Title: Refund function with no double refund\n\nBehavior requirements:\n- refund amount must be positive\n- refund amount must not exceed the original payment amount\n- refunds are only allowed for valid, non-cancelled orders\n- an order cannot be refunded more than once for the same paid amount\n- each refund request is linked to a single order and a single paid amount\n- if an order has already been refunded for a given amount, subsequent refunds for that amount are rejected\n- the system tracks refunded_total per order and validates new refunds against remaining refundable amount\n\nEdge cases:\n- refund request equals the original payment amount (full refund) on a valid order\n- partial refunds across multiple refund requests for the same order\n- refund request for a cancelled or invalid order\n- refund request with amount zero or negative\n- concurrent refund requests hitting the same order simultaneously\n- order with multiple payment chunks or refunds should not allow double refund of any chunk\n- rounding issues when amounts involve fractions of the smallest currency unit\n\nAcceptance criteria:\n- refund is rejected if order is invalid or cancelled\n- refund amount > 0\n- refund amount <= original_payment_amount\n- no refund processed if same order/payment amount has already been refunded\n- refunded_total for the order is updated correctly after each successful refund\n- system indicates exactly one of: success with updated refunded_total, or failure with a clear reason (e.g., double refund, over-refund, invalid order)\n\nNon-goals:\n- implementing business logic unrelated to refunds (e.g., purchase flow, checkout validation)\n- automatic refunds without explicit request\n- support for currency conversion or multi-currency refunds beyond the original payment currency\n\nTestable assertions:\n- given a valid order with original_payment of X, a refund request of Y (0 < Y <= X) succeeds and refunded_total becomes Y\n- subsequent refund requests for the same order with any amount > 0 fail if they would cause total refunds to exceed original_payment\n- refund request for an invalid or cancelled order fails\n- refund request with amount 0 or negative fails\n- concurrent identical refund requests for the same order and amount fail safely without double-refunding",
+  "generation_empty": false,
+  "generation_error": null
+}

@@ -1,0 +1,1 @@
+Candidate-set analysis shows that incomplete public specs underconstrain the implementation target, not only the selected candidate. Under naive specs, multiple public-spec-passing implementations often remain hidden-oracle-failing, so verified-but-wrong is not merely a fixed-order selection artifact.

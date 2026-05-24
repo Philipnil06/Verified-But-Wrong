@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-05-12T17:27:32.053260+00:00",
+  "task_id": "access_control_delete_user",
+  "task_title": "Access control for deleting users",
+  "condition": "ticket_plus_generic_checklist",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the product ticket and the generic checklist.\nThe checklist is generic and may not mention task-specific organization policies.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the product ticket and the generic checklist. The checklist is generic and may not mention task-specific organization policies.\n\nTask title: Access control for deleting users\nFunction entrypoint: delete_user\n\nProduct ticket:\n# Product ticket: delete user\n\n## Background\nSupport administrators need to delete active users that should no longer exist in the system.\n\n## Happy path\n- Admin deletes an active target user.\n- Target status becomes deleted.\n\n## Edge cases\n- Missing targets should fail.\n- Deleted targets should not be deleted again.\n\n## Acceptance criteria\n- Admin delete succeeds.\n- Target state is updated.\n\nGeneric checklist:\n- authorization and access control\n- idempotency and duplicate handling\n- boundary conditions and off-by-one cases\n- state consistency and required state updates\n- audit logging or record retention where relevant\n- tenant or data isolation where relevant\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "aed7f0bd6f86d05f670803e853696df8c6b6df4224c0d1b83545b42894d2ef90",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Access control for deleting users\",\n  \"behavior_requirements\": [\n    \"delete_user(entrypoint) must enforce that only admins can delete users\",\n    \"Only active target users are deletable; status must transition to deleted\",\n    \"Operation is idempotent: deleting a deleted target has no effect and does not error\",\n    \"Target user must exist; missing target results in failure\",\n    \"Audit logging records admin identity, target user, timestamp, and outcome\",\n    \"Data isolation: deletion affects the target's state within the correct tenant\"\n  ],\n  \"edge_cases\": [\n    \"Missing targets should fail (target user not found or user_id invalid)\",\n    \"Deleted targets should not be deleted again (no state change and no duplicate actions)\",\n    \"Admin attempting to delete a non-target (e.g., already deleted or ineligible) should fail with clear error\",\n    \"Boundary: attempting to delete a user_id outside of allowed range should fail\",\n    \"No leakage of unauthorized user data in responses\"\n  ],\n  \"acceptance_criteria\": [\n    \"Admin delete succeeds when target is active\",\n    \"Target state is updated to deleted\",\n    \"When target is missing, operation fails with appropriate error\",\n    \"When target is already deleted, operation is idempotent and returns success/no-op or explicit idempotent result\",\n    \"Audit log entry created with admin_id, target_user_id, timestamp, and result\",\n    \"Access control prevents non-admins from initiating delete\"\n  ],\n  \"non_goals\": [\n    \"Handling of related data cascades beyond status update (e.g., archiving related records) is out of scope\",\n    \"Recovery from deletion or undo functionality is out of scope\"\n  ],\n  \"testable_assertions\": [\n    \"Given an admin deletes an active user, delete_user returns success and target.status == 'deleted'\",\n    \"Given a missing target, delete_user returns failure with not-found error\",\n    \"Given a target already deleted, delete_user is a no-op or returns idempotent success\",\n    \"Non-admin attempting delete is rejected with forbidden error\",\n    \"An audit log entry is created for successful and failed delete attempts\"\n  ]\n}",
+  "response_hash": "1ab9a230836db8688a38622ffb46d0757307da7f8792f212a752bc5299558c6c",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0b2dcbf295aea176006a03630300e481a0a716baaf27408503",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 359,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 472,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 831
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Access control for deleting users",
+    "behavior_requirements": [
+      "delete_user(entrypoint) must enforce that only admins can delete users",
+      "Only active target users are deletable; status must transition to deleted",
+      "Operation is idempotent: deleting a deleted target has no effect and does not error",
+      "Target user must exist; missing target results in failure",
+      "Audit logging records admin identity, target user, timestamp, and outcome",
+      "Data isolation: deletion affects the target's state within the correct tenant"
+    ],
+    "edge_cases": [
+      "Missing targets should fail (target user not found or user_id invalid)",
+      "Deleted targets should not be deleted again (no state change and no duplicate actions)",
+      "Admin attempting to delete a non-target (e.g., already deleted or ineligible) should fail with clear error",
+      "Boundary: attempting to delete a user_id outside of allowed range should fail",
+      "No leakage of unauthorized user data in responses"
+    ],
+    "acceptance_criteria": [
+      "Admin delete succeeds when target is active",
+      "Target state is updated to deleted",
+      "When target is missing, operation fails with appropriate error",
+      "When target is already deleted, operation is idempotent and returns success/no-op or explicit idempotent result",
+      "Audit log entry created with admin_id, target_user_id, timestamp, and result",
+      "Access control prevents non-admins from initiating delete"
+    ],
+    "non_goals": [
+      "Handling of related data cascades beyond status update (e.g., archiving related records) is out of scope",
+      "Recovery from deletion or undo functionality is out of scope"
+    ],
+    "testable_assertions": [
+      "Given an admin deletes an active user, delete_user returns success and target.status == 'deleted'",
+      "Given a missing target, delete_user returns failure with not-found error",
+      "Given a target already deleted, delete_user is a no-op or returns idempotent success",
+      "Non-admin attempting delete is rejected with forbidden error",
+      "An audit log entry is created for successful and failed delete attempts"
+    ]
+  },
+  "public_spec": "Title: Access control for deleting users\n\nBehavior requirements:\n- delete_user(entrypoint) must enforce that only admins can delete users\n- Only active target users are deletable; status must transition to deleted\n- Operation is idempotent: deleting a deleted target has no effect and does not error\n- Target user must exist; missing target results in failure\n- Audit logging records admin identity, target user, timestamp, and outcome\n- Data isolation: deletion affects the target's state within the correct tenant\n\nEdge cases:\n- Missing targets should fail (target user not found or user_id invalid)\n- Deleted targets should not be deleted again (no state change and no duplicate actions)\n- Admin attempting to delete a non-target (e.g., already deleted or ineligible) should fail with clear error\n- Boundary: attempting to delete a user_id outside of allowed range should fail\n- No leakage of unauthorized user data in responses\n\nAcceptance criteria:\n- Admin delete succeeds when target is active\n- Target state is updated to deleted\n- When target is missing, operation fails with appropriate error\n- When target is already deleted, operation is idempotent and returns success/no-op or explicit idempotent result\n- Audit log entry created with admin_id, target_user_id, timestamp, and result\n- Access control prevents non-admins from initiating delete\n\nNon-goals:\n- Handling of related data cascades beyond status update (e.g., archiving related records) is out of scope\n- Recovery from deletion or undo functionality is out of scope\n\nTestable assertions:\n- Given an admin deletes an active user, delete_user returns success and target.status == 'deleted'\n- Given a missing target, delete_user returns failure with not-found error\n- Given a target already deleted, delete_user is a no-op or returns idempotent success\n- Non-admin attempting delete is rejected with forbidden error\n- An audit log entry is created for successful and failed delete attempts",
+  "generation_empty": false,
+  "generation_error": null
+}

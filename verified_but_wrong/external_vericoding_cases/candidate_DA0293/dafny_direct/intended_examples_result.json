@@ -1,0 +1,36 @@
+{
+  "task_id": "DA0293",
+  "rows": [
+    {
+      "input": [
+        5,
+        1,
+        "00101"
+      ],
+      "expected": 3,
+      "actual_bad_candidate": 0,
+      "pass": false
+    },
+    {
+      "input": [
+        6,
+        2,
+        "010101"
+      ],
+      "expected": 5,
+      "actual_bad_candidate": 0,
+      "pass": false
+    },
+    {
+      "input": [
+        4,
+        0,
+        "1111"
+      ],
+      "expected": 4,
+      "actual_bad_candidate": 0,
+      "pass": false
+    }
+  ],
+  "all_pass": false
+}

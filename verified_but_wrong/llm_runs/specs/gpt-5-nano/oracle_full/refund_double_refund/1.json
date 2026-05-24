@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-05-12T17:30:43.543095+00:00",
+  "task_id": "refund_double_refund",
+  "task_title": "Refund function with no double refund",
+  "condition": "oracle_full",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the full intended behavior.\nThis is an upper-bound condition and is not a deployable retrieval setting.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the full intended behavior. This is an upper-bound condition.\n\nTask title: Refund function with no double refund\nFunction entrypoint: refund\n\nFull intended behavior:\nRefund amount must be positive, must not exceed the remaining refundable balance, cancelled orders must fail, and successful refunds must update refunded_total so the same money cannot be refunded twice.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "9af08f057a9a977fff44db180f70a1ba77036f5af7f5974cad7c3fad8e9e40a0",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Refund function with no double refund\",\n  \"behavior_requirements\": [\n    \"refund(amount) must accept a positive amount.\",\n    \"refund(amount) must not exceed the remaining refundable balance.\",\n    \"refunds on cancelled orders must fail.\",\n    \"successful refunds must update refunded_total so the same funds cannot be refunded twice.\"\n  ],\n  \"edge_cases\": [\n    \"amount <= 0 should fail with appropriate error.\",\n    \"amount > remaining refundable balance should fail.\",\n    \"order status cancelled should cause refund to fail even if amount <= balance.\",\n    \"refunding identical amount twice should fail on second attempt due to updated refunded_total.\",\n    \"floating point precision or currency rounding should be handled consistently (e.g., use integer cents).\",\n    \"initial refunded_total is 0 and remaining refundable balance equals total refundable amount.\"\n  ],\n  \"acceptance_criteria\": [\n    \"refund(positive_amount) succeeds when amount <= remaining refundable balance and order not cancelled.\",\n    \"refund(positive_amount) on cancelled orders fails.\",\n    \"refunded_total increases by amount on successful refund.\",\n    \"subsequent refund attempts of the same funds are rejected due to updated refunded_total.\",\n    \"refund amount must be strictly positive; zero or negative fails.\"\n  ],\n  \"non_goals\": [\n    \"handling non-monetary refunds (e.g., store credits) unless specified.\",\n    \"synchronization across distributed systems beyond the function boundary.\",\n    \"audit logging details beyond correctness of state changes.\"\n  ],\n  \"testable_assertions\": [\n    \"assert refund(10) returns success and refunded_total == 10 when remaining balance >= 10 and order != cancelled.\",\n    \"assert refund( fraud ) fails; improper type rejected.\",\n    \"assert refund(0) fails.\",\n    \"assert refund(remaining_balance) succeeds and refunded_total equals total refundable amount.\",\n    \"assert after refund, refund(1) fails if remaining balance is 0 (no double refund).\",\n    \"assert refund on cancelled order fails regardless of amount.\"\n  ]\n}",
+  "response_hash": "46055bb3e481b806d6a991d10068017f42d854030e9cba2f7870b3aee5d73a85",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_076f479a397417a8006a0363c28964819c8854fd387a7849e1",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 256,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 441,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 697
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Refund function with no double refund",
+    "behavior_requirements": [
+      "refund(amount) must accept a positive amount.",
+      "refund(amount) must not exceed the remaining refundable balance.",
+      "refunds on cancelled orders must fail.",
+      "successful refunds must update refunded_total so the same funds cannot be refunded twice."
+    ],
+    "edge_cases": [
+      "amount <= 0 should fail with appropriate error.",
+      "amount > remaining refundable balance should fail.",
+      "order status cancelled should cause refund to fail even if amount <= balance.",
+      "refunding identical amount twice should fail on second attempt due to updated refunded_total.",
+      "floating point precision or currency rounding should be handled consistently (e.g., use integer cents).",
+      "initial refunded_total is 0 and remaining refundable balance equals total refundable amount."
+    ],
+    "acceptance_criteria": [
+      "refund(positive_amount) succeeds when amount <= remaining refundable balance and order not cancelled.",
+      "refund(positive_amount) on cancelled orders fails.",
+      "refunded_total increases by amount on successful refund.",
+      "subsequent refund attempts of the same funds are rejected due to updated refunded_total.",
+      "refund amount must be strictly positive; zero or negative fails."
+    ],
+    "non_goals": [
+      "handling non-monetary refunds (e.g., store credits) unless specified.",
+      "synchronization across distributed systems beyond the function boundary.",
+      "audit logging details beyond correctness of state changes."
+    ],
+    "testable_assertions": [
+      "assert refund(10) returns success and refunded_total == 10 when remaining balance >= 10 and order != cancelled.",
+      "assert refund( fraud ) fails; improper type rejected.",
+      "assert refund(0) fails.",
+      "assert refund(remaining_balance) succeeds and refunded_total equals total refundable amount.",
+      "assert after refund, refund(1) fails if remaining balance is 0 (no double refund).",
+      "assert refund on cancelled order fails regardless of amount."
+    ]
+  },
+  "public_spec": "Title: Refund function with no double refund\n\nBehavior requirements:\n- refund(amount) must accept a positive amount.\n- refund(amount) must not exceed the remaining refundable balance.\n- refunds on cancelled orders must fail.\n- successful refunds must update refunded_total so the same funds cannot be refunded twice.\n\nEdge cases:\n- amount <= 0 should fail with appropriate error.\n- amount > remaining refundable balance should fail.\n- order status cancelled should cause refund to fail even if amount <= balance.\n- refunding identical amount twice should fail on second attempt due to updated refunded_total.\n- floating point precision or currency rounding should be handled consistently (e.g., use integer cents).\n- initial refunded_total is 0 and remaining refundable balance equals total refundable amount.\n\nAcceptance criteria:\n- refund(positive_amount) succeeds when amount <= remaining refundable balance and order not cancelled.\n- refund(positive_amount) on cancelled orders fails.\n- refunded_total increases by amount on successful refund.\n- subsequent refund attempts of the same funds are rejected due to updated refunded_total.\n- refund amount must be strictly positive; zero or negative fails.\n\nNon-goals:\n- handling non-monetary refunds (e.g., store credits) unless specified.\n- synchronization across distributed systems beyond the function boundary.\n- audit logging details beyond correctness of state changes.\n\nTestable assertions:\n- assert refund(10) returns success and refunded_total == 10 when remaining balance >= 10 and order != cancelled.\n- assert refund( fraud ) fails; improper type rejected.\n- assert refund(0) fails.\n- assert refund(remaining_balance) succeeds and refunded_total equals total refundable amount.\n- assert after refund, refund(1) fails if remaining balance is 0 (no double refund).\n- assert refund on cancelled order fails regardless of amount.",
+  "generation_empty": false,
+  "generation_error": null
+}

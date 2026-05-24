@@ -1,0 +1,74 @@
+{
+  "timestamp": "2026-05-12T17:29:45.150427+00:00",
+  "task_id": "payment_webhook_idempotency",
+  "task_title": "Payment webhook idempotency",
+  "condition": "ticket_only",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse only the product ticket below.\nDo not assume access to hidden organization policies.\nWrite the best implementation spec you can from the ticket.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse only the product ticket below. Do not assume access to hidden organization policies. Write the best implementation spec you can from the ticket.\n\nTask title: Payment webhook idempotency\nFunction entrypoint: process_payment_event\n\nProduct ticket:\n# Product ticket: payment webhook processing\n\n## Background\nThe payments provider sends webhook events for payment outcomes. The service updates merchant balances for successful payments.\n\n## Happy path\n- Successful payment events increase merchant balance by the event amount.\n- Failed payment events do not increase balance.\n- The event has merchant, amount, currency, and status fields.\n\n## Acceptance criteria\n- Successful payment credits the merchant balance.\n- Failed payment does not credit balance.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "35d7859bd62b661754a5409a8f19def9c512a0833a52552c991920a845fc78bd",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Payment webhook idempotency for merchant balance update\",\n  \"behavior_requirements\": [\n    \"process_payment_event is the entrypoint that accepts webhook payloads from the payments provider.\",\n    \"Payload must include: merchant, amount, currency, status.\",\n    \"On status indicating success, the merchant's balance must be increased by the event amount for the specified currency.\",\n    \"On status indicating failure or non-success, the merchant's balance must not be changed.\",\n    \"Idempotency: repeated processing of the same webhook event (identified by a stable event id if provided by the provider, or a deterministic combination of merchant, amount, currency, status, and timestamp) must not double-credit the merchant balance.\",\n    \"Validation: reject or ignore events missing required fields; return a deterministic response describing the outcome without side effects.\",\n    \"Side effects (balance update) must be performed within a transactional boundary to ensure atomicity.\"\n  ],\n  \"edge_cases\": [\n    \"Duplicate webhook events (same id) arriving after initial processing.\",\n    \"Non-integer or negative amount values.\",\n    \"Unknown or missing merchant identifier.\",\n    \"Unsupported currency code.\",\n    \"Malformed payload (missing fields or wrong data types).\",\n    \"High-frequency event bursts requiring idempotent handling.\",\n    \"Concurrent processing of multiple events for the same merchant.\",\n    \"Zero amount with success status should not credit balance.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Successful payment events credit merchant balance by the event amount in the specified currency.\",\n    \"Failed payment events do not credit merchant balance.\",\n    \"Idempotent processing prevents double-credit for repeated events.\",\n    \"All operations are validatable via deterministic responses and audit logs.\",\n    \"Invalid or incomplete events produce a safe no-op with proper error signaling and no balance changes.\"\n  ],\n  \"non_goals\": [\n    \"Retrieving historical events beyond the current webhook processing flow.\",\n    \"Manual reconciliation interfaces or UI elements are out of scope.\",\n    \"Cross-merchant balance transfer logic or fee calculation.\"\n  ],\n  \"testable_assertions\": [\n    \"Given a successful payment event for merchant M with amount A and currency C, merchant M's balance increases by A.\",\n    \"Given a failed payment event for merchant M with amount A and currency C, merchant M's balance remains unchanged.\",\n    \"Re-sending the exact same event id does not change the balance again (idempotent behavior).\",\n    \"Event with missing fields is rejected without mutating balances and returns a non-successful status.\",\n    \"Processing two concurrent successful events for the same merchant results in a sum of amounts credited exactly once per event (no double-credit due to race conditions).\"\n  ]\n}",
+  "response_hash": "610206444fc3129ba1c51017c48bc2cf72a4c05adfba15a46b03e04289fd93c2",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0f76dfcd076e9535006a0363881e5c8193aad2f1c8809746c8",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 330,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 573,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 903
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Payment webhook idempotency for merchant balance update",
+    "behavior_requirements": [
+      "process_payment_event is the entrypoint that accepts webhook payloads from the payments provider.",
+      "Payload must include: merchant, amount, currency, status.",
+      "On status indicating success, the merchant's balance must be increased by the event amount for the specified currency.",
+      "On status indicating failure or non-success, the merchant's balance must not be changed.",
+      "Idempotency: repeated processing of the same webhook event (identified by a stable event id if provided by the provider, or a deterministic combination of merchant, amount, currency, status, and timestamp) must not double-credit the merchant balance.",
+      "Validation: reject or ignore events missing required fields; return a deterministic response describing the outcome without side effects.",
+      "Side effects (balance update) must be performed within a transactional boundary to ensure atomicity."
+    ],
+    "edge_cases": [
+      "Duplicate webhook events (same id) arriving after initial processing.",
+      "Non-integer or negative amount values.",
+      "Unknown or missing merchant identifier.",
+      "Unsupported currency code.",
+      "Malformed payload (missing fields or wrong data types).",
+      "High-frequency event bursts requiring idempotent handling.",
+      "Concurrent processing of multiple events for the same merchant.",
+      "Zero amount with success status should not credit balance."
+    ],
+    "acceptance_criteria": [
+      "Successful payment events credit merchant balance by the event amount in the specified currency.",
+      "Failed payment events do not credit merchant balance.",
+      "Idempotent processing prevents double-credit for repeated events.",
+      "All operations are validatable via deterministic responses and audit logs.",
+      "Invalid or incomplete events produce a safe no-op with proper error signaling and no balance changes."
+    ],
+    "non_goals": [
+      "Retrieving historical events beyond the current webhook processing flow.",
+      "Manual reconciliation interfaces or UI elements are out of scope.",
+      "Cross-merchant balance transfer logic or fee calculation."
+    ],
+    "testable_assertions": [
+      "Given a successful payment event for merchant M with amount A and currency C, merchant M's balance increases by A.",
+      "Given a failed payment event for merchant M with amount A and currency C, merchant M's balance remains unchanged.",
+      "Re-sending the exact same event id does not change the balance again (idempotent behavior).",
+      "Event with missing fields is rejected without mutating balances and returns a non-successful status.",
+      "Processing two concurrent successful events for the same merchant results in a sum of amounts credited exactly once per event (no double-credit due to race conditions)."
+    ]
+  },
+  "public_spec": "Title: Payment webhook idempotency for merchant balance update\n\nBehavior requirements:\n- process_payment_event is the entrypoint that accepts webhook payloads from the payments provider.\n- Payload must include: merchant, amount, currency, status.\n- On status indicating success, the merchant's balance must be increased by the event amount for the specified currency.\n- On status indicating failure or non-success, the merchant's balance must not be changed.\n- Idempotency: repeated processing of the same webhook event (identified by a stable event id if provided by the provider, or a deterministic combination of merchant, amount, currency, status, and timestamp) must not double-credit the merchant balance.\n- Validation: reject or ignore events missing required fields; return a deterministic response describing the outcome without side effects.\n- Side effects (balance update) must be performed within a transactional boundary to ensure atomicity.\n\nEdge cases:\n- Duplicate webhook events (same id) arriving after initial processing.\n- Non-integer or negative amount values.\n- Unknown or missing merchant identifier.\n- Unsupported currency code.\n- Malformed payload (missing fields or wrong data types).\n- High-frequency event bursts requiring idempotent handling.\n- Concurrent processing of multiple events for the same merchant.\n- Zero amount with success status should not credit balance.\n\nAcceptance criteria:\n- Successful payment events credit merchant balance by the event amount in the specified currency.\n- Failed payment events do not credit merchant balance.\n- Idempotent processing prevents double-credit for repeated events.\n- All operations are validatable via deterministic responses and audit logs.\n- Invalid or incomplete events produce a safe no-op with proper error signaling and no balance changes.\n\nNon-goals:\n- Retrieving historical events beyond the current webhook processing flow.\n- Manual reconciliation interfaces or UI elements are out of scope.\n- Cross-merchant balance transfer logic or fee calculation.\n\nTestable assertions:\n- Given a successful payment event for merchant M with amount A and currency C, merchant M's balance increases by A.\n- Given a failed payment event for merchant M with amount A and currency C, merchant M's balance remains unchanged.\n- Re-sending the exact same event id does not change the balance again (idempotent behavior).\n- Event with missing fields is rejected without mutating balances and returns a non-successful status.\n- Processing two concurrent successful events for the same merchant results in a sum of amounts credited exactly once per event (no double-credit due to race conditions).",
+  "generation_empty": false,
+  "generation_error": null
+}

@@ -1,0 +1,1 @@
+We add an externally sourced adapted issue suite to sanity-check that the same omission pattern can be expressed using public issue artifacts. These are adapted public issue patterns, not bug reproductions.

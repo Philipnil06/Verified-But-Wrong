@@ -1,0 +1,4 @@
+You are writing an implementation specification for a secure program synthesis workflow.
+Use only the product ticket below.
+Do not assume access to hidden organization policies.
+Write the best implementation spec you can from the ticket.

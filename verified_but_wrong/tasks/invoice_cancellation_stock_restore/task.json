@@ -1,0 +1,38 @@
+{
+  "id": "invoice_cancellation_stock_restore",
+  "title": "Invoice cancellation restores stock",
+  "entrypoint": "cancel_invoice",
+  "intent": "Cancel an invoice and restore any inventory reserved for that invoice.",
+  "ai_generated_spec": "Mark invoice as cancelled.",
+  "critic_improved_spec": "Mark open invoices as cancelled and reject already paid invoices.",
+  "full_oracle_spec": "Mark open invoices as cancelled and restore reserved inventory quantities for cancelled invoice lines.",
+  "missing_requirements": [
+    "Reserved inventory must be restored when invoice is cancelled",
+    "Invoice status must update to cancelled",
+    "Paid invoices cannot be cancelled",
+    "Inventory reserved count must decrease"
+  ],
+  "spec_hole_categories": [
+    "business_rule_omission",
+    "conservation_omission",
+    "state_invariant_omission"
+  ],
+  "expected_naive_failure": "The public spec omits a heldout policy invariant that changes implementation selection.",
+  "expected_defense": "The oracle spec includes the heldout policy invariant.",
+  "policy_pack_ids": [
+    "generic_critical_requirements",
+    "business_logic_policy",
+    "inventory_policy"
+  ],
+  "relevant_policy_card_ids": [
+    "generic.invalid_inputs_fail",
+    "invoice.cancel.restore_stock",
+    "invoice.cancel.paid_fails"
+  ],
+  "evaluation_split": "heldout",
+  "public_spec_text": {
+    "naive": "Mark invoice as cancelled.",
+    "critic": "Mark open invoices as cancelled and reject already paid invoices.",
+    "oracle": "Mark open invoices as cancelled and restore reserved inventory quantities for cancelled invoice lines."
+  }
+}

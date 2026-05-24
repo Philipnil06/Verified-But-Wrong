@@ -1,0 +1,287 @@
+{
+  "id": "payments_policy",
+  "title": "Payments and refund policy",
+  "policy_cards": [
+    {
+      "id": "payments.refund.remaining_balance",
+      "title": "Refunds must not exceed remaining paid amount",
+      "requirement": "Refunds must never exceed the original payment or remaining refundable paid amount.",
+      "category": "conservation_omission",
+      "severity": "high",
+      "applies_to_tasks": [
+        "refund_double_refund",
+        "refund_window_expiry",
+        "loyalty_refund_reversal"
+      ],
+      "keywords": [
+        "remaining",
+        "remaining paid",
+        "remaining refundable",
+        "original payment",
+        "cannot exceed",
+        "must not exceed",
+        "over refund",
+        "over-refund"
+      ],
+      "why_it_matters": "Over-refunds create direct financial loss and inconsistent payment ledgers.",
+      "suggested_spec_patch": "Refund amount must not exceed the remaining refundable paid amount.",
+      "audit_question": "Does the spec explicitly cap refunds at the remaining refundable amount?",
+      "requirement_test": "Refund cannot exceed remaining paid amount",
+      "applies_to": [],
+      "failure_if_omitted": "Over-refunds create direct financial loss and inconsistent payment ledgers.",
+      "audit_questions": [
+        "Does the spec explicitly cap refunds at the remaining refundable amount?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "Over-refunds create direct financial loss and inconsistent payment ledgers.",
+      "safe_spec_example": "Refund amount must not exceed the remaining refundable paid amount."
+    },
+    {
+      "id": "payments.refund.no_double_refund",
+      "title": "Refunds must not be processed twice for the same money",
+      "requirement": "The same order, refund, or paid amount must not be refunded twice.",
+      "category": "state_invariant_omission",
+      "severity": "high",
+      "applies_to_tasks": [
+        "refund_double_refund"
+      ],
+      "keywords": [
+        "double refund",
+        "same order",
+        "already refunded",
+        "refunded twice",
+        "remaining refundable",
+        "refunded_total"
+      ],
+      "why_it_matters": "Duplicate refunds can return more money than the customer paid.",
+      "suggested_spec_patch": "The spec must reject repeated refunds that would refund the same paid amount twice.",
+      "audit_question": "Does the spec prevent double refunds for the same order?",
+      "requirement_test": "Same order cannot be refunded twice",
+      "applies_to": [],
+      "failure_if_omitted": "Duplicate refunds can return more money than the customer paid.",
+      "audit_questions": [
+        "Does the spec prevent double refunds for the same order?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "Duplicate refunds can return more money than the customer paid.",
+      "safe_spec_example": "The spec must reject repeated refunds that would refund the same paid amount twice."
+    },
+    {
+      "id": "payments.refund.reverse_dependent_rewards",
+      "title": "Refunds must reverse dependent rewards or credits",
+      "requirement": "If a refund reverses a purchase that awarded loyalty points, credits, or rewards, the refunded portion must reverse the corresponding dependent value.",
+      "category": "business_rule_omission",
+      "severity": "high",
+      "applies_to_tasks": [
+        "loyalty_refund_reversal"
+      ],
+      "keywords": [
+        "loyalty",
+        "loyalty points",
+        "reward points",
+        "credits",
+        "reverse points",
+        "reverse rewards",
+        "dependent state",
+        "proportional reversal",
+        "pro rata",
+        "refunded portion"
+      ],
+      "why_it_matters": "Without this rule, a customer can keep rewards from a purchase that has been refunded, creating inconsistent financial state.",
+      "suggested_spec_patch": "Successful refunds must reverse any dependent rewards, credits, or loyalty points awarded by the original purchase in proportion to the refunded amount.",
+      "audit_question": "Does the spec explicitly say how dependent rewards or credits are reversed during refunds?",
+      "requirement_test": "Successful refunds must reverse proportional loyalty points awarded by the original purchase",
+      "applies_to": [],
+      "failure_if_omitted": "Without this rule, a customer can keep rewards from a purchase that has been refunded, creating inconsistent financial state.",
+      "audit_questions": [
+        "Does the spec explicitly say how dependent rewards or credits are reversed during refunds?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "Without this rule, a customer can keep rewards from a purchase that has been refunded, creating inconsistent financial state.",
+      "safe_spec_example": "Successful refunds must reverse any dependent rewards, credits, or loyalty points awarded by the original purchase in proportion to the refunded amount."
+    },
+    {
+      "id": "payments.refund.loyalty_non_negative",
+      "title": "Dependent reward balances must remain non-negative",
+      "requirement": "Refund-related loyalty or reward reversal must not make the customer reward balance negative.",
+      "category": "state_invariant_omission",
+      "severity": "high",
+      "applies_to_tasks": [
+        "loyalty_refund_reversal"
+      ],
+      "keywords": [
+        "loyalty",
+        "not negative",
+        "never below zero",
+        "non-negative",
+        "non negative",
+        "balance negative"
+      ],
+      "why_it_matters": "Negative reward balances create financial and customer-account inconsistencies.",
+      "suggested_spec_patch": "Loyalty or reward balances must never become negative when refund reversals are applied.",
+      "audit_question": "Does the spec preserve a non-negative loyalty or rewards balance?",
+      "requirement_test": "Loyalty points must not become negative",
+      "applies_to": [],
+      "failure_if_omitted": "Negative reward balances create financial and customer-account inconsistencies.",
+      "audit_questions": [
+        "Does the spec preserve a non-negative loyalty or rewards balance?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "Negative reward balances create financial and customer-account inconsistencies.",
+      "safe_spec_example": "Loyalty or reward balances must never become negative when refund reversals are applied."
+    },
+    {
+      "id": "payments.webhook.idempotent_event",
+      "title": "Payment webhooks must be idempotent",
+      "requirement": "Payment webhook events must be processed at most once per event_id and duplicate events must not credit balances twice.",
+      "category": "idempotency_omission",
+      "severity": "critical",
+      "applies_to_tasks": [
+        "payment_webhook_idempotency"
+      ],
+      "keywords": [
+        "idempotent",
+        "idempotency",
+        "duplicate event",
+        "duplicate webhook",
+        "same event_id",
+        "already processed",
+        "process once",
+        "credited twice",
+        "double credit"
+      ],
+      "why_it_matters": "Duplicate webhook delivery can double-credit merchant balances.",
+      "suggested_spec_patch": "Successful payment events must be idempotent: the same event_id must be credited at most once.",
+      "audit_question": "Does the spec explicitly require duplicate event IDs to be ignored or processed once?",
+      "requirement_test": "The same event_id must not be credited twice",
+      "applies_to": [],
+      "failure_if_omitted": "Duplicate webhook delivery can double-credit merchant balances.",
+      "audit_questions": [
+        "Does the spec explicitly require duplicate event IDs to be ignored or processed once?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "Duplicate webhook delivery can double-credit merchant balances.",
+      "safe_spec_example": "Successful payment events must be idempotent: the same event_id must be credited at most once."
+    },
+    {
+      "id": "payments.webhook.failed_no_credit",
+      "title": "Failed payments must not credit balance",
+      "requirement": "Failed payment events must not increase merchant balance.",
+      "category": "conservation_omission",
+      "severity": "high",
+      "applies_to_tasks": [
+        "payment_webhook_idempotency"
+      ],
+      "keywords": [
+        "failed payment",
+        "failed events",
+        "must not increase balance",
+        "no balance change",
+        "failed payments should not increase"
+      ],
+      "why_it_matters": "Crediting failed payments misstates merchant funds.",
+      "suggested_spec_patch": "Failed payment events must not credit merchant balance.",
+      "audit_question": "Does the spec explicitly prevent failed payment events from crediting balance?",
+      "requirement_test": "Failed payments must not credit balance",
+      "applies_to": [],
+      "failure_if_omitted": "Crediting failed payments misstates merchant funds.",
+      "audit_questions": [
+        "Does the spec explicitly prevent failed payment events from crediting balance?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "Crediting failed payments misstates merchant funds.",
+      "safe_spec_example": "Failed payment events must not credit merchant balance."
+    },
+    {
+      "id": "payments.webhook.event_id_required",
+      "title": "Webhook event IDs are required",
+      "requirement": "Payment webhook events must include a non-empty event_id.",
+      "category": "invalid_input_omission",
+      "severity": "high",
+      "applies_to_tasks": [
+        "payment_webhook_idempotency"
+      ],
+      "keywords": [
+        "event_id",
+        "missing event_id",
+        "require event_id",
+        "event_id must be present",
+        "event_id is required"
+      ],
+      "why_it_matters": "Without an event ID, idempotency cannot be enforced.",
+      "suggested_spec_patch": "Missing or empty event_id must fail without changing balances.",
+      "audit_question": "Does the spec require a non-empty event_id?",
+      "requirement_test": "Missing event_id must fail",
+      "applies_to": [],
+      "failure_if_omitted": "Without an event ID, idempotency cannot be enforced.",
+      "audit_questions": [
+        "Does the spec require a non-empty event_id?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "Without an event ID, idempotency cannot be enforced.",
+      "safe_spec_example": "Missing or empty event_id must fail without changing balances."
+    },
+    {
+      "id": "payments.refund.window_30_days",
+      "title": "Refund window must be enforced",
+      "requirement": "Normal refunds are only allowed within 30 days of purchase unless manual_override is true.",
+      "category": "business_rule_omission",
+      "severity": "high",
+      "applies_to_tasks": [
+        "refund_window_expiry"
+      ],
+      "keywords": [
+        "30 days",
+        "within 30 days",
+        "refund window",
+        "purchase date",
+        "days since purchase",
+        "refund period",
+        "manual_override",
+        "manual override"
+      ],
+      "why_it_matters": "Refunds outside finance policy may be incorrectly approved.",
+      "suggested_spec_patch": "Normal refunds are allowed only within 30 calendar days of purchase unless manual_override is true.",
+      "audit_question": "Does the spec explicitly preserve the 30-day refund window and manual override exception?",
+      "requirement_test": "Refunds are only allowed within 30 days of purchase unless manual_override is true",
+      "applies_to": [],
+      "failure_if_omitted": "Refunds outside finance policy may be incorrectly approved.",
+      "audit_questions": [
+        "Does the spec explicitly preserve the 30-day refund window and manual override exception?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "Refunds outside finance policy may be incorrectly approved.",
+      "safe_spec_example": "Normal refunds are allowed only within 30 calendar days of purchase unless manual_override is true."
+    },
+    {
+      "id": "payments.refund.window_boundary",
+      "title": "Refund window boundary must be explicit",
+      "requirement": "Day 30 is allowed but day 31 is rejected without manual_override.",
+      "category": "boundary_omission",
+      "severity": "medium",
+      "applies_to_tasks": [
+        "refund_window_expiry"
+      ],
+      "keywords": [
+        "day 30",
+        "30th day",
+        "day 31",
+        "more than 30 days",
+        "boundary",
+        "inclusive"
+      ],
+      "why_it_matters": "Ambiguous date boundaries cause inconsistent approvals.",
+      "suggested_spec_patch": "Day 30 after purchase is still allowed; day 31 is rejected unless manual_override is true.",
+      "audit_question": "Does the spec define the day 30/day 31 boundary?",
+      "requirement_test": "Day 30 is still allowed but day 31 is rejected without manual_override",
+      "applies_to": [],
+      "failure_if_omitted": "Ambiguous date boundaries cause inconsistent approvals.",
+      "audit_questions": [
+        "Does the spec define the day 30/day 31 boundary?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "Ambiguous date boundaries cause inconsistent approvals.",
+      "safe_spec_example": "Day 30 after purchase is still allowed; day 31 is rejected unless manual_override is true."
+    }
+  ]
+}

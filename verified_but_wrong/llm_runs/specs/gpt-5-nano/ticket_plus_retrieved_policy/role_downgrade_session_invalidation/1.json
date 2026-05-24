@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-05-12T17:31:25.733974+00:00",
+  "task_id": "role_downgrade_session_invalidation",
+  "task_title": "Role downgrade session invalidation",
+  "condition": "ticket_plus_retrieved_policy",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the product ticket and the retrieved policy card.\nThe policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the product ticket and the retrieved policy card. The policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nTask title: Role downgrade session invalidation\nFunction entrypoint: update_role\n\nProduct ticket:\n# Ticket: update user role\n\nAdmins can update a user's role to admin, member, or guest. The profile should reflect the new role immediately.\n\nAcceptance criteria:\n- Valid role update succeeds.\n- Invalid roles fail.\n\nRetrieved policy card:\nPolicy card ID: access.role_downgrade.invalidate_sessions\nTitle: Role downgrade must invalidate privileged sessions\nRequirement: When a user loses admin privileges, existing privileged sessions must be invalidated.\nWhy it matters: Old sessions can retain privileges after a role downgrade.\nAudit questions:\n- Does the spec invalidate privileged sessions when admin role is removed?\nKeywords:\n- invalidate\n- session\n- privileged sessions\n- loses admin\n- downgrade\n- admin privileges\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "0708d00c7e2b72ee29c83ba6b507fd05c0146591daa30f37efca694a408a26e3",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Role downgrade session invalidation\",\n  \"behavior_requirements\": [\n    \"update_role(entrypoint) accepts a user_id and a target_role; target_role must be one of {admin, member, guest}.\",\n    \"On successful role update, the user's profile must reflect the new role immediately.\",\n    \"If the target_role is admin, no special session invalidation is required beyond normal session handling.\",\n    \"If the target_role results in losing admin privileges (i.e., changing from admin to member or guest), all privileged sessions for that user must be invalidated immediately.\",\n    \"Privileged sessions are defined as sessions with admin-level privileges or tokens that grant admin capabilities.\",\n    \"Invalidation of privileged sessions should occur before the function returns success to the caller.\",\n    \"A validation path must reject any role values outside the allowed set with a clear error and no side effects.\"\n  ],\n  \"edge_cases\": [\n    \"Downgrading a user who currently has no admin sessions should still complete, but no privileged sessions exist to invalidate.\",\n    \"Downgrading a user from admin to member/guest when there are multiple concurrent privileged sessions; all must be invalidated.\",\n    \"Role update request with missing or invalid user_id or missing target_role should fail without changing sessions or profile.\",\n    \"Role update to the same current role should be treated as a no-op with no session invalidation and still reflect success per ticket semantics.\",\n    \"System clock skew or asynchronous session invalidation latency should not expose a window where admin privileges persist after downgrade.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Valid role update succeeds when target_role ∈ {admin, member, guest} and the profile reflects the new role immediately.\",\n    \"Invalid roles fail with an error and no changes to profile or sessions.\",\n    \"When a user loses admin privileges (downgrade to member or guest), all privileged sessions for that user are invalidated immediately and cannot be reused.\",\n    \"No privileged sessions remain valid after a downgrade; subsequent privileged actions require re-authentication with appropriate privileges.\",\n    \"Audit logging records: user_id, old_role, new_role, and number of invalidated privileged sessions.\"\n  ],\n  \"non_goals\": [\n    \"This spec does not cover upgrading a user to admin via elevated permissions beyond the role update.\",\n    \"This spec does not define non-privileged session invalidation behavior beyond standard session management.\",\n    \"This spec does not address third-party token revocation outside privileged sessions.\"\n  ],\n  \"testable_assertions\": [\n    \"Given a user with role admin and active privileged sessions, calling update_role with target_role=member invalidates all privileged sessions and updates profile to member.\",\n    \"Given a user with role member, calling update_role with target_role=guest updates profile to guest and does not invalidate privileged sessions (none exist).\",\n    \"Given a user with role admin and an invalid target_role (e.g., superuser), update_role fails and profile/sessions remain unchanged.\",\n    \"Given a user with role admin and multiple privileged sessions, after downgrade to member, all privileged sessions are invalidated and require re-authentication for admin actions.\"\n  ]\n}",
+  "response_hash": "4abf2f2ea5004a2afa215f6fc4a0153502a48486e3f1541168a4b820d981f03f",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_05795848c22c62ff006a0363ecad4481a1aee456a99edfe66c",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 378,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 671,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 1049
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Role downgrade session invalidation",
+    "behavior_requirements": [
+      "update_role(entrypoint) accepts a user_id and a target_role; target_role must be one of {admin, member, guest}.",
+      "On successful role update, the user's profile must reflect the new role immediately.",
+      "If the target_role is admin, no special session invalidation is required beyond normal session handling.",
+      "If the target_role results in losing admin privileges (i.e., changing from admin to member or guest), all privileged sessions for that user must be invalidated immediately.",
+      "Privileged sessions are defined as sessions with admin-level privileges or tokens that grant admin capabilities.",
+      "Invalidation of privileged sessions should occur before the function returns success to the caller.",
+      "A validation path must reject any role values outside the allowed set with a clear error and no side effects."
+    ],
+    "edge_cases": [
+      "Downgrading a user who currently has no admin sessions should still complete, but no privileged sessions exist to invalidate.",
+      "Downgrading a user from admin to member/guest when there are multiple concurrent privileged sessions; all must be invalidated.",
+      "Role update request with missing or invalid user_id or missing target_role should fail without changing sessions or profile.",
+      "Role update to the same current role should be treated as a no-op with no session invalidation and still reflect success per ticket semantics.",
+      "System clock skew or asynchronous session invalidation latency should not expose a window where admin privileges persist after downgrade."
+    ],
+    "acceptance_criteria": [
+      "Valid role update succeeds when target_role ∈ {admin, member, guest} and the profile reflects the new role immediately.",
+      "Invalid roles fail with an error and no changes to profile or sessions.",
+      "When a user loses admin privileges (downgrade to member or guest), all privileged sessions for that user are invalidated immediately and cannot be reused.",
+      "No privileged sessions remain valid after a downgrade; subsequent privileged actions require re-authentication with appropriate privileges.",
+      "Audit logging records: user_id, old_role, new_role, and number of invalidated privileged sessions."
+    ],
+    "non_goals": [
+      "This spec does not cover upgrading a user to admin via elevated permissions beyond the role update.",
+      "This spec does not define non-privileged session invalidation behavior beyond standard session management.",
+      "This spec does not address third-party token revocation outside privileged sessions."
+    ],
+    "testable_assertions": [
+      "Given a user with role admin and active privileged sessions, calling update_role with target_role=member invalidates all privileged sessions and updates profile to member.",
+      "Given a user with role member, calling update_role with target_role=guest updates profile to guest and does not invalidate privileged sessions (none exist).",
+      "Given a user with role admin and an invalid target_role (e.g., superuser), update_role fails and profile/sessions remain unchanged.",
+      "Given a user with role admin and multiple privileged sessions, after downgrade to member, all privileged sessions are invalidated and require re-authentication for admin actions."
+    ]
+  },
+  "public_spec": "Title: Role downgrade session invalidation\n\nBehavior requirements:\n- update_role(entrypoint) accepts a user_id and a target_role; target_role must be one of {admin, member, guest}.\n- On successful role update, the user's profile must reflect the new role immediately.\n- If the target_role is admin, no special session invalidation is required beyond normal session handling.\n- If the target_role results in losing admin privileges (i.e., changing from admin to member or guest), all privileged sessions for that user must be invalidated immediately.\n- Privileged sessions are defined as sessions with admin-level privileges or tokens that grant admin capabilities.\n- Invalidation of privileged sessions should occur before the function returns success to the caller.\n- A validation path must reject any role values outside the allowed set with a clear error and no side effects.\n\nEdge cases:\n- Downgrading a user who currently has no admin sessions should still complete, but no privileged sessions exist to invalidate.\n- Downgrading a user from admin to member/guest when there are multiple concurrent privileged sessions; all must be invalidated.\n- Role update request with missing or invalid user_id or missing target_role should fail without changing sessions or profile.\n- Role update to the same current role should be treated as a no-op with no session invalidation and still reflect success per ticket semantics.\n- System clock skew or asynchronous session invalidation latency should not expose a window where admin privileges persist after downgrade.\n\nAcceptance criteria:\n- Valid role update succeeds when target_role ∈ {admin, member, guest} and the profile reflects the new role immediately.\n- Invalid roles fail with an error and no changes to profile or sessions.\n- When a user loses admin privileges (downgrade to member or guest), all privileged sessions for that user are invalidated immediately and cannot be reused.\n- No privileged sessions remain valid after a downgrade; subsequent privileged actions require re-authentication with appropriate privileges.\n- Audit logging records: user_id, old_role, new_role, and number of invalidated privileged sessions.\n\nNon-goals:\n- This spec does not cover upgrading a user to admin via elevated permissions beyond the role update.\n- This spec does not define non-privileged session invalidation behavior beyond standard session management.\n- This spec does not address third-party token revocation outside privileged sessions.\n\nTestable assertions:\n- Given a user with role admin and active privileged sessions, calling update_role with target_role=member invalidates all privileged sessions and updates profile to member.\n- Given a user with role member, calling update_role with target_role=guest updates profile to guest and does not invalidate privileged sessions (none exist).\n- Given a user with role admin and an invalid target_role (e.g., superuser), update_role fails and profile/sessions remain unchanged.\n- Given a user with role admin and multiple privileged sessions, after downgrade to member, all privileged sessions are invalidated and require re-authentication for admin actions.",
+  "generation_empty": false,
+  "generation_error": null
+}

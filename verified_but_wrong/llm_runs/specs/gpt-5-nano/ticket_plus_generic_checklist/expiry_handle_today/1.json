@@ -1,0 +1,68 @@
+{
+  "timestamp": "2026-05-12T17:28:47.593379+00:00",
+  "task_id": "expiry_handle_today",
+  "task_title": "Expiry handling with lead time",
+  "condition": "ticket_plus_generic_checklist",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the product ticket and the generic checklist.\nThe checklist is generic and may not mention task-specific organization policies.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the product ticket and the generic checklist. The checklist is generic and may not mention task-specific organization policies.\n\nTask title: Expiry handling with lead time\nFunction entrypoint: should_handle_today\n\nProduct ticket:\n# Product ticket: expiry handling\n\n## Background\nInventory items should be marked for handling based on expiry dates.\n\n## Happy path\n- Items expiring today should be handled.\n- Items expiring tomorrow should not be handled by default.\n\n## Policy note\nSome categories have lead-time rules.\n\n## Acceptance criteria\n- Expiring today returns handle_today true.\n- Invalid dates return an error.\n\nGeneric checklist:\n- authorization and access control\n- idempotency and duplicate handling\n- boundary conditions and off-by-one cases\n- state consistency and required state updates\n- audit logging or record retention where relevant\n- tenant or data isolation where relevant\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "cf8b33cb5db3e3b28ff137f747999fd3510f9c8019597011b0fd4fe146546553",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Expiry handling with lead time - should_handle_today\",\n  \"behavior_requirements\": [\n    \"should_handle_today(item) returns true when the item expiry date is today\",\n    \"should_handle_today(item) returns false for expiry dates tomorrow (unless lead-time rules apply for the item's category)\",\n    \"Invalid or missing expiry dates should raise an error\",\n    \"Lead-time rules, when present for a category, influence whether an item is considered for handling on a given day\",\n    \"Function adheres to authorization and access control where applicable\"\n  ],\n  \"edge_cases\": [\n    \"Expiry date is today with time zone differences; ensure date comparison is based on the canonical local date\",\n    \"Expiry date is null or malformed; results in an error\",\n    \"Category has a lead-time rule that changes the handling decision (e.g., lead-time = 2 days) and the expiry is today or tomorrow accordingly\",\n    \"Leap year and end-of-month transitions\",\n    \"Multiple items with the same expiry date are processed idempotently\"\n  ],\n  \"acceptance_criteria\": [\n    \"Expiring today returns handle_today = true\",\n    \"Expiring tomorrow returns handle_today = false by default, unless a lead-time rule applies that changes this\",\n    \"Invalid dates return an error\",\n    \"Lead-time rules are consulted for applicable categories\",\n    \"State updates and audit logging occur as part of decision evaluation where relevant\"\n  ],\n  \"non_goals\": [\n    \"Implementing full inventory mutation on decision; this spec covers only the boolean decision function\",\n    \"Handling cross-tenant data leakage; assume proper isolation in surrounding layer\"\n  ],\n  \"testable_assertions\": [\n    \"should_handle_today(expiry_today) == true\",\n    \"should_handle_today(expiry_tomorrow) == false with no lead-time rule\",\n    \"should_handle_today(expiry_tomorrow) == true if category lead-time indicates processing on that day\",\n    \"should_handle_today(null_expiry) raises an error\",\n    \"should_handle_today(invalid_date) raises an error\"\n  ]\n}",
+  "response_hash": "c75e43f138b36018082005798de5447f608b2c65173d819cd0040ebae0e103d4",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0c70ec6b964458b5006a03634eab388191a1684242b8ff2669",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 361,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 450,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 811
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Expiry handling with lead time - should_handle_today",
+    "behavior_requirements": [
+      "should_handle_today(item) returns true when the item expiry date is today",
+      "should_handle_today(item) returns false for expiry dates tomorrow (unless lead-time rules apply for the item's category)",
+      "Invalid or missing expiry dates should raise an error",
+      "Lead-time rules, when present for a category, influence whether an item is considered for handling on a given day",
+      "Function adheres to authorization and access control where applicable"
+    ],
+    "edge_cases": [
+      "Expiry date is today with time zone differences; ensure date comparison is based on the canonical local date",
+      "Expiry date is null or malformed; results in an error",
+      "Category has a lead-time rule that changes the handling decision (e.g., lead-time = 2 days) and the expiry is today or tomorrow accordingly",
+      "Leap year and end-of-month transitions",
+      "Multiple items with the same expiry date are processed idempotently"
+    ],
+    "acceptance_criteria": [
+      "Expiring today returns handle_today = true",
+      "Expiring tomorrow returns handle_today = false by default, unless a lead-time rule applies that changes this",
+      "Invalid dates return an error",
+      "Lead-time rules are consulted for applicable categories",
+      "State updates and audit logging occur as part of decision evaluation where relevant"
+    ],
+    "non_goals": [
+      "Implementing full inventory mutation on decision; this spec covers only the boolean decision function",
+      "Handling cross-tenant data leakage; assume proper isolation in surrounding layer"
+    ],
+    "testable_assertions": [
+      "should_handle_today(expiry_today) == true",
+      "should_handle_today(expiry_tomorrow) == false with no lead-time rule",
+      "should_handle_today(expiry_tomorrow) == true if category lead-time indicates processing on that day",
+      "should_handle_today(null_expiry) raises an error",
+      "should_handle_today(invalid_date) raises an error"
+    ]
+  },
+  "public_spec": "Title: Expiry handling with lead time - should_handle_today\n\nBehavior requirements:\n- should_handle_today(item) returns true when the item expiry date is today\n- should_handle_today(item) returns false for expiry dates tomorrow (unless lead-time rules apply for the item's category)\n- Invalid or missing expiry dates should raise an error\n- Lead-time rules, when present for a category, influence whether an item is considered for handling on a given day\n- Function adheres to authorization and access control where applicable\n\nEdge cases:\n- Expiry date is today with time zone differences; ensure date comparison is based on the canonical local date\n- Expiry date is null or malformed; results in an error\n- Category has a lead-time rule that changes the handling decision (e.g., lead-time = 2 days) and the expiry is today or tomorrow accordingly\n- Leap year and end-of-month transitions\n- Multiple items with the same expiry date are processed idempotently\n\nAcceptance criteria:\n- Expiring today returns handle_today = true\n- Expiring tomorrow returns handle_today = false by default, unless a lead-time rule applies that changes this\n- Invalid dates return an error\n- Lead-time rules are consulted for applicable categories\n- State updates and audit logging occur as part of decision evaluation where relevant\n\nNon-goals:\n- Implementing full inventory mutation on decision; this spec covers only the boolean decision function\n- Handling cross-tenant data leakage; assume proper isolation in surrounding layer\n\nTestable assertions:\n- should_handle_today(expiry_today) == true\n- should_handle_today(expiry_tomorrow) == false with no lead-time rule\n- should_handle_today(expiry_tomorrow) == true if category lead-time indicates processing on that day\n- should_handle_today(null_expiry) raises an error\n- should_handle_today(invalid_date) raises an error",
+  "generation_empty": false,
+  "generation_error": null
+}

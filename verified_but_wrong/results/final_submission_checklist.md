@@ -1,0 +1,7 @@
+- [x] policy packs
+- [x] heldout tasks
+- [x] naturalistic docs
+- [x] repair loop
+- [x] baselines
+- [x] ablations
+- [x] CI demo

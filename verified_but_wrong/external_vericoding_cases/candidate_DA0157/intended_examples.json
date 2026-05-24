@@ -1,0 +1,40 @@
+{
+  "examples": [
+    {
+      "input": [
+        1,
+        1,
+        10
+      ],
+      "expected": [
+        10,
+        1,
+        10
+      ],
+      "bad_candidate": [
+        100,
+        10,
+        10
+      ],
+      "pass": false
+    },
+    {
+      "input": [
+        2,
+        2,
+        3
+      ],
+      "expected": [
+        12,
+        3,
+        4
+      ],
+      "bad_candidate": [
+        36,
+        6,
+        6
+      ],
+      "pass": false
+    }
+  ]
+}

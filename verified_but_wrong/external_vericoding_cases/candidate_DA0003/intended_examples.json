@@ -1,0 +1,28 @@
+{
+  "examples": [
+    {
+      "input": [
+        5,
+        2,
+        3,
+        4,
+        5
+      ],
+      "expected": 13,
+      "bad_candidate": 0,
+      "pass": false
+    },
+    {
+      "input": [
+        10,
+        2,
+        5,
+        3,
+        8
+      ],
+      "expected": 28,
+      "bad_candidate": 0,
+      "pass": false
+    }
+  ]
+}

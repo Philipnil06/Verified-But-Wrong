@@ -1,0 +1,65 @@
+{
+  "timestamp": "2026-05-12T17:29:03.053548+00:00",
+  "task_id": "invoice_cancellation_stock_restore",
+  "task_title": "Invoice cancellation restores stock",
+  "condition": "ticket_only",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse only the product ticket below.\nDo not assume access to hidden organization policies.\nWrite the best implementation spec you can from the ticket.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse only the product ticket below. Do not assume access to hidden organization policies. Write the best implementation spec you can from the ticket.\n\nTask title: Invoice cancellation restores stock\nFunction entrypoint: cancel_invoice\n\nProduct ticket:\n# Ticket: cancel invoice\n\nOperations can cancel an open invoice. The invoice status should become cancelled. Paid invoices should not use this path.\n\nAcceptance criteria:\n- Open invoice cancellation succeeds.\n- Paid invoice cancellation fails.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "9f0ab62dfbaf42a5f29d124aae1dd1206173a2efb0ffaf4c64ceb7493fcd4d2b",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"cancel_invoice: restore stock on open invoices\",\n  \"behavior_requirements\": [\n    \"cancel_invoice accepts an invoice identifier for an invoice in OPEN status.\",\n    \"Upon successful cancellation of an OPEN invoice, set invoice status to CANCELLED.\",\n    \"On cancellation of an OPEN invoice, restore stock quantities for all line items in the invoice to their pre-invoice state.\",\n    \"Cancellation request for an invoice in any status other than OPEN (e.g., PAID, CANCELLED, DRAFT) must fail with an appropriate error.\",\n    \"Return a structured success response indicating cancellation and stock restoration, or a standardized error response indicating reason for failure.\"\n  ],\n  \"edge_cases\": [\n    \"Attempting to cancel an invoice that does not exist returns a not-found error.\",\n    \"Attempting to cancel an already CANCELLED invoice returns a conflict/invalid-state error.\",\n    \"An OPEN invoice with line items that reference non-stockable products should only restore stock for stockable items; non-stockable items are ignored in stock adjustments.\",\n    \"Concurrent cancellation requests for the same OPEN invoice should be handled idempotently or serialized to avoid double stock restoration.\",\n    \"Stock restoration must consider current inventory constraints (e.g., warehouse, lot/serial tracking) and update all affected stock records atomically with the cancellation transaction.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Open invoice cancellation succeeds: status becomes CANCELLED and stock quantities for all stockable line items are increased to reflect cancellation.\",\nnull\n  ],\n  \"non_goals\": [\n    \"Cancelling PAID invoices or invoices with partial payments via this path.\",\n    \"Reopening or un-cancelling cancelled invoices.\",\n    \"Partial cancellation of an invoice (only some line items) via this path.\"\n  ],\n  \"testable_assertions\": [\n    \"Given an OPEN invoice with stockable line items, after cancel_invoice, invoice.status == CANCELLED and stock levels increased by the quantity in the invoice.\",\n    \"Given a PAID invoice, cancel_invoice returns an error indicating only OPEN invoices can be cancelled.\",\n    \"Given a non-existent invoice id, cancel_invoice returns a not-found error.\",\n    \"Given an already CANCELLED invoice, cancel_invoice returns an invalid-state error.\"\n  ]\n}",
+  "response_hash": "1a58b5a45e95e00713688bc36484ef97121e12fdc896823b4e47aa284b2d3f3b",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_04d173f597042ced006a03635e1cf4819e896c87a6ac191def",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 282,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 482,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 764
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "cancel_invoice: restore stock on open invoices",
+    "behavior_requirements": [
+      "cancel_invoice accepts an invoice identifier for an invoice in OPEN status.",
+      "Upon successful cancellation of an OPEN invoice, set invoice status to CANCELLED.",
+      "On cancellation of an OPEN invoice, restore stock quantities for all line items in the invoice to their pre-invoice state.",
+      "Cancellation request for an invoice in any status other than OPEN (e.g., PAID, CANCELLED, DRAFT) must fail with an appropriate error.",
+      "Return a structured success response indicating cancellation and stock restoration, or a standardized error response indicating reason for failure."
+    ],
+    "edge_cases": [
+      "Attempting to cancel an invoice that does not exist returns a not-found error.",
+      "Attempting to cancel an already CANCELLED invoice returns a conflict/invalid-state error.",
+      "An OPEN invoice with line items that reference non-stockable products should only restore stock for stockable items; non-stockable items are ignored in stock adjustments.",
+      "Concurrent cancellation requests for the same OPEN invoice should be handled idempotently or serialized to avoid double stock restoration.",
+      "Stock restoration must consider current inventory constraints (e.g., warehouse, lot/serial tracking) and update all affected stock records atomically with the cancellation transaction."
+    ],
+    "acceptance_criteria": [
+      "Open invoice cancellation succeeds: status becomes CANCELLED and stock quantities for all stockable line items are increased to reflect cancellation.",
+      "None"
+    ],
+    "non_goals": [
+      "Cancelling PAID invoices or invoices with partial payments via this path.",
+      "Reopening or un-cancelling cancelled invoices.",
+      "Partial cancellation of an invoice (only some line items) via this path."
+    ],
+    "testable_assertions": [
+      "Given an OPEN invoice with stockable line items, after cancel_invoice, invoice.status == CANCELLED and stock levels increased by the quantity in the invoice.",
+      "Given a PAID invoice, cancel_invoice returns an error indicating only OPEN invoices can be cancelled.",
+      "Given a non-existent invoice id, cancel_invoice returns a not-found error.",
+      "Given an already CANCELLED invoice, cancel_invoice returns an invalid-state error."
+    ]
+  },
+  "public_spec": "Title: cancel_invoice: restore stock on open invoices\n\nBehavior requirements:\n- cancel_invoice accepts an invoice identifier for an invoice in OPEN status.\n- Upon successful cancellation of an OPEN invoice, set invoice status to CANCELLED.\n- On cancellation of an OPEN invoice, restore stock quantities for all line items in the invoice to their pre-invoice state.\n- Cancellation request for an invoice in any status other than OPEN (e.g., PAID, CANCELLED, DRAFT) must fail with an appropriate error.\n- Return a structured success response indicating cancellation and stock restoration, or a standardized error response indicating reason for failure.\n\nEdge cases:\n- Attempting to cancel an invoice that does not exist returns a not-found error.\n- Attempting to cancel an already CANCELLED invoice returns a conflict/invalid-state error.\n- An OPEN invoice with line items that reference non-stockable products should only restore stock for stockable items; non-stockable items are ignored in stock adjustments.\n- Concurrent cancellation requests for the same OPEN invoice should be handled idempotently or serialized to avoid double stock restoration.\n- Stock restoration must consider current inventory constraints (e.g., warehouse, lot/serial tracking) and update all affected stock records atomically with the cancellation transaction.\n\nAcceptance criteria:\n- Open invoice cancellation succeeds: status becomes CANCELLED and stock quantities for all stockable line items are increased to reflect cancellation.\n- None\n\nNon-goals:\n- Cancelling PAID invoices or invoices with partial payments via this path.\n- Reopening or un-cancelling cancelled invoices.\n- Partial cancellation of an invoice (only some line items) via this path.\n\nTestable assertions:\n- Given an OPEN invoice with stockable line items, after cancel_invoice, invoice.status == CANCELLED and stock levels increased by the quantity in the invoice.\n- Given a PAID invoice, cancel_invoice returns an error indicating only OPEN invoices can be cancelled.\n- Given a non-existent invoice id, cancel_invoice returns a not-found error.\n- Given an already CANCELLED invoice, cancel_invoice returns an invalid-state error.",
+  "generation_empty": false,
+  "generation_error": null
+}

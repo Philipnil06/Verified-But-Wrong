@@ -1,0 +1,7 @@
+{
+  "policy_pack_ids": [
+    "generic_critical_requirements",
+    "access_control_policy",
+    "audit_logging_policy"
+  ]
+}

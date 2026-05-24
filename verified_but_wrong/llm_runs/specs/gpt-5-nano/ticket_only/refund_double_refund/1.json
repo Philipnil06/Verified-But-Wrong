@@ -1,0 +1,74 @@
+{
+  "timestamp": "2026-05-12T17:30:29.188386+00:00",
+  "task_id": "refund_double_refund",
+  "task_title": "Refund function with no double refund",
+  "condition": "ticket_only",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse only the product ticket below.\nDo not assume access to hidden organization policies.\nWrite the best implementation spec you can from the ticket.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse only the product ticket below. Do not assume access to hidden organization policies. Write the best implementation spec you can from the ticket.\n\nTask title: Refund function with no double refund\nFunction entrypoint: refund\n\nProduct ticket:\nImplement a refund function. Refunds must be positive, must never exceed the original payment, invalid or cancelled orders must fail, and the same order cannot be refunded twice.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "bc6d43bb865009a6da20ddf6af2e18ef8b0b6d084ef7368289d565c33fa1d936",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Refund function with no double refund\",\n  \"behavior_requirements\": [\n    \"refund(amount, order_id) must return a positive refund amount greater than 0.\",\n    \"refund amount must be less than or equal to the original payment amount for the given order.\",\n    \"refund must fail for invalid orders (non-existent, cancelled, or already refunded).\",\n    \"an order cannot be refunded more than once; subsequent refund attempts for the same order must fail.\",\n    \"successful refunds must be recorded as refunded for the order to prevent double refunds.\",\n    \"the function must return a clear failure signal for invalid scenarios (e.g., error/exception or structured error response).\"\n  ],\n  \"edge_cases\": [\n    \"refund amount equals the full original payment amount.\",\n    \"refund amount is zero or negative (should fail).\",\n    \"order has multiple payment attempts or partial payments (treat as original payment reference for total allowed refund).\",\n    \"concurrent refund attempts for the same order (must be serialized to avoid race conditions and still prevent double refund).\",\n    \"refund after order cancellation vs. refund before cancellation (both must be invalid if order is cancelled).\",\n    \"floating point precision when comparing amounts (tolerance used or integer cents).\"\n  ],\n  \"acceptance_criteria\": [\n    \"refund returns a positive value not exceeding original payment.\",\n    \"refund for invalid/cancelled/non-existent orders fails with a clear error.\",\n    \"a previously refunded order cannot be refunded again; second call fails.\",\n    \"edge cases like full refund, partial refund, and zero/negative inputs are handled as specified.\",\n    \"no double refund is possible due to proper state tracking and concurrency safeguards.\",\n    \"behavior is observable via return values and/or explicit error signals.\"\n  ],\n  \"non_goals\": [\n    \"defining or enforcing organization-specific policies beyond the given ticket.\",\n    \"integration with external payment gateways beyond the scope of refund eligibility checks.\",\n    \"UI rendering or user notification logic.\"\n  ],\n  \"testable_assertions\": [\n    \"refund(10, 'order1') returns 10 when original payment is 10 and order1 not refunded.\",\n    \"refund(15, 'order1') fails if original payment is 10 (amount exceeds original).\",\n    \"refund(0, 'order2') fails as non-positive refund.\",\n    \"refund(10, 'invalid_order') fails as invalid order.\",\n    \"refund(10, 'order3') succeeds and subsequent refund attempt on 'order3' fails (double refund prevention).\",\n    \"refund exactly equal to original amount is allowed and marks order as refunded.\",\n    \"concurrent refund attempts for the same order do not permit two successful refunds.\"\n  ]\n}",
+  "response_hash": "bdc242ecb3193c22d8121ccd0564ed4822411bf464f7bcd6172e98ff30ad7372",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_011707db1c4765e6006a0363b4290c8193b594b748e92f469c",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 274,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 583,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 857
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Refund function with no double refund",
+    "behavior_requirements": [
+      "refund(amount, order_id) must return a positive refund amount greater than 0.",
+      "refund amount must be less than or equal to the original payment amount for the given order.",
+      "refund must fail for invalid orders (non-existent, cancelled, or already refunded).",
+      "an order cannot be refunded more than once; subsequent refund attempts for the same order must fail.",
+      "successful refunds must be recorded as refunded for the order to prevent double refunds.",
+      "the function must return a clear failure signal for invalid scenarios (e.g., error/exception or structured error response)."
+    ],
+    "edge_cases": [
+      "refund amount equals the full original payment amount.",
+      "refund amount is zero or negative (should fail).",
+      "order has multiple payment attempts or partial payments (treat as original payment reference for total allowed refund).",
+      "concurrent refund attempts for the same order (must be serialized to avoid race conditions and still prevent double refund).",
+      "refund after order cancellation vs. refund before cancellation (both must be invalid if order is cancelled).",
+      "floating point precision when comparing amounts (tolerance used or integer cents)."
+    ],
+    "acceptance_criteria": [
+      "refund returns a positive value not exceeding original payment.",
+      "refund for invalid/cancelled/non-existent orders fails with a clear error.",
+      "a previously refunded order cannot be refunded again; second call fails.",
+      "edge cases like full refund, partial refund, and zero/negative inputs are handled as specified.",
+      "no double refund is possible due to proper state tracking and concurrency safeguards.",
+      "behavior is observable via return values and/or explicit error signals."
+    ],
+    "non_goals": [
+      "defining or enforcing organization-specific policies beyond the given ticket.",
+      "integration with external payment gateways beyond the scope of refund eligibility checks.",
+      "UI rendering or user notification logic."
+    ],
+    "testable_assertions": [
+      "refund(10, 'order1') returns 10 when original payment is 10 and order1 not refunded.",
+      "refund(15, 'order1') fails if original payment is 10 (amount exceeds original).",
+      "refund(0, 'order2') fails as non-positive refund.",
+      "refund(10, 'invalid_order') fails as invalid order.",
+      "refund(10, 'order3') succeeds and subsequent refund attempt on 'order3' fails (double refund prevention).",
+      "refund exactly equal to original amount is allowed and marks order as refunded.",
+      "concurrent refund attempts for the same order do not permit two successful refunds."
+    ]
+  },
+  "public_spec": "Title: Refund function with no double refund\n\nBehavior requirements:\n- refund(amount, order_id) must return a positive refund amount greater than 0.\n- refund amount must be less than or equal to the original payment amount for the given order.\n- refund must fail for invalid orders (non-existent, cancelled, or already refunded).\n- an order cannot be refunded more than once; subsequent refund attempts for the same order must fail.\n- successful refunds must be recorded as refunded for the order to prevent double refunds.\n- the function must return a clear failure signal for invalid scenarios (e.g., error/exception or structured error response).\n\nEdge cases:\n- refund amount equals the full original payment amount.\n- refund amount is zero or negative (should fail).\n- order has multiple payment attempts or partial payments (treat as original payment reference for total allowed refund).\n- concurrent refund attempts for the same order (must be serialized to avoid race conditions and still prevent double refund).\n- refund after order cancellation vs. refund before cancellation (both must be invalid if order is cancelled).\n- floating point precision when comparing amounts (tolerance used or integer cents).\n\nAcceptance criteria:\n- refund returns a positive value not exceeding original payment.\n- refund for invalid/cancelled/non-existent orders fails with a clear error.\n- a previously refunded order cannot be refunded again; second call fails.\n- edge cases like full refund, partial refund, and zero/negative inputs are handled as specified.\n- no double refund is possible due to proper state tracking and concurrency safeguards.\n- behavior is observable via return values and/or explicit error signals.\n\nNon-goals:\n- defining or enforcing organization-specific policies beyond the given ticket.\n- integration with external payment gateways beyond the scope of refund eligibility checks.\n- UI rendering or user notification logic.\n\nTestable assertions:\n- refund(10, 'order1') returns 10 when original payment is 10 and order1 not refunded.\n- refund(15, 'order1') fails if original payment is 10 (amount exceeds original).\n- refund(0, 'order2') fails as non-positive refund.\n- refund(10, 'invalid_order') fails as invalid order.\n- refund(10, 'order3') succeeds and subsequent refund attempt on 'order3' fails (double refund prevention).\n- refund exactly equal to original amount is allowed and marks order as refunded.\n- concurrent refund attempts for the same order do not permit two successful refunds.",
+  "generation_empty": false,
+  "generation_error": null
+}

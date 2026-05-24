@@ -1,0 +1,72 @@
+{
+  "timestamp": "2026-05-12T17:30:23.516475+00:00",
+  "task_id": "rate_limiter_boundary",
+  "task_title": "Rate limiter boundary and per-user state",
+  "condition": "oracle_full",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the full intended behavior.\nThis is an upper-bound condition and is not a deployable retrieval setting.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the full intended behavior. This is an upper-bound condition.\n\nTask title: Rate limiter boundary and per-user state\nFunction entrypoint: allow_request\n\nFull intended behavior:\nTrack requests per user in a 60 second rolling window. Allow at most 5 requests per user. The 6th request in the window must be blocked. Different users must be independent.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "8d022120813f0ce3fe79c7c60e5da7798822972e4f7052e1e795ed3f9647a6e9",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Per-user 60-second rolling window rate limiter\",\n  \"behavior_requirements\": [\n    \"Maintain a per-user request history timestamped with the time of each allow_request invocation.\",\n    \"Define a rolling window of 60 seconds ending at the current time when evaluating a request.\",\n    \"Allow the 5th or fewer requests within the current 60-second window for a given user.\",\n    \"Block the 6th or more requests within the current 60-second window for that user.\",\n    \"Isolation: requests from different users must not impact each other's counters.\",\n    \"On a block decision, do not update per-user state that would improperly advance history for other users; only the requesting user's state is touched.\",\n    \"Return a deterministic decision indicator (allowed or blocked) based on the user-specific window calculation.\"\n  ],\n  \"edge_cases\": [\n    \"First ever request from a user within an empty state should be allowed.\",\n    \"Requests exactly 60 seconds apart should not be counted within the same rolling window (i.e., a request at t and a request at t+60 should be in separate windows).\",\n    \"Multiple concurrent requests for the same user should be handled deterministically (race conditions prevented) by atomic per-user state updates.\",\n    \"Clock skew: if system clock moves backward, ensure behavior remains consistent and does not reuse invalid timestamps.\",\n    \"Memory limits: prune old timestamps beyond a reasonable horizon to prevent unbounded growth while preserving 60-second window accuracy.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Given a user identifier, allow up to five requests within any 60-second sliding window, and block the sixth within that same window.\",\n    \"Requests from different users do not affect each other's allowance counts.\",\n    \"Edge timing cases around window boundaries are treated according to rolling-window semantics (60-second window ending at current time).\",\n    \"State updates are durable within the scope of the process and consistent across sequential requests for the same user.\",\n    \"Blocked responses are returned when the rate limit is exceeded for that user; allowed responses otherwise.\"\n  ],\n  \"non_goals\": [\n    \"Cross-user aggregation or global rate limiting.\",\n    \"Permanent or long-term throttling beyond the 60-second window.\",\n    \"Storing or exposing user data beyond timestamps necessary for the 60-second window.\",\n    \"Persistence across restarts beyond the defined in-memory/ephemeral state (not specified in this spec).\"\n  ],\n  \"testable_assertions\": [\n    \"For a given user, performing five allow_request calls within 60 seconds returns allowed, and the sixth within that window returns blocked.\",\n    \"Between two users, requests do not influence each other’s outcomes; each user’s decisions depend solely on their own history.\",\n    \"Requests separated by more than 60 seconds are counted in new windows and should be allowed up to five again.\",\n    \"Concurrent allow_request calls for the same user result in consistent, non-contradictory outcomes (no more than five allowed within the same 60-second period).\",\n    \"State for a user only records timestamps of that user’s requests, with no leakage of other users’ data.\"\n  ]\n}",
+  "response_hash": "7552b8030290f973de474fb6ce74683a452836be1fc1ada78554280038161765",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0b1d0c56598966c5006a0363ae78a0819e916e06f506edc79a",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 262,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 670,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 932
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Per-user 60-second rolling window rate limiter",
+    "behavior_requirements": [
+      "Maintain a per-user request history timestamped with the time of each allow_request invocation.",
+      "Define a rolling window of 60 seconds ending at the current time when evaluating a request.",
+      "Allow the 5th or fewer requests within the current 60-second window for a given user.",
+      "Block the 6th or more requests within the current 60-second window for that user.",
+      "Isolation: requests from different users must not impact each other's counters.",
+      "On a block decision, do not update per-user state that would improperly advance history for other users; only the requesting user's state is touched.",
+      "Return a deterministic decision indicator (allowed or blocked) based on the user-specific window calculation."
+    ],
+    "edge_cases": [
+      "First ever request from a user within an empty state should be allowed.",
+      "Requests exactly 60 seconds apart should not be counted within the same rolling window (i.e., a request at t and a request at t+60 should be in separate windows).",
+      "Multiple concurrent requests for the same user should be handled deterministically (race conditions prevented) by atomic per-user state updates.",
+      "Clock skew: if system clock moves backward, ensure behavior remains consistent and does not reuse invalid timestamps.",
+      "Memory limits: prune old timestamps beyond a reasonable horizon to prevent unbounded growth while preserving 60-second window accuracy."
+    ],
+    "acceptance_criteria": [
+      "Given a user identifier, allow up to five requests within any 60-second sliding window, and block the sixth within that same window.",
+      "Requests from different users do not affect each other's allowance counts.",
+      "Edge timing cases around window boundaries are treated according to rolling-window semantics (60-second window ending at current time).",
+      "State updates are durable within the scope of the process and consistent across sequential requests for the same user.",
+      "Blocked responses are returned when the rate limit is exceeded for that user; allowed responses otherwise."
+    ],
+    "non_goals": [
+      "Cross-user aggregation or global rate limiting.",
+      "Permanent or long-term throttling beyond the 60-second window.",
+      "Storing or exposing user data beyond timestamps necessary for the 60-second window.",
+      "Persistence across restarts beyond the defined in-memory/ephemeral state (not specified in this spec)."
+    ],
+    "testable_assertions": [
+      "For a given user, performing five allow_request calls within 60 seconds returns allowed, and the sixth within that window returns blocked.",
+      "Between two users, requests do not influence each other’s outcomes; each user’s decisions depend solely on their own history.",
+      "Requests separated by more than 60 seconds are counted in new windows and should be allowed up to five again.",
+      "Concurrent allow_request calls for the same user result in consistent, non-contradictory outcomes (no more than five allowed within the same 60-second period).",
+      "State for a user only records timestamps of that user’s requests, with no leakage of other users’ data."
+    ]
+  },
+  "public_spec": "Title: Per-user 60-second rolling window rate limiter\n\nBehavior requirements:\n- Maintain a per-user request history timestamped with the time of each allow_request invocation.\n- Define a rolling window of 60 seconds ending at the current time when evaluating a request.\n- Allow the 5th or fewer requests within the current 60-second window for a given user.\n- Block the 6th or more requests within the current 60-second window for that user.\n- Isolation: requests from different users must not impact each other's counters.\n- On a block decision, do not update per-user state that would improperly advance history for other users; only the requesting user's state is touched.\n- Return a deterministic decision indicator (allowed or blocked) based on the user-specific window calculation.\n\nEdge cases:\n- First ever request from a user within an empty state should be allowed.\n- Requests exactly 60 seconds apart should not be counted within the same rolling window (i.e., a request at t and a request at t+60 should be in separate windows).\n- Multiple concurrent requests for the same user should be handled deterministically (race conditions prevented) by atomic per-user state updates.\n- Clock skew: if system clock moves backward, ensure behavior remains consistent and does not reuse invalid timestamps.\n- Memory limits: prune old timestamps beyond a reasonable horizon to prevent unbounded growth while preserving 60-second window accuracy.\n\nAcceptance criteria:\n- Given a user identifier, allow up to five requests within any 60-second sliding window, and block the sixth within that same window.\n- Requests from different users do not affect each other's allowance counts.\n- Edge timing cases around window boundaries are treated according to rolling-window semantics (60-second window ending at current time).\n- State updates are durable within the scope of the process and consistent across sequential requests for the same user.\n- Blocked responses are returned when the rate limit is exceeded for that user; allowed responses otherwise.\n\nNon-goals:\n- Cross-user aggregation or global rate limiting.\n- Permanent or long-term throttling beyond the 60-second window.\n- Storing or exposing user data beyond timestamps necessary for the 60-second window.\n- Persistence across restarts beyond the defined in-memory/ephemeral state (not specified in this spec).\n\nTestable assertions:\n- For a given user, performing five allow_request calls within 60 seconds returns allowed, and the sixth within that window returns blocked.\n- Between two users, requests do not influence each other’s outcomes; each user’s decisions depend solely on their own history.\n- Requests separated by more than 60 seconds are counted in new windows and should be allowed up to five again.\n- Concurrent allow_request calls for the same user result in consistent, non-contradictory outcomes (no more than five allowed within the same 60-second period).\n- State for a user only records timestamps of that user’s requests, with no leakage of other users’ data.",
+  "generation_empty": false,
+  "generation_error": null
+}

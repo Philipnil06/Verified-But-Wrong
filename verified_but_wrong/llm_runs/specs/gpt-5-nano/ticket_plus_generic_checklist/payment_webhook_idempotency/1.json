@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-05-12T17:29:50.180132+00:00",
+  "task_id": "payment_webhook_idempotency",
+  "task_title": "Payment webhook idempotency",
+  "condition": "ticket_plus_generic_checklist",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the product ticket and the generic checklist.\nThe checklist is generic and may not mention task-specific organization policies.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the product ticket and the generic checklist. The checklist is generic and may not mention task-specific organization policies.\n\nTask title: Payment webhook idempotency\nFunction entrypoint: process_payment_event\n\nProduct ticket:\n# Product ticket: payment webhook processing\n\n## Background\nThe payments provider sends webhook events for payment outcomes. The service updates merchant balances for successful payments.\n\n## Happy path\n- Successful payment events increase merchant balance by the event amount.\n- Failed payment events do not increase balance.\n- The event has merchant, amount, currency, and status fields.\n\n## Acceptance criteria\n- Successful payment credits the merchant balance.\n- Failed payment does not credit balance.\n\nGeneric checklist:\n- authorization and access control\n- idempotency and duplicate handling\n- boundary conditions and off-by-one cases\n- state consistency and required state updates\n- audit logging or record retention where relevant\n- tenant or data isolation where relevant\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "cc53dab8de8e7353f456f80221323017fd62c40d99fc42b17d48e898b7913ef5",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Payment webhook processing with idempotent process_payment_event\",\n  \"behavior_requirements\": [\n    \"Process webhook events only after verifying event payload contains merchant, amount, currency, and status fields.\",\n    \"On status = 'paid' (successful), credit merchant balance by the event amount in the specified currency.\",\n    \"On status != 'paid' (e.g., 'failed', 'refunded'), do not credit the merchant balance.\",\n    \"Ensure idempotency: repeated delivery of the same event (same event_id or a dedup token) must not duplicate credits.\",\n    \"Persist a durable record of each processed event for audit and reconciliation.\",\n    \"Enforce proper access controls to ensure only legitimate webhook requests are processed.\"\n  ],\n  \"edge_cases\": [\n    \"Duplicate webhook delivery with same event_id should result in no additional balance change.\",\n    \"Webhook with missing or invalid fields should be rejected without side effects and logged.\",\n    \"Webhook with currency mismatch or unsupported currency should be rejected or handled per policy with no balance change.\",\n    \"Partial failures (e.g., balance update succeeds but event log write fails) should be recoverable via idempotent retries and compensating actions if needed.\",\n    \"High-volume webhook bursts should not cause race conditions; balance updates must be serialized per merchant.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Successful payment events increment merchant balance by the event amount exactly once per unique event.\",\n    \"Failed payment events do not modify merchant balance.\",\n    \"Each event is processed idempotently; duplicate deliveries do not change state.\",\n    \"All processed events are recorded for audit, including event_id, merchant_id, amount, currency, status, and timestamp.\",\n    \"Access control checks are enforced and webhook requests from the provider are authenticated.\"\n  ],\n  \"non_goals\": [\n    \"Implementing non-webhook payment methods,\" ,\n    \"Handling refunds as balance credits unless status explicitly indicates a credit.\",\n    \"Global currency conversion or multi-currency balance aggregation beyond per-merchant currency consistency validation.\"\n  ],\n  \"testable_assertions\": [\n    \"Given a successful webhook with event_id E for merchant M and amount A, after processing, balance(M) increases by A and event E is recorded.\",\n    \"Processing the same webhook event E again does not change balance(M) further.\",\n    \"Given a failed webhook with event_id F, balance(M) remains unchanged and event F is recorded as processed.\",\n    \"Webhook with missing required fields is rejected without modifying balance or event state.\",\n    \"Webhook with invalid authentication is rejected and not processed.\"\n  ]\n}",
+  "response_hash": "799f67d736f287930a3b912b990fb409e0b54db45fc88aa0a87c8f3972e905d7",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_015b3fa59273a830006a03638d1d84819c888c11d76380faaa",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 371,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 552,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 923
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Payment webhook processing with idempotent process_payment_event",
+    "behavior_requirements": [
+      "Process webhook events only after verifying event payload contains merchant, amount, currency, and status fields.",
+      "On status = 'paid' (successful), credit merchant balance by the event amount in the specified currency.",
+      "On status != 'paid' (e.g., 'failed', 'refunded'), do not credit the merchant balance.",
+      "Ensure idempotency: repeated delivery of the same event (same event_id or a dedup token) must not duplicate credits.",
+      "Persist a durable record of each processed event for audit and reconciliation.",
+      "Enforce proper access controls to ensure only legitimate webhook requests are processed."
+    ],
+    "edge_cases": [
+      "Duplicate webhook delivery with same event_id should result in no additional balance change.",
+      "Webhook with missing or invalid fields should be rejected without side effects and logged.",
+      "Webhook with currency mismatch or unsupported currency should be rejected or handled per policy with no balance change.",
+      "Partial failures (e.g., balance update succeeds but event log write fails) should be recoverable via idempotent retries and compensating actions if needed.",
+      "High-volume webhook bursts should not cause race conditions; balance updates must be serialized per merchant."
+    ],
+    "acceptance_criteria": [
+      "Successful payment events increment merchant balance by the event amount exactly once per unique event.",
+      "Failed payment events do not modify merchant balance.",
+      "Each event is processed idempotently; duplicate deliveries do not change state.",
+      "All processed events are recorded for audit, including event_id, merchant_id, amount, currency, status, and timestamp.",
+      "Access control checks are enforced and webhook requests from the provider are authenticated."
+    ],
+    "non_goals": [
+      "Implementing non-webhook payment methods,",
+      "Handling refunds as balance credits unless status explicitly indicates a credit.",
+      "Global currency conversion or multi-currency balance aggregation beyond per-merchant currency consistency validation."
+    ],
+    "testable_assertions": [
+      "Given a successful webhook with event_id E for merchant M and amount A, after processing, balance(M) increases by A and event E is recorded.",
+      "Processing the same webhook event E again does not change balance(M) further.",
+      "Given a failed webhook with event_id F, balance(M) remains unchanged and event F is recorded as processed.",
+      "Webhook with missing required fields is rejected without modifying balance or event state.",
+      "Webhook with invalid authentication is rejected and not processed."
+    ]
+  },
+  "public_spec": "Title: Payment webhook processing with idempotent process_payment_event\n\nBehavior requirements:\n- Process webhook events only after verifying event payload contains merchant, amount, currency, and status fields.\n- On status = 'paid' (successful), credit merchant balance by the event amount in the specified currency.\n- On status != 'paid' (e.g., 'failed', 'refunded'), do not credit the merchant balance.\n- Ensure idempotency: repeated delivery of the same event (same event_id or a dedup token) must not duplicate credits.\n- Persist a durable record of each processed event for audit and reconciliation.\n- Enforce proper access controls to ensure only legitimate webhook requests are processed.\n\nEdge cases:\n- Duplicate webhook delivery with same event_id should result in no additional balance change.\n- Webhook with missing or invalid fields should be rejected without side effects and logged.\n- Webhook with currency mismatch or unsupported currency should be rejected or handled per policy with no balance change.\n- Partial failures (e.g., balance update succeeds but event log write fails) should be recoverable via idempotent retries and compensating actions if needed.\n- High-volume webhook bursts should not cause race conditions; balance updates must be serialized per merchant.\n\nAcceptance criteria:\n- Successful payment events increment merchant balance by the event amount exactly once per unique event.\n- Failed payment events do not modify merchant balance.\n- Each event is processed idempotently; duplicate deliveries do not change state.\n- All processed events are recorded for audit, including event_id, merchant_id, amount, currency, status, and timestamp.\n- Access control checks are enforced and webhook requests from the provider are authenticated.\n\nNon-goals:\n- Implementing non-webhook payment methods,\n- Handling refunds as balance credits unless status explicitly indicates a credit.\n- Global currency conversion or multi-currency balance aggregation beyond per-merchant currency consistency validation.\n\nTestable assertions:\n- Given a successful webhook with event_id E for merchant M and amount A, after processing, balance(M) increases by A and event E is recorded.\n- Processing the same webhook event E again does not change balance(M) further.\n- Given a failed webhook with event_id F, balance(M) remains unchanged and event F is recorded as processed.\n- Webhook with missing required fields is rejected without modifying balance or event state.\n- Webhook with invalid authentication is rejected and not processed.",
+  "generation_empty": false,
+  "generation_error": null
+}

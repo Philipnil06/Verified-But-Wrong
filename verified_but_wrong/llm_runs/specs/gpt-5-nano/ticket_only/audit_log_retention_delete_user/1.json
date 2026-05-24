@@ -1,0 +1,65 @@
+{
+  "timestamp": "2026-05-12T17:27:48.272409+00:00",
+  "task_id": "audit_log_retention_delete_user",
+  "task_title": "Audit log retention on delete user",
+  "condition": "ticket_only",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse only the product ticket below.\nDo not assume access to hidden organization policies.\nWrite the best implementation spec you can from the ticket.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse only the product ticket below. Do not assume access to hidden organization policies. Write the best implementation spec you can from the ticket.\n\nTask title: Audit log retention on delete user\nFunction entrypoint: delete_user\n\nProduct ticket:\n# Ticket: delete inactive user\n\nAllow administrators to delete an inactive user from the active user table. Mark the user as deleted and return success.\n\nAcceptance criteria:\n- Admin delete succeeds.\n- Non-admin delete fails.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "1363a0d3f576626761744ed1c22c7f3b7b63ebdd178763cae5d2baad587c166b",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Audit log retention on delete user\",\n  \"behavior_requirements\": [\n    \"delete_user(id) is callable by administrators only.\",\n    \"If user with given id is inactive and present in the active user table, mark the user as deleted (soft delete) by setting a deleted flag or status in the user record.\",\n    \"Deleted user must remain in the database for auditing purposes (not physically removed).\",\n    \"Return success JSON response when deletion edge passes validation.\",\n    \"Non-admin attempts must fail with an appropriate error response and no changes to the user record.\",\n    \"All actions must be auditable: log the admin performing the deletion, timestamp, target user id, and result.\"\n  ],\n  \"edge_cases\": [\n    \"Attempt to delete a user who is already marked as deleted: treat as idempotent success or clearly indicate no-op with success.\",\n    \"Attempt to delete a non-existent user id: return failure with clear error indicating not found.\",\n    \"Attempt to delete an active (not inactive) user: reject with appropriate error (only inactive users allowed to be deleted).\",\n    \"Database failure during update: return failure with error indicating internal error and do not partially commit.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Admin delete succeeds for an inactive user: user record marked as deleted and success returned.\",\nnull    ],\n  \"non_goals\": [\n    \"Hard delete of user data.\",\n    \"Audit log retention beyond deletion window is not specified.\",\n    \"Non-admin deletion permissions beyond admin/non-admin dichotomy.\"\n  ],\n  \"testable_assertions\": [\n    \"Given an inactive user in active_user_table, when admin invokes delete_user, the user row is updated to deleted state and response is success.\",\n    \"Given a non-admin invokes delete_user, no changes occur and response indicates failure due to insufficient permissions.\",\n    \"Given a non-existent user id, delete_user returns not found error and no data is modified.\",\n    \"Given an active (non-inactive) user, delete_user fails with reason that only inactive users can be deleted.\"\n  ]\n}",
+  "response_hash": "dfaa734a24c5309d9b72908b43c5ea9eaa5ecbc7ac495f430989e1d8e655648f",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0f0a12cc38144b4c006a0363135a9481978376221f26aae8b4",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 284,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 451,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 735
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Audit log retention on delete user",
+    "behavior_requirements": [
+      "delete_user(id) is callable by administrators only.",
+      "If user with given id is inactive and present in the active user table, mark the user as deleted (soft delete) by setting a deleted flag or status in the user record.",
+      "Deleted user must remain in the database for auditing purposes (not physically removed).",
+      "Return success JSON response when deletion edge passes validation.",
+      "Non-admin attempts must fail with an appropriate error response and no changes to the user record.",
+      "All actions must be auditable: log the admin performing the deletion, timestamp, target user id, and result."
+    ],
+    "edge_cases": [
+      "Attempt to delete a user who is already marked as deleted: treat as idempotent success or clearly indicate no-op with success.",
+      "Attempt to delete a non-existent user id: return failure with clear error indicating not found.",
+      "Attempt to delete an active (not inactive) user: reject with appropriate error (only inactive users allowed to be deleted).",
+      "Database failure during update: return failure with error indicating internal error and do not partially commit."
+    ],
+    "acceptance_criteria": [
+      "Admin delete succeeds for an inactive user: user record marked as deleted and success returned.",
+      "None"
+    ],
+    "non_goals": [
+      "Hard delete of user data.",
+      "Audit log retention beyond deletion window is not specified.",
+      "Non-admin deletion permissions beyond admin/non-admin dichotomy."
+    ],
+    "testable_assertions": [
+      "Given an inactive user in active_user_table, when admin invokes delete_user, the user row is updated to deleted state and response is success.",
+      "Given a non-admin invokes delete_user, no changes occur and response indicates failure due to insufficient permissions.",
+      "Given a non-existent user id, delete_user returns not found error and no data is modified.",
+      "Given an active (non-inactive) user, delete_user fails with reason that only inactive users can be deleted."
+    ]
+  },
+  "public_spec": "Title: Audit log retention on delete user\n\nBehavior requirements:\n- delete_user(id) is callable by administrators only.\n- If user with given id is inactive and present in the active user table, mark the user as deleted (soft delete) by setting a deleted flag or status in the user record.\n- Deleted user must remain in the database for auditing purposes (not physically removed).\n- Return success JSON response when deletion edge passes validation.\n- Non-admin attempts must fail with an appropriate error response and no changes to the user record.\n- All actions must be auditable: log the admin performing the deletion, timestamp, target user id, and result.\n\nEdge cases:\n- Attempt to delete a user who is already marked as deleted: treat as idempotent success or clearly indicate no-op with success.\n- Attempt to delete a non-existent user id: return failure with clear error indicating not found.\n- Attempt to delete an active (not inactive) user: reject with appropriate error (only inactive users allowed to be deleted).\n- Database failure during update: return failure with error indicating internal error and do not partially commit.\n\nAcceptance criteria:\n- Admin delete succeeds for an inactive user: user record marked as deleted and success returned.\n- None\n\nNon-goals:\n- Hard delete of user data.\n- Audit log retention beyond deletion window is not specified.\n- Non-admin deletion permissions beyond admin/non-admin dichotomy.\n\nTestable assertions:\n- Given an inactive user in active_user_table, when admin invokes delete_user, the user row is updated to deleted state and response is success.\n- Given a non-admin invokes delete_user, no changes occur and response indicates failure due to insufficient permissions.\n- Given a non-existent user id, delete_user returns not found error and no data is modified.\n- Given an active (non-inactive) user, delete_user fails with reason that only inactive users can be deleted.",
+  "generation_empty": false,
+  "generation_error": null
+}

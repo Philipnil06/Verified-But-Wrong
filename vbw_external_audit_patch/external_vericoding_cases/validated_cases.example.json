@@ -1,0 +1,15 @@
+[
+  {
+    "id": "DA0003",
+    "status": "validated",
+    "reason": "Human-reviewed example only. Copy to validated_cases.json only after real review.",
+    "gap_category": "trivial_postcondition",
+    "nl_requirement": "Describe the exact NL requirement here.",
+    "formal_spec_gap": "Describe the missing formal condition here.",
+    "weak_spec_proxy_description": "Describe the weak spec proxy or point to weak_spec_proxy.py.",
+    "weak_spec_proxy_pass": true,
+    "bad_candidate_behavior": "Describe the intentionally wrong candidate.",
+    "intended_oracle_description": "Describe task-specific oracle tests.",
+    "reviewer_notes": "Do not use this example as validation without real files in the case folder."
+  }
+]

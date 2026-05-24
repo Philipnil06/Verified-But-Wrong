@@ -1,0 +1,81 @@
+{
+  "generated_at_utc": "2026-05-13T13:31:16.238832+00:00",
+  "repo": "C:\\Users\\Philip Nilsson\\OneDrive - Mälardalens Tekniska Gymnasium\\Skrivbordet\\Hackathon apartresearch The Secure Program Synthesis\\verified_but_wrong",
+  "install_succeeded": true,
+  "dafny_version": "4.11.0+fcb2042d6d043a2634f0854338c08feeaaaf4ae2",
+  "install_method": "dotnet-install.ps1 (SDK 8.0.421 to C:\\\\vbw-dotnet-sdk) + local .NET tool manifest (.config/dotnet-tools.json)",
+  "results": [
+    {
+      "command": "dotnet --version",
+      "exit_code": 2147516561,
+      "stdout": "",
+      "stderr": "The command could not be loaded, possibly because:\n  * You intended to execute a .NET application:\n      The application '--version' does not exist.\n  * You intended to execute a .NET SDK command:\n      No .NET SDKs were found.\n\nDownload a .NET SDK:\nhttps://aka.ms/dotnet/download\n\nLearn about SDK resolution:\nhttps://aka.ms/dotnet/sdk-not-found\n"
+    },
+    {
+      "command": "dotnet --info",
+      "exit_code": 0,
+      "stdout": "\nHost:\n  Version:      7.0.7\n  Architecture: x64\n  Commit:       5b20af47d9\n\n.NET SDKs installed:\n  No SDKs were found.\n\n.NET runtimes installed:\n  Microsoft.AspNetCore.App 3.1.10 [C:\\Program Files\\dotnet\\shared\\Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 7.0.7 [C:\\Program Files\\dotnet\\shared\\Microsoft.AspNetCore.App]\n  Microsoft.NETCore.App 3.1.10 [C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App]\n  Microsoft.NETCore.App 7.0.7 [C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App]\n  Microsoft.WindowsDesktop.App 7.0.7 [C:\\Program Files\\dotnet\\shared\\Microsoft.WindowsDesktop.App]\n\nOther architectures found:\n  None\n\nEnvironment variables:\n  Not set\n\nglobal.json file:\n  Not found\n\nLearn more:\n  https://aka.ms/dotnet/info\n\nDownload .NET:\n  https://aka.ms/dotnet/download\n",
+      "stderr": ""
+    },
+    {
+      "command": "dafny --version",
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "'dafny' is not recognized as an internal or external command,\noperable program or batch file.\n"
+    },
+    {
+      "command": "dotnet tool run dafny --version",
+      "exit_code": 2147516561,
+      "stdout": "",
+      "stderr": "The command could not be loaded, possibly because:\n  * You intended to execute a .NET application:\n      The application 'tool' does not exist.\n  * You intended to execute a .NET SDK command:\n      No .NET SDKs were found.\n\nDownload a .NET SDK:\nhttps://aka.ms/dotnet/download\n\nLearn about SDK resolution:\nhttps://aka.ms/dotnet/sdk-not-found\n"
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File .tools/dotnet-install.ps1 -Channel 8.0 -InstallDir \".dotnet\" -NoPath",
+      "exit_code": 0,
+      "stdout": "dotnet-install: .NET Core SDK with version '8.0.421' is already installed.\ndotnet-install: Binaries of dotnet can be found in C:\\Users\\Philip Nilsson\\OneDrive - MÃ¤lardalens Tekniska Gymnasium\\Skrivbordet\\Hackathon apartresearch The Secure Program Synthesis\\verified_but_wrong\\.dotnet\\\n",
+      "stderr": ""
+    },
+    {
+      "command": "powershell -ExecutionPolicy Bypass -File .tools/dotnet-install.ps1 -Channel 8.0 -InstallDir \"C:\\vbw-dotnet-sdk\" -NoPath",
+      "exit_code": 0,
+      "stdout": "dotnet-install: .NET Core SDK with version '8.0.421' is already installed.\ndotnet-install: Binaries of dotnet can be found in C:\\vbw-dotnet-sdk\\\n",
+      "stderr": ""
+    },
+    {
+      "command": "C:\\vbw-dotnet-sdk\\dotnet.exe --version",
+      "exit_code": 0,
+      "stdout": "8.0.421\n",
+      "stderr": ""
+    },
+    {
+      "command": "C:\\vbw-dotnet-sdk\\dotnet.exe --info",
+      "exit_code": 0,
+      "stdout": ".NET SDK:\n Version:           8.0.421\n Commit:            f16c270f6c\n Workload version:  8.0.400-manifests.83eddae2\n MSBuild version:   17.11.48+02bf66295\n\nRuntime Environment:\n OS Name:     Windows\n OS Version:  10.0.19045\n OS Platform: Windows\n RID:         win-x64\n Base Path:   C:\\vbw-dotnet-sdk\\sdk\\8.0.421\\\n\n.NET workloads installed:\nConfigured to use loose manifests when installing new manifests.\nThere are no installed workloads to display.\n\nHost:\n  Version:      8.0.27\n  Architecture: x64\n  Commit:       a6bde67c45\n\n.NET SDKs installed:\n  8.0.421 [C:\\vbw-dotnet-sdk\\sdk]\n\n.NET runtimes installed:\n  Microsoft.AspNetCore.App 8.0.27 [C:\\vbw-dotnet-sdk\\shared\\Microsoft.AspNetCore.App]\n  Microsoft.NETCore.App 8.0.27 [C:\\vbw-dotnet-sdk\\shared\\Microsoft.NETCore.App]\n  Microsoft.WindowsDesktop.App 8.0.27 [C:\\vbw-dotnet-sdk\\shared\\Microsoft.WindowsDesktop.App]\n\nOther architectures found:\n  None\n\nEnvironment variables:\n  Not set\n\nglobal.json file:\n  Not found\n\nLearn more:\n  https://aka.ms/dotnet/info\n\nDownload .NET:\n  https://aka.ms/dotnet/download\n",
+      "stderr": ""
+    },
+    {
+      "command": "C:\\vbw-dotnet-sdk\\dotnet.exe new tool-manifest --force",
+      "exit_code": 0,
+      "stdout": "The template \"Dotnet local tool manifest file\" was created successfully.\n\n",
+      "stderr": ""
+    },
+    {
+      "command": "C:\\vbw-dotnet-sdk\\dotnet.exe tool install Dafny --version 4.11.0",
+      "exit_code": 0,
+      "stdout": "You can invoke the tool from this directory using the following commands: 'dotnet tool run dafny' or 'dotnet dafny'.\nTool 'dafny' (version '4.11.0') was successfully installed. Entry is added to the manifest file C:\\Users\\Philip Nilsson\\OneDrive - MÃ¤lardalens Tekniska Gymnasium\\Skrivbordet\\Hackathon apartresearch The Secure Program Synthesis\\verified_but_wrong\\.config\\dotnet-tools.json.\n",
+      "stderr": ""
+    },
+    {
+      "command": "C:\\vbw-dotnet-sdk\\dotnet.exe tool restore",
+      "exit_code": 0,
+      "stdout": "Tool 'dafny' (version '4.11.0') was restored. Available commands: dafny\n\nRestore was successful.\n",
+      "stderr": ""
+    },
+    {
+      "command": "C:\\vbw-dotnet-sdk\\dotnet.exe tool run dafny --version",
+      "exit_code": 0,
+      "stdout": "4.11.0+fcb2042d6d043a2634f0854338c08feeaaaf4ae2\n",
+      "stderr": ""
+    }
+  ]
+}

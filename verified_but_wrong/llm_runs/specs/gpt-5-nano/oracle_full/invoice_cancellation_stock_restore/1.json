@@ -1,0 +1,73 @@
+{
+  "timestamp": "2026-05-12T17:29:15.591911+00:00",
+  "task_id": "invoice_cancellation_stock_restore",
+  "task_title": "Invoice cancellation restores stock",
+  "condition": "oracle_full",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the full intended behavior.\nThis is an upper-bound condition and is not a deployable retrieval setting.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the full intended behavior. This is an upper-bound condition.\n\nTask title: Invoice cancellation restores stock\nFunction entrypoint: cancel_invoice\n\nFull intended behavior:\nMark open invoices as cancelled and restore reserved inventory quantities for cancelled invoice lines.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "316c05805c3042ab867ac754cdcb05009237012868f4a6534077ab4c81b5b10b",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Invoice cancellation restores stock\",\n  \"behavior_requirements\": [\n    \"Given a valid invoice identifier corresponding to an open invoice, cancel_invoice marks the invoice as cancelled.\",\n    \"For each line item in the cancelled invoice, the reserved inventory quantity is restored to available stock.\",\n    \"Only line items with reserved quantities are touched; no other inventory attributes are altered.\",\n    \"If an invoice is already cancelled, cancel_invoice returns a no-op success indication without errors.\",\n    \"If the invoice does not exist or is not in an open state, cancel_invoice returns an appropriate error/exception as defined by the system.\",\n    \"All operations are performed atomically within a single transactional context to ensure consistency between invoice status and inventory stock levels.\",\n    \"All changes are auditable: the cancellation event and stock restoration are recorded with timestamp, user initiating the cancellation, and affected items.\"\n  ],\n  \"edge_cases\": [\n    \"No line items on the invoice; cancellation should proceed and still mark the invoice as cancelled.\",\n    \"A line item has zero reserved quantity; no stock change for that line.\",\n    \"Concurrent cancellation or modification of the same invoice by another process; system should serialize or handle via transactional isolation and report conflict if applicable.\",\n    \"Stock restoration would exceed the current available quantity limit; system should enforce stock quantity bounds and not underflow/overflow.\",\n    \"Inventory reservations for the cancelled lines are already consumed by other orders; restoration should re-link to available stock correctly or fail with a descriptive error if the reservation state cannot be reconciled.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Invoice status is updated to 'cancelled' for the specified open invoice.\",\n    \"Reserved quantities for all line items of the cancelled invoice are added back to their respective available stock.\",\n    \"No other inventory quantities are modified beyond the intended reserved-to-available transfer.\",\n    \"Operation is atomic; either all line items are processed and the invoice is cancelled, or the operation fails without partial changes.\",\n    \"Cancellation and stock restoration are recorded in audit logs with timestamp and initiating user.\",\n    \"Return value indicates success for valid cancellations and appropriate error for invalid inputs or non-open invoices.\"\n  ],\n  \"non_goals\": [\n    \"Cancelling invoices that are already cancelled should not modify stock or raise failure; it should be a benign no-op.\",\n    \"Handling of discounts, taxes, or non-inventory items during cancellation beyond stock restoration.\",\n    \"Revalidation of external systems or downstream processes beyond transactional consistency and audit logging.\"\n  ],\n  \"testable_assertions\": [\n    \"cancel_invoice(open_invoice_id) sets invoice.status == 'cancelled'.\",\n    \"For each line_item in invoice.lines: line_item.reserved_quantity == 0 and line_item.product.available_quantity increased by the reserved_quantity amount.\",\n    \"Total available stock after cancellation equals previous available stock plus all restored quantities minus any concurrent conflicting changes (no partial restoration).\",\n    \"Operation is wrapped in a database transaction with commit on success and rollback on failure.\",\n    \"Audit logs contain an entry for the cancellation with invoice_id, user_id, timestamp, and list of affected items.\",\n    \"Exported API returns success for valid cancellation and meaningful error codes/messages for invalid inputs or non-open invoices.\"\n  ]\n}",
+  "response_hash": "fbef97d913c4c7554cfdb3fd34145fa51319c1ce8863ef6c4ecf8fa44f0bd923",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_095bff897e105199006a03636aad048194b0df7ae6789235e1",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 235,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 685,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 920
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Invoice cancellation restores stock",
+    "behavior_requirements": [
+      "Given a valid invoice identifier corresponding to an open invoice, cancel_invoice marks the invoice as cancelled.",
+      "For each line item in the cancelled invoice, the reserved inventory quantity is restored to available stock.",
+      "Only line items with reserved quantities are touched; no other inventory attributes are altered.",
+      "If an invoice is already cancelled, cancel_invoice returns a no-op success indication without errors.",
+      "If the invoice does not exist or is not in an open state, cancel_invoice returns an appropriate error/exception as defined by the system.",
+      "All operations are performed atomically within a single transactional context to ensure consistency between invoice status and inventory stock levels.",
+      "All changes are auditable: the cancellation event and stock restoration are recorded with timestamp, user initiating the cancellation, and affected items."
+    ],
+    "edge_cases": [
+      "No line items on the invoice; cancellation should proceed and still mark the invoice as cancelled.",
+      "A line item has zero reserved quantity; no stock change for that line.",
+      "Concurrent cancellation or modification of the same invoice by another process; system should serialize or handle via transactional isolation and report conflict if applicable.",
+      "Stock restoration would exceed the current available quantity limit; system should enforce stock quantity bounds and not underflow/overflow.",
+      "Inventory reservations for the cancelled lines are already consumed by other orders; restoration should re-link to available stock correctly or fail with a descriptive error if the reservation state cannot be reconciled."
+    ],
+    "acceptance_criteria": [
+      "Invoice status is updated to 'cancelled' for the specified open invoice.",
+      "Reserved quantities for all line items of the cancelled invoice are added back to their respective available stock.",
+      "No other inventory quantities are modified beyond the intended reserved-to-available transfer.",
+      "Operation is atomic; either all line items are processed and the invoice is cancelled, or the operation fails without partial changes.",
+      "Cancellation and stock restoration are recorded in audit logs with timestamp and initiating user.",
+      "Return value indicates success for valid cancellations and appropriate error for invalid inputs or non-open invoices."
+    ],
+    "non_goals": [
+      "Cancelling invoices that are already cancelled should not modify stock or raise failure; it should be a benign no-op.",
+      "Handling of discounts, taxes, or non-inventory items during cancellation beyond stock restoration.",
+      "Revalidation of external systems or downstream processes beyond transactional consistency and audit logging."
+    ],
+    "testable_assertions": [
+      "cancel_invoice(open_invoice_id) sets invoice.status == 'cancelled'.",
+      "For each line_item in invoice.lines: line_item.reserved_quantity == 0 and line_item.product.available_quantity increased by the reserved_quantity amount.",
+      "Total available stock after cancellation equals previous available stock plus all restored quantities minus any concurrent conflicting changes (no partial restoration).",
+      "Operation is wrapped in a database transaction with commit on success and rollback on failure.",
+      "Audit logs contain an entry for the cancellation with invoice_id, user_id, timestamp, and list of affected items.",
+      "Exported API returns success for valid cancellation and meaningful error codes/messages for invalid inputs or non-open invoices."
+    ]
+  },
+  "public_spec": "Title: Invoice cancellation restores stock\n\nBehavior requirements:\n- Given a valid invoice identifier corresponding to an open invoice, cancel_invoice marks the invoice as cancelled.\n- For each line item in the cancelled invoice, the reserved inventory quantity is restored to available stock.\n- Only line items with reserved quantities are touched; no other inventory attributes are altered.\n- If an invoice is already cancelled, cancel_invoice returns a no-op success indication without errors.\n- If the invoice does not exist or is not in an open state, cancel_invoice returns an appropriate error/exception as defined by the system.\n- All operations are performed atomically within a single transactional context to ensure consistency between invoice status and inventory stock levels.\n- All changes are auditable: the cancellation event and stock restoration are recorded with timestamp, user initiating the cancellation, and affected items.\n\nEdge cases:\n- No line items on the invoice; cancellation should proceed and still mark the invoice as cancelled.\n- A line item has zero reserved quantity; no stock change for that line.\n- Concurrent cancellation or modification of the same invoice by another process; system should serialize or handle via transactional isolation and report conflict if applicable.\n- Stock restoration would exceed the current available quantity limit; system should enforce stock quantity bounds and not underflow/overflow.\n- Inventory reservations for the cancelled lines are already consumed by other orders; restoration should re-link to available stock correctly or fail with a descriptive error if the reservation state cannot be reconciled.\n\nAcceptance criteria:\n- Invoice status is updated to 'cancelled' for the specified open invoice.\n- Reserved quantities for all line items of the cancelled invoice are added back to their respective available stock.\n- No other inventory quantities are modified beyond the intended reserved-to-available transfer.\n- Operation is atomic; either all line items are processed and the invoice is cancelled, or the operation fails without partial changes.\n- Cancellation and stock restoration are recorded in audit logs with timestamp and initiating user.\n- Return value indicates success for valid cancellations and appropriate error for invalid inputs or non-open invoices.\n\nNon-goals:\n- Cancelling invoices that are already cancelled should not modify stock or raise failure; it should be a benign no-op.\n- Handling of discounts, taxes, or non-inventory items during cancellation beyond stock restoration.\n- Revalidation of external systems or downstream processes beyond transactional consistency and audit logging.\n\nTestable assertions:\n- cancel_invoice(open_invoice_id) sets invoice.status == 'cancelled'.\n- For each line_item in invoice.lines: line_item.reserved_quantity == 0 and line_item.product.available_quantity increased by the reserved_quantity amount.\n- Total available stock after cancellation equals previous available stock plus all restored quantities minus any concurrent conflicting changes (no partial restoration).\n- Operation is wrapped in a database transaction with commit on success and rollback on failure.\n- Audit logs contain an entry for the cancellation with invoice_id, user_id, timestamp, and list of affected items.\n- Exported API returns success for valid cancellation and meaningful error codes/messages for invalid inputs or non-open invoices.",
+  "generation_empty": false,
+  "generation_error": null
+}

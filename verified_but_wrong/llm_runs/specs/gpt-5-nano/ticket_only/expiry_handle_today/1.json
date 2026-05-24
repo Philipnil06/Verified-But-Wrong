@@ -1,0 +1,65 @@
+{
+  "timestamp": "2026-05-12T17:28:43.657924+00:00",
+  "task_id": "expiry_handle_today",
+  "task_title": "Expiry handling with lead time",
+  "condition": "ticket_only",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse only the product ticket below.\nDo not assume access to hidden organization policies.\nWrite the best implementation spec you can from the ticket.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse only the product ticket below. Do not assume access to hidden organization policies. Write the best implementation spec you can from the ticket.\n\nTask title: Expiry handling with lead time\nFunction entrypoint: should_handle_today\n\nProduct ticket:\n# Product ticket: expiry handling\n\n## Background\nInventory items should be marked for handling based on expiry dates.\n\n## Happy path\n- Items expiring today should be handled.\n- Items expiring tomorrow should not be handled by default.\n\n## Policy note\nSome categories have lead-time rules.\n\n## Acceptance criteria\n- Expiring today returns handle_today true.\n- Invalid dates return an error.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "ce132fc6f3c27acf33e8f4b7ad84888011d3d2c14108ad1059c1931cca5aa1f3",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Expiry handling with lead time - should_handle_today\",\n  \"behavior_requirements\": [\n    \"Given a date string representing an expiry date, should_handle_today returns true if the expiry date is today.\",\n    \"If the expiry date is tomorrow, should_handle_today returns false by default.\",\n    \"Items with expiry dates in the past may be treated as invalid or require separate handling per future policy (not required by current acceptance).\",\n    \"If the input date string is invalid (unparsable or not a valid date), the function should return an error.\"\n  ],\n  \"edge_cases\": [\n    \"Expiry date is today in different time zones (consistent interpretation expected; treat according to system date in local time).\",\n    \"Leap day or end-of-month transitions (valid dates should parse correctly).\",\n    \"Null or empty input should produce an error.\",\n    \"Future lead-time rules for specific categories exist but are not active unless category is provided; default behavior remains as above.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Expiring today returns should_handle_today = true.\",\n    \"Expiring tomorrow returns should_handle_today = false.\",\n    \"Invalid date strings return an error.\",\n    \"Non-date inputs return an error.\"\n  ],\n  \"non_goals\": [\n    \"Implementing category-specific lead-time rules unless a category is provided.\",\n    \"Changing behavior for dates beyond tomorrow beyond explicit acceptance criteria.\"\n  ],\n  \"testable_assertions\": [\n    \"assert should_handle_today('YYYY-MM-DD' equal to today's date) is true\",\n    \"assert should_handle_today('YYYY-MM-DD' equal to tomorrow) is false\",\n    \"assert should_handle_today('invalid-date') results in error\",\n    \"assert should_handle_today('') results in error\",\n    \"assert should_handle_today(null) results in error\"\n  ]\n}",
+  "response_hash": "553f8c95b602f8d7ca3c25a60e7b83a424aef660203224f2651cf443e2c1e9ab",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_009474f01fbdb02e006a03634ac78881908334ae709702299b",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 320,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 399,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 719
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Expiry handling with lead time - should_handle_today",
+    "behavior_requirements": [
+      "Given a date string representing an expiry date, should_handle_today returns true if the expiry date is today.",
+      "If the expiry date is tomorrow, should_handle_today returns false by default.",
+      "Items with expiry dates in the past may be treated as invalid or require separate handling per future policy (not required by current acceptance).",
+      "If the input date string is invalid (unparsable or not a valid date), the function should return an error."
+    ],
+    "edge_cases": [
+      "Expiry date is today in different time zones (consistent interpretation expected; treat according to system date in local time).",
+      "Leap day or end-of-month transitions (valid dates should parse correctly).",
+      "Null or empty input should produce an error.",
+      "Future lead-time rules for specific categories exist but are not active unless category is provided; default behavior remains as above."
+    ],
+    "acceptance_criteria": [
+      "Expiring today returns should_handle_today = true.",
+      "Expiring tomorrow returns should_handle_today = false.",
+      "Invalid date strings return an error.",
+      "Non-date inputs return an error."
+    ],
+    "non_goals": [
+      "Implementing category-specific lead-time rules unless a category is provided.",
+      "Changing behavior for dates beyond tomorrow beyond explicit acceptance criteria."
+    ],
+    "testable_assertions": [
+      "assert should_handle_today('YYYY-MM-DD' equal to today's date) is true",
+      "assert should_handle_today('YYYY-MM-DD' equal to tomorrow) is false",
+      "assert should_handle_today('invalid-date') results in error",
+      "assert should_handle_today('') results in error",
+      "assert should_handle_today(null) results in error"
+    ]
+  },
+  "public_spec": "Title: Expiry handling with lead time - should_handle_today\n\nBehavior requirements:\n- Given a date string representing an expiry date, should_handle_today returns true if the expiry date is today.\n- If the expiry date is tomorrow, should_handle_today returns false by default.\n- Items with expiry dates in the past may be treated as invalid or require separate handling per future policy (not required by current acceptance).\n- If the input date string is invalid (unparsable or not a valid date), the function should return an error.\n\nEdge cases:\n- Expiry date is today in different time zones (consistent interpretation expected; treat according to system date in local time).\n- Leap day or end-of-month transitions (valid dates should parse correctly).\n- Null or empty input should produce an error.\n- Future lead-time rules for specific categories exist but are not active unless category is provided; default behavior remains as above.\n\nAcceptance criteria:\n- Expiring today returns should_handle_today = true.\n- Expiring tomorrow returns should_handle_today = false.\n- Invalid date strings return an error.\n- Non-date inputs return an error.\n\nNon-goals:\n- Implementing category-specific lead-time rules unless a category is provided.\n- Changing behavior for dates beyond tomorrow beyond explicit acceptance criteria.\n\nTestable assertions:\n- assert should_handle_today('YYYY-MM-DD' equal to today's date) is true\n- assert should_handle_today('YYYY-MM-DD' equal to tomorrow) is false\n- assert should_handle_today('invalid-date') results in error\n- assert should_handle_today('') results in error\n- assert should_handle_today(null) results in error",
+  "generation_empty": false,
+  "generation_error": null
+}

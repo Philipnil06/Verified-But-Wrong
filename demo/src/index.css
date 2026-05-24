@@ -1,0 +1,44 @@
+:root {
+  --bg: #ffffff;
+  --text: #12233d;
+  --muted: #3f546f;
+  --border: #dbe4ee;
+  --orange: #c87818;
+  --green: #0f7a46;
+  --red: #b02a2a;
+  --blue: #1c5fbc;
+  --panel: #f8fafc;
+  --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-mono: 'Consolas', 'Courier New', monospace;
+
+  font-family: var(--font-sans);
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.5;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+}
+
+a {
+  color: var(--blue);
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+#root {
+  min-height: 100vh;
+}

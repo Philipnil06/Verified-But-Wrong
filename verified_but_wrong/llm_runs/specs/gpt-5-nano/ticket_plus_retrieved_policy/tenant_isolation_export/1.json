@@ -1,0 +1,64 @@
+{
+  "timestamp": "2026-05-12T17:31:44.817854+00:00",
+  "task_id": "tenant_isolation_export",
+  "task_title": "Tenant isolation export",
+  "condition": "ticket_plus_retrieved_policy",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the product ticket and the retrieved policy card.\nThe policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the product ticket and the retrieved policy card. The policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nTask title: Tenant isolation export\nFunction entrypoint: export_records\n\nProduct ticket:\n# Ticket: tenant-scoped export\n\nExport records matching requested filters, but only records whose tenant_id matches the authenticated actor tenant_id may be returned. User-provided filters must not override tenant scope.\n\nAcceptance criteria:\n- Tenant t1 receives only t1 records.\n- Cross-tenant records are never included.\n\nRetrieved policy card:\nPolicy card ID: tenant.export.isolation\nTitle: Tenant exports must not cross tenant boundary\nRequirement: Export must not include records from other tenants.\nWhy it matters: Cross-tenant exports leak data across customer boundaries.\nAudit questions:\n- Does the spec require tenant_id scoping for every exported record?\nKeywords:\n- tenant\n- tenant_id\n- other tenants\n- tenant boundary\n- cross tenant\n- requesting tenant\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "f251b3eb397af33e25570603c6362928d09e39f532d2b4ef7000996019211882",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Tenant-scoped export: export_records enforces tenant_id isolation\",\n  \"behavior_requirements\": [\n    \"For every record returned by export_records, the record's tenant_id must equal the authenticated actor's tenant_id.\",\n    \"User-provided filters must not override tenant scoping. If a filter attempts to include non-matching tenant_id values, those records must be excluded.\",\n    \"If no tenant_id is specified in a record (or the record lacks tenant_id), treat as incompatible with tenant-scoped export and exclude from results.\"\n  ],\n  \"edge_cases\": [\n    \"Records with null or missing tenant_id are excluded from export results.\",\n    \"Filters that would include multiple tenants are restricted to only include records with tenant_id equal to the authenticated actor's tenant_id.\",\n    \"In case of multi-tenant joins or computed fields, ensure final exported dataset remains scoped to the actor's tenant.\",\n    \"If authentication context is missing or tenant_id is unavailable, fail the export with a clear permission/invalid-context error.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Given tenant t1, export_records returns only records where record.tenant_id == t1.\",\n    \"No records from other tenants are present in the export output for any authenticated actor.\",\n    \"When filters are provided, they are applied after enforcing tenant_id scope, and any non-matching tenant records are excluded regardless of filter.\",\n    \"Audit trail indicates tenant scoping was applied for each exported record.\"\n  ],\n  \"non_goals\": [\n    \"Exporting cross-tenant data or bypassing tenant_id checks.\",\n    \"Modifying tenant boundaries or altering the definition of tenant to broaden export scope.\",\n    \"Handling of export formats beyond the defined supported formats without explicit security review.\"\n  ],\n  \"testable_assertions\": [\n    \"test_export_t1_returns_only_t1_records: all returned records have tenant_id == t1.\",\n    \"test_cross_tenant_records_not_included: records with tenant_id != t1 are never present in export output.\",\n    \"test_filter_no_override_tenant: a filter requesting non-t1 tenants yields zero results, not a mixed dataset.\",\n    \"test_missing_tenant_id_records_excluded: records missing tenant_id are not exported.\"\n  ]\n}",
+  "response_hash": "93de2c79ad2132106796057ad6ff37a1465ac7b1af3e82fc2e3596c3df77be55",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_09d5a630799ebf2b006a0363ffdb9481a1a068428077411117",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 388,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 485,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 873
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Tenant-scoped export: export_records enforces tenant_id isolation",
+    "behavior_requirements": [
+      "For every record returned by export_records, the record's tenant_id must equal the authenticated actor's tenant_id.",
+      "User-provided filters must not override tenant scoping. If a filter attempts to include non-matching tenant_id values, those records must be excluded.",
+      "If no tenant_id is specified in a record (or the record lacks tenant_id), treat as incompatible with tenant-scoped export and exclude from results."
+    ],
+    "edge_cases": [
+      "Records with null or missing tenant_id are excluded from export results.",
+      "Filters that would include multiple tenants are restricted to only include records with tenant_id equal to the authenticated actor's tenant_id.",
+      "In case of multi-tenant joins or computed fields, ensure final exported dataset remains scoped to the actor's tenant.",
+      "If authentication context is missing or tenant_id is unavailable, fail the export with a clear permission/invalid-context error."
+    ],
+    "acceptance_criteria": [
+      "Given tenant t1, export_records returns only records where record.tenant_id == t1.",
+      "No records from other tenants are present in the export output for any authenticated actor.",
+      "When filters are provided, they are applied after enforcing tenant_id scope, and any non-matching tenant records are excluded regardless of filter.",
+      "Audit trail indicates tenant scoping was applied for each exported record."
+    ],
+    "non_goals": [
+      "Exporting cross-tenant data or bypassing tenant_id checks.",
+      "Modifying tenant boundaries or altering the definition of tenant to broaden export scope.",
+      "Handling of export formats beyond the defined supported formats without explicit security review."
+    ],
+    "testable_assertions": [
+      "test_export_t1_returns_only_t1_records: all returned records have tenant_id == t1.",
+      "test_cross_tenant_records_not_included: records with tenant_id != t1 are never present in export output.",
+      "test_filter_no_override_tenant: a filter requesting non-t1 tenants yields zero results, not a mixed dataset.",
+      "test_missing_tenant_id_records_excluded: records missing tenant_id are not exported."
+    ]
+  },
+  "public_spec": "Title: Tenant-scoped export: export_records enforces tenant_id isolation\n\nBehavior requirements:\n- For every record returned by export_records, the record's tenant_id must equal the authenticated actor's tenant_id.\n- User-provided filters must not override tenant scoping. If a filter attempts to include non-matching tenant_id values, those records must be excluded.\n- If no tenant_id is specified in a record (or the record lacks tenant_id), treat as incompatible with tenant-scoped export and exclude from results.\n\nEdge cases:\n- Records with null or missing tenant_id are excluded from export results.\n- Filters that would include multiple tenants are restricted to only include records with tenant_id equal to the authenticated actor's tenant_id.\n- In case of multi-tenant joins or computed fields, ensure final exported dataset remains scoped to the actor's tenant.\n- If authentication context is missing or tenant_id is unavailable, fail the export with a clear permission/invalid-context error.\n\nAcceptance criteria:\n- Given tenant t1, export_records returns only records where record.tenant_id == t1.\n- No records from other tenants are present in the export output for any authenticated actor.\n- When filters are provided, they are applied after enforcing tenant_id scope, and any non-matching tenant records are excluded regardless of filter.\n- Audit trail indicates tenant scoping was applied for each exported record.\n\nNon-goals:\n- Exporting cross-tenant data or bypassing tenant_id checks.\n- Modifying tenant boundaries or altering the definition of tenant to broaden export scope.\n- Handling of export formats beyond the defined supported formats without explicit security review.\n\nTestable assertions:\n- test_export_t1_returns_only_t1_records: all returned records have tenant_id == t1.\n- test_cross_tenant_records_not_included: records with tenant_id != t1 are never present in export output.\n- test_filter_no_override_tenant: a filter requesting non-t1 tenants yields zero results, not a mixed dataset.\n- test_missing_tenant_id_records_excluded: records missing tenant_id are not exported.",
+  "generation_empty": false,
+  "generation_error": null
+}

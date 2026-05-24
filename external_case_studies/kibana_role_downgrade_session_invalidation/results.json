@@ -1,0 +1,701 @@
+{
+  "result_type": "external_case_study",
+  "timestamp": "2026-05-13T13:28:31.275813+00:00",
+  "case_id": "kibana_role_downgrade_session_invalidation",
+  "source": {
+    "type": "externally sourced public GitHub issue",
+    "repository": "elastic/kibana",
+    "issue": 192346,
+    "url": "https://github.com/elastic/kibana/issues/192346",
+    "limitation": "adapted case study, not original bug reproduction"
+  },
+  "policy_card": {
+    "id": "auth.role_downgrade.session_invalidation",
+    "title": "Privilege-reducing role changes must invalidate or revalidate active sessions",
+    "category": "authorization_omission",
+    "severity": "high",
+    "requirement": "When a user's role is downgraded or privileged access is removed, existing sessions must not continue to authorize privileged actions. The system must either invalidate active sessions or revalidate permissions server-side before privileged actions.",
+    "applies_to": [
+      "role update",
+      "authorization",
+      "session management",
+      "RBAC"
+    ],
+    "failure_if_omitted": "A user whose role was downgraded may keep using an old session with stale privileged claims to perform administrator actions.",
+    "audit_questions": [
+      "Does the spec say what happens to active sessions after a privilege-reducing role change?",
+      "Does the backend revalidate current stored permissions before privileged actions?",
+      "Are stale admin claims denied after the role is downgraded?"
+    ],
+    "keywords": [
+      "session invalidation",
+      "invalidate sessions",
+      "revalidate permissions",
+      "server-side permission",
+      "stale session",
+      "stale privileged access",
+      "active sessions",
+      "privileged actions",
+      "role downgrade"
+    ],
+    "suggested_spec_patch": "When a user's role is downgraded or privileged access is removed, existing sessions must not continue to authorize privileged actions; invalidate active sessions or revalidate permissions server-side before every privileged action."
+  },
+  "gate": {
+    "spec_source": "external_case_extracted_public_spec",
+    "pre_selection_decision": "BLOCK",
+    "coverage_rate": 0.0,
+    "covered_policy_cards": [],
+    "missing_policy_cards": [
+      {
+        "id": "auth.role_downgrade.session_invalidation",
+        "title": "Privilege-reducing role changes must invalidate or revalidate active sessions",
+        "category": "authorization_omission",
+        "severity": "high",
+        "requirement": "When a user's role is downgraded or privileged access is removed, existing sessions must not continue to authorize privileged actions. The system must either invalidate active sessions or revalidate permissions server-side before privileged actions.",
+        "applies_to": [
+          "role update",
+          "authorization",
+          "session management",
+          "RBAC"
+        ],
+        "failure_if_omitted": "A user whose role was downgraded may keep using an old session with stale privileged claims to perform administrator actions.",
+        "audit_questions": [
+          "Does the spec say what happens to active sessions after a privilege-reducing role change?",
+          "Does the backend revalidate current stored permissions before privileged actions?",
+          "Are stale admin claims denied after the role is downgraded?"
+        ],
+        "keywords": [
+          "session invalidation",
+          "invalidate sessions",
+          "revalidate permissions",
+          "server-side permission",
+          "stale session",
+          "stale privileged access",
+          "active sessions",
+          "privileged actions",
+          "role downgrade"
+        ],
+        "suggested_spec_patch": "When a user's role is downgraded or privileged access is removed, existing sessions must not continue to authorize privileged actions; invalidate active sessions or revalidate permissions server-side before every privileged action."
+      }
+    ],
+    "critical_missing_requirements": [
+      {
+        "policy_card_id": "auth.role_downgrade.session_invalidation",
+        "requirement": "When a user's role is downgraded or privileged access is removed, existing sessions must not continue to authorize privileged actions. The system must either invalidate active sessions or revalidate permissions server-side before privileged actions.",
+        "category": "authorization_omission",
+        "severity": "high",
+        "why_it_matters": "A user whose role was downgraded may keep using an old session with stale privileged claims to perform administrator actions.",
+        "audit_question": "Does the spec say what happens to active sessions after a privilege-reducing role change?"
+      }
+    ],
+    "risk_categories": {
+      "authorization_omission": 1
+    },
+    "severity_counts": {
+      "high": 1
+    },
+    "suggested_patches": [
+      {
+        "policy_card_id": "auth.role_downgrade.session_invalidation",
+        "patch": "When a user's role is downgraded or privileged access is removed, existing sessions must not continue to authorize privileged actions; invalidate active sessions or revalidate permissions server-side before every privileged action."
+      }
+    ],
+    "recommendation": "Block or repair before using this spec for implementation selection.",
+    "ci_exit_code": 1,
+    "keyword_hits": []
+  },
+  "before_repair": {
+    "selected_candidate": "impl_1_update_role_only.py",
+    "public_spec_passed": true,
+    "hidden_oracle_passed": false,
+    "verified_but_wrong": true,
+    "candidates": [
+      {
+        "name": "impl_1_update_role_only.py",
+        "public": {
+          "passed": true,
+          "passed_count": 3,
+          "failed_count": 0,
+          "failures": [],
+          "tests": [
+            {
+              "name": "admin_can_change_role_from_admin_to_none",
+              "passed": true,
+              "expected": "status ok",
+              "actual": "ok"
+            },
+            {
+              "name": "stored_role_is_updated",
+              "passed": true,
+              "expected": "stored role none",
+              "actual": "none"
+            },
+            {
+              "name": "refreshed_view_shows_updated_role",
+              "passed": true,
+              "expected": "view role none",
+              "actual": "{'role': 'none'}"
+            }
+          ]
+        },
+        "hidden": {
+          "passed": false,
+          "passed_count": 1,
+          "failed_count": 1,
+          "failures": [
+            "old_admin_session_cannot_perform_privileged_action_after_downgrade"
+          ],
+          "tests": [
+            {
+              "name": "role_downgrade_succeeds",
+              "passed": true,
+              "expected": "role updated to none",
+              "actual": "status=ok role=none"
+            },
+            {
+              "name": "old_admin_session_cannot_perform_privileged_action_after_downgrade",
+              "passed": false,
+              "expected": "old session denied after role downgrade",
+              "actual": "allowed=True message=admin action allowed from session claims"
+            }
+          ]
+        },
+        "public_passed": true,
+        "hidden_passed": false,
+        "selected": true,
+        "verified_but_wrong": true
+      },
+      {
+        "name": "impl_2_ui_refresh_only.py",
+        "public": {
+          "passed": true,
+          "passed_count": 3,
+          "failed_count": 0,
+          "failures": [],
+          "tests": [
+            {
+              "name": "admin_can_change_role_from_admin_to_none",
+              "passed": true,
+              "expected": "status ok",
+              "actual": "ok"
+            },
+            {
+              "name": "stored_role_is_updated",
+              "passed": true,
+              "expected": "stored role none",
+              "actual": "none"
+            },
+            {
+              "name": "refreshed_view_shows_updated_role",
+              "passed": true,
+              "expected": "view role none",
+              "actual": "{'role': 'none'}"
+            }
+          ]
+        },
+        "hidden": {
+          "passed": false,
+          "passed_count": 1,
+          "failed_count": 1,
+          "failures": [
+            "old_admin_session_cannot_perform_privileged_action_after_downgrade"
+          ],
+          "tests": [
+            {
+              "name": "role_downgrade_succeeds",
+              "passed": true,
+              "expected": "role updated to none",
+              "actual": "status=ok role=none"
+            },
+            {
+              "name": "old_admin_session_cannot_perform_privileged_action_after_downgrade",
+              "passed": false,
+              "expected": "old session denied after role downgrade",
+              "actual": "allowed=True message=backend trusted stale session claims"
+            }
+          ]
+        },
+        "public_passed": true,
+        "hidden_passed": false,
+        "selected": false,
+        "verified_but_wrong": false
+      },
+      {
+        "name": "impl_3_revalidate_permissions.py",
+        "public": {
+          "passed": true,
+          "passed_count": 3,
+          "failed_count": 0,
+          "failures": [],
+          "tests": [
+            {
+              "name": "admin_can_change_role_from_admin_to_none",
+              "passed": true,
+              "expected": "status ok",
+              "actual": "ok"
+            },
+            {
+              "name": "stored_role_is_updated",
+              "passed": true,
+              "expected": "stored role none",
+              "actual": "none"
+            },
+            {
+              "name": "refreshed_view_shows_updated_role",
+              "passed": true,
+              "expected": "view role none",
+              "actual": "{'role': 'none'}"
+            }
+          ]
+        },
+        "hidden": {
+          "passed": true,
+          "passed_count": 2,
+          "failed_count": 0,
+          "failures": [],
+          "tests": [
+            {
+              "name": "role_downgrade_succeeds",
+              "passed": true,
+              "expected": "role updated to none",
+              "actual": "status=ok role=none"
+            },
+            {
+              "name": "old_admin_session_cannot_perform_privileged_action_after_downgrade",
+              "passed": true,
+              "expected": "old session denied after role downgrade",
+              "actual": "allowed=False message=current stored role is not admin"
+            }
+          ]
+        },
+        "public_passed": true,
+        "hidden_passed": true,
+        "selected": false,
+        "verified_but_wrong": false
+      },
+      {
+        "name": "impl_4_invalidate_sessions_on_downgrade.py",
+        "public": {
+          "passed": true,
+          "passed_count": 3,
+          "failed_count": 0,
+          "failures": [],
+          "tests": [
+            {
+              "name": "admin_can_change_role_from_admin_to_none",
+              "passed": true,
+              "expected": "status ok",
+              "actual": "ok"
+            },
+            {
+              "name": "stored_role_is_updated",
+              "passed": true,
+              "expected": "stored role none",
+              "actual": "none"
+            },
+            {
+              "name": "refreshed_view_shows_updated_role",
+              "passed": true,
+              "expected": "view role none",
+              "actual": "{'role': 'none'}"
+            }
+          ]
+        },
+        "hidden": {
+          "passed": true,
+          "passed_count": 2,
+          "failed_count": 0,
+          "failures": [],
+          "tests": [
+            {
+              "name": "role_downgrade_succeeds",
+              "passed": true,
+              "expected": "role updated to none",
+              "actual": "status=ok role=none"
+            },
+            {
+              "name": "old_admin_session_cannot_perform_privileged_action_after_downgrade",
+              "passed": true,
+              "expected": "old session denied after role downgrade",
+              "actual": "allowed=False message=session inactive or not admin"
+            }
+          ]
+        },
+        "public_passed": true,
+        "hidden_passed": true,
+        "selected": false,
+        "verified_but_wrong": false
+      },
+      {
+        "name": "impl_5_correct.py",
+        "public": {
+          "passed": true,
+          "passed_count": 3,
+          "failed_count": 0,
+          "failures": [],
+          "tests": [
+            {
+              "name": "admin_can_change_role_from_admin_to_none",
+              "passed": true,
+              "expected": "status ok",
+              "actual": "ok"
+            },
+            {
+              "name": "stored_role_is_updated",
+              "passed": true,
+              "expected": "stored role none",
+              "actual": "none"
+            },
+            {
+              "name": "refreshed_view_shows_updated_role",
+              "passed": true,
+              "expected": "view role none",
+              "actual": "{'role': 'none'}"
+            }
+          ]
+        },
+        "hidden": {
+          "passed": true,
+          "passed_count": 2,
+          "failed_count": 0,
+          "failures": [],
+          "tests": [
+            {
+              "name": "role_downgrade_succeeds",
+              "passed": true,
+              "expected": "role updated to none",
+              "actual": "status=ok role=none"
+            },
+            {
+              "name": "old_admin_session_cannot_perform_privileged_action_after_downgrade",
+              "passed": true,
+              "expected": "old session denied after role downgrade",
+              "actual": "allowed=False message=admin action denied"
+            }
+          ]
+        },
+        "public_passed": true,
+        "hidden_passed": true,
+        "selected": false,
+        "verified_but_wrong": false
+      }
+    ]
+  },
+  "repair": {
+    "patched_policy_card_ids": [
+      "auth.role_downgrade.session_invalidation"
+    ],
+    "repaired_spec_text": "# Extracted Public Spec\n\nImplement user role update behavior.\n\nWhen an administrator changes a user's role, the stored role should update successfully. The updated role should be reflected when the user is viewed or refreshed.\n\n## Acceptance Criteria\n\n- An administrator can change a user's role from `admin` to `none`.\n- The stored user role is updated to `none`.\n- A refreshed or viewed user record shows the updated role.\n\n## Intentional Scope Of This Public Spec\n\nThis public spec models the incomplete task-level implementation spec used for candidate selection. It covers role update and refreshed role display behavior only.\n\n## Policy Repair\n\nWhen a user's role is downgraded or privileged access is removed, existing sessions must not continue to authorize privileged actions; invalidate active sessions or revalidate permissions server-side before every privileged action.\n"
+  },
+  "after_repair": {
+    "selected_candidate": "impl_3_revalidate_permissions.py",
+    "public_spec_passed": true,
+    "hidden_oracle_passed": true,
+    "verified_but_wrong": false,
+    "candidates": [
+      {
+        "name": "impl_1_update_role_only.py",
+        "public": {
+          "passed": false,
+          "passed_count": 3,
+          "failed_count": 1,
+          "failures": [
+            "role_downgrade_neutralizes_stale_privileged_session"
+          ],
+          "tests": [
+            {
+              "name": "admin_can_change_role_from_admin_to_none",
+              "passed": true,
+              "expected": "status ok",
+              "actual": "ok"
+            },
+            {
+              "name": "stored_role_is_updated",
+              "passed": true,
+              "expected": "stored role none",
+              "actual": "none"
+            },
+            {
+              "name": "refreshed_view_shows_updated_role",
+              "passed": true,
+              "expected": "view role none",
+              "actual": "{'role': 'none'}"
+            },
+            {
+              "name": "role_downgrade_neutralizes_stale_privileged_session",
+              "passed": false,
+              "expected": "old admin session denied after role downgrade",
+              "actual": "allowed=True message=admin action allowed from session claims"
+            }
+          ]
+        },
+        "hidden": {
+          "passed": false,
+          "passed_count": 1,
+          "failed_count": 1,
+          "failures": [
+            "old_admin_session_cannot_perform_privileged_action_after_downgrade"
+          ],
+          "tests": [
+            {
+              "name": "role_downgrade_succeeds",
+              "passed": true,
+              "expected": "role updated to none",
+              "actual": "status=ok role=none"
+            },
+            {
+              "name": "old_admin_session_cannot_perform_privileged_action_after_downgrade",
+              "passed": false,
+              "expected": "old session denied after role downgrade",
+              "actual": "allowed=True message=admin action allowed from session claims"
+            }
+          ]
+        },
+        "public_passed": false,
+        "hidden_passed": false,
+        "selected": false,
+        "verified_but_wrong": false
+      },
+      {
+        "name": "impl_2_ui_refresh_only.py",
+        "public": {
+          "passed": false,
+          "passed_count": 3,
+          "failed_count": 1,
+          "failures": [
+            "role_downgrade_neutralizes_stale_privileged_session"
+          ],
+          "tests": [
+            {
+              "name": "admin_can_change_role_from_admin_to_none",
+              "passed": true,
+              "expected": "status ok",
+              "actual": "ok"
+            },
+            {
+              "name": "stored_role_is_updated",
+              "passed": true,
+              "expected": "stored role none",
+              "actual": "none"
+            },
+            {
+              "name": "refreshed_view_shows_updated_role",
+              "passed": true,
+              "expected": "view role none",
+              "actual": "{'role': 'none'}"
+            },
+            {
+              "name": "role_downgrade_neutralizes_stale_privileged_session",
+              "passed": false,
+              "expected": "old admin session denied after role downgrade",
+              "actual": "allowed=True message=backend trusted stale session claims"
+            }
+          ]
+        },
+        "hidden": {
+          "passed": false,
+          "passed_count": 1,
+          "failed_count": 1,
+          "failures": [
+            "old_admin_session_cannot_perform_privileged_action_after_downgrade"
+          ],
+          "tests": [
+            {
+              "name": "role_downgrade_succeeds",
+              "passed": true,
+              "expected": "role updated to none",
+              "actual": "status=ok role=none"
+            },
+            {
+              "name": "old_admin_session_cannot_perform_privileged_action_after_downgrade",
+              "passed": false,
+              "expected": "old session denied after role downgrade",
+              "actual": "allowed=True message=backend trusted stale session claims"
+            }
+          ]
+        },
+        "public_passed": false,
+        "hidden_passed": false,
+        "selected": false,
+        "verified_but_wrong": false
+      },
+      {
+        "name": "impl_3_revalidate_permissions.py",
+        "public": {
+          "passed": true,
+          "passed_count": 4,
+          "failed_count": 0,
+          "failures": [],
+          "tests": [
+            {
+              "name": "admin_can_change_role_from_admin_to_none",
+              "passed": true,
+              "expected": "status ok",
+              "actual": "ok"
+            },
+            {
+              "name": "stored_role_is_updated",
+              "passed": true,
+              "expected": "stored role none",
+              "actual": "none"
+            },
+            {
+              "name": "refreshed_view_shows_updated_role",
+              "passed": true,
+              "expected": "view role none",
+              "actual": "{'role': 'none'}"
+            },
+            {
+              "name": "role_downgrade_neutralizes_stale_privileged_session",
+              "passed": true,
+              "expected": "old admin session denied after role downgrade",
+              "actual": "allowed=False message=current stored role is not admin"
+            }
+          ]
+        },
+        "hidden": {
+          "passed": true,
+          "passed_count": 2,
+          "failed_count": 0,
+          "failures": [],
+          "tests": [
+            {
+              "name": "role_downgrade_succeeds",
+              "passed": true,
+              "expected": "role updated to none",
+              "actual": "status=ok role=none"
+            },
+            {
+              "name": "old_admin_session_cannot_perform_privileged_action_after_downgrade",
+              "passed": true,
+              "expected": "old session denied after role downgrade",
+              "actual": "allowed=False message=current stored role is not admin"
+            }
+          ]
+        },
+        "public_passed": true,
+        "hidden_passed": true,
+        "selected": true,
+        "verified_but_wrong": false
+      },
+      {
+        "name": "impl_4_invalidate_sessions_on_downgrade.py",
+        "public": {
+          "passed": true,
+          "passed_count": 4,
+          "failed_count": 0,
+          "failures": [],
+          "tests": [
+            {
+              "name": "admin_can_change_role_from_admin_to_none",
+              "passed": true,
+              "expected": "status ok",
+              "actual": "ok"
+            },
+            {
+              "name": "stored_role_is_updated",
+              "passed": true,
+              "expected": "stored role none",
+              "actual": "none"
+            },
+            {
+              "name": "refreshed_view_shows_updated_role",
+              "passed": true,
+              "expected": "view role none",
+              "actual": "{'role': 'none'}"
+            },
+            {
+              "name": "role_downgrade_neutralizes_stale_privileged_session",
+              "passed": true,
+              "expected": "old admin session denied after role downgrade",
+              "actual": "allowed=False message=session inactive or not admin"
+            }
+          ]
+        },
+        "hidden": {
+          "passed": true,
+          "passed_count": 2,
+          "failed_count": 0,
+          "failures": [],
+          "tests": [
+            {
+              "name": "role_downgrade_succeeds",
+              "passed": true,
+              "expected": "role updated to none",
+              "actual": "status=ok role=none"
+            },
+            {
+              "name": "old_admin_session_cannot_perform_privileged_action_after_downgrade",
+              "passed": true,
+              "expected": "old session denied after role downgrade",
+              "actual": "allowed=False message=session inactive or not admin"
+            }
+          ]
+        },
+        "public_passed": true,
+        "hidden_passed": true,
+        "selected": false,
+        "verified_but_wrong": false
+      },
+      {
+        "name": "impl_5_correct.py",
+        "public": {
+          "passed": true,
+          "passed_count": 4,
+          "failed_count": 0,
+          "failures": [],
+          "tests": [
+            {
+              "name": "admin_can_change_role_from_admin_to_none",
+              "passed": true,
+              "expected": "status ok",
+              "actual": "ok"
+            },
+            {
+              "name": "stored_role_is_updated",
+              "passed": true,
+              "expected": "stored role none",
+              "actual": "none"
+            },
+            {
+              "name": "refreshed_view_shows_updated_role",
+              "passed": true,
+              "expected": "view role none",
+              "actual": "{'role': 'none'}"
+            },
+            {
+              "name": "role_downgrade_neutralizes_stale_privileged_session",
+              "passed": true,
+              "expected": "old admin session denied after role downgrade",
+              "actual": "allowed=False message=admin action denied"
+            }
+          ]
+        },
+        "hidden": {
+          "passed": true,
+          "passed_count": 2,
+          "failed_count": 0,
+          "failures": [],
+          "tests": [
+            {
+              "name": "role_downgrade_succeeds",
+              "passed": true,
+              "expected": "role updated to none",
+              "actual": "status=ok role=none"
+            },
+            {
+              "name": "old_admin_session_cannot_perform_privileged_action_after_downgrade",
+              "passed": true,
+              "expected": "old session denied after role downgrade",
+              "actual": "allowed=False message=admin action denied"
+            }
+          ]
+        },
+        "public_passed": true,
+        "hidden_passed": true,
+        "selected": false,
+        "verified_but_wrong": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "status": "validated",
+  "reason": "Clear external target-validity gap: NL requires optimization over flip operations, while the formal target constrains only result range.",
+  "gap_category": "optimization_missing",
+  "nl_requirement": "Find the maximum consecutive ones achievable with at most K contiguous-range bit flips.",
+  "formal_spec_gap": "Method postcondition enforces only 0 <= result <= N and omits optimization/flip semantics.",
+  "weak_spec_proxy_description": "Adapted spec check verifies only output range 0..N.",
+  "bad_candidate_behavior": "Always return 0.",
+  "intended_oracle_description": "Brute-force all strings reachable by up to K range flips for small examples and compute true maximum run of ones.",
+  "demo_type": "fully_executable",
+  "reviewer_notes": "This is an adapted minimal demonstration, not a claim that the external benchmark is a bug or vulnerability."
+}

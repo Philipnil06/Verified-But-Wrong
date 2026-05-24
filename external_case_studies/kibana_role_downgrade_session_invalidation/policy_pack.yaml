@@ -1,0 +1,30 @@
+policy_cards:
+  - id: auth.role_downgrade.session_invalidation
+    title: Privilege-reducing role changes must invalidate or revalidate active sessions
+    category: authorization_omission
+    severity: high
+    requirement: When a user's role is downgraded or privileged access is removed, existing sessions must not continue to authorize privileged actions. The system must either invalidate active sessions or revalidate permissions server-side before privileged actions.
+    applies_to:
+      - role update
+      - authorization
+      - session management
+      - RBAC
+    failure_if_omitted: A user whose role was downgraded may keep using an old session with stale privileged claims to perform administrator actions.
+    audit_questions:
+      - Does the spec say what happens to active sessions after a privilege-reducing role change?
+      - Does the backend revalidate current stored permissions before privileged actions?
+      - Are stale admin claims denied after the role is downgraded?
+    keywords:
+      - session invalidation
+      - invalidate sessions
+      - revalidate permissions
+      - server-side permission
+      - stale session
+      - stale privileged access
+      - active sessions
+      - privileged actions
+      - role downgrade
+    suggested_spec_patch: When a user's role is downgraded or privileged access is removed, existing sessions must not continue to authorize privileged actions; invalidate active sessions or revalidate permissions server-side before every privileged action.
+    source_provenance:
+      external_case: public GitHub issue elastic/kibana #192346
+      limitation: adapted case study, not bug reproduction

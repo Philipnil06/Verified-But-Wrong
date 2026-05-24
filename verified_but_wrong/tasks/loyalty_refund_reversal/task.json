@@ -1,0 +1,50 @@
+{
+  "id": "loyalty_refund_reversal",
+  "title": "Loyalty points refund reversal",
+  "entrypoint": "process_refund",
+  "intent": "Implement a refund function for paid orders. Refund amounts must be positive and cannot exceed the remaining paid amount. Successful refunds must update refunded_total. If the original order awarded loyalty points, the refunded portion must reverse the corresponding loyalty points from the customer's balance.",
+  "ai_generated_spec": "Refund amounts must be positive and cannot exceed the remaining paid amount. Successful refunds update refunded_total.",
+  "critic_improved_spec": "Refund amounts must be positive and cannot exceed the remaining paid amount. Only paid orders can be refunded. Successful refunds must update refunded_total and cannot exceed the original payment.",
+  "full_oracle_spec": "Refund amounts must be positive and cannot exceed the remaining paid amount. Only paid orders can be refunded. Successful refunds must update refunded_total. If the original order awarded loyalty points, the refunded portion must reverse the corresponding loyalty points from the customer balance, without making loyalty points negative.",
+  "missing_requirements": [
+    "Successful refunds must reverse proportional loyalty points awarded by the original purchase",
+    "Loyalty points must not become negative",
+    "Cancelled or chargeback orders cannot be refunded",
+    "Successful refunds must update refunded_total",
+    "Refund cannot exceed remaining paid amount"
+  ],
+  "spec_hole_categories": [
+    "business_rule_omission",
+    "state_invariant_omission",
+    "conservation_omission",
+    "error_behavior_omission"
+  ],
+  "expected_naive_failure": "The naive public spec can select refund code that updates refunded_total but fails to reverse loyalty points.",
+  "expected_defense": "A checklist critic can still miss organization-specific loyalty side effects; the full oracle spec should catch them.",
+  "policy_pack_ids": [
+    "generic_critical_requirements",
+    "payments_policy",
+    "business_logic_policy"
+  ],
+  "relevant_policy_card_ids": [
+    "generic.state.update_success",
+    "generic.invalid_inputs_fail",
+    "payments.refund.remaining_balance",
+    "payments.refund.reverse_dependent_rewards",
+    "payments.refund.loyalty_non_negative",
+    "order.status.refundable_only_paid"
+  ],
+  "missing_requirement_severity": {
+    "Successful refunds must reverse proportional loyalty points awarded by the original purchase": "high",
+    "Loyalty points must not become negative": "high",
+    "Cancelled or chargeback orders cannot be refunded": "high",
+    "Successful refunds must update refunded_total": "high",
+    "Refund cannot exceed remaining paid amount": "high"
+  },
+  "public_spec_text": {
+    "naive": "Refund amounts must be positive and cannot exceed the remaining paid amount. Successful refunds update refunded_total.",
+    "critic": "Refund amounts must be positive and cannot exceed the remaining paid amount. Only paid orders can be refunded. Successful refunds must update refunded_total and cannot exceed the original payment.",
+    "oracle": "Refund amounts must be positive and cannot exceed the remaining paid amount. Only paid orders can be refunded. Successful refunds must update refunded_total. If the original order awarded loyalty points, the refunded portion must reverse the corresponding loyalty points from the customer balance, without making loyalty points negative."
+  },
+  "evaluation_split": "development"
+}

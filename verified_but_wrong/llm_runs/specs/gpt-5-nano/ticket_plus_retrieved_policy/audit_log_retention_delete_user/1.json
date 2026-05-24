@@ -1,0 +1,69 @@
+{
+  "timestamp": "2026-05-12T17:28:07.000063+00:00",
+  "task_id": "audit_log_retention_delete_user",
+  "task_title": "Audit log retention on delete user",
+  "condition": "ticket_plus_retrieved_policy",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the product ticket and the retrieved policy card.\nThe policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the product ticket and the retrieved policy card. The policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nTask title: Audit log retention on delete user\nFunction entrypoint: delete_user\n\nProduct ticket:\n# Ticket: delete inactive user\n\nAllow administrators to delete an inactive user from the active user table. Mark the user as deleted and return success.\n\nAcceptance criteria:\n- Admin delete succeeds.\n- Non-admin delete fails.\n\nRetrieved policy card:\nPolicy card ID: audit.delete.preserve_records\nTitle: Required audit records must be preserved\nRequirement: Required audit records must be preserved when deleting or deactivating a user.\nWhy it matters: Compliance and incident response require retained audit history.\nAudit questions:\n- Does deletion preserve required audit records?\nKeywords:\n- audit\n- preserve\n- retention\n- audit records\n- audit log\n- history\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "5432bdee415a7ab8d275681a78b720829ae6475dd89bd33fd9a1dc0855d3b281",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Audit log retention on delete user\",\n  \"behavior_requirements\": [\n    \"delete_user(admin) on inactive user: mark as deleted in active user table, do not remove from all records, return success\",\n    \"delete_user(non-admin) must fail with appropriate error\",\n    \"Upon deletion, required audit records must be preserved per policy audit.delete.preserve_records\",\n    \"Audit log must reflect the deletion event with timestamp, actor, target user, and reason 'inactive user deletion'\",\n    \"No deletion of active users or non-inactive users; operation is gated by user status\",\n    \"If required audit records cannot be preserved, the operation must fail and no state changes occur\"\n  ],\n  \"edge_cases\": [\n    \"Attempt to delete a user that is already marked as deleted\",\n    \"Deletion requested for non-existent user\",\n    \"Deletion attempted when audit log service is unavailable\",\n    \"Admin lacks permission scope due to role misconfiguration but authenticated as admin\",\n    \"Deletion attempted during concurrent operations on the same user\"\n  ],\n  \"acceptance_criteria\": [\n    \"Admin delete succeeds for an inactive user and returns success\",\n    \"Non-admin delete fails with authorization error and no change to user state\",\n    \"User is marked as deleted in active user table; original records are preserved in audit/history logs\",\n    \"Audit log contains an entry for the delete event with timestamp, actor, target, and action\",\n    \"No removal of user data from historical records; only status flag updated and audit preserved\"\n  ],\n  \"non_goals\": [\n    \"Patching or deleting active users\",\n    \"Automatic deletion of non-inactive users\",\n    \"Purging audit history beyond retention requirements\"\n  ],\n  \"testable_assertions\": [\n    \"Given an inactive user and an admin performing delete_user, user is marked as deleted and function returns success\",\n    \"Given a non-admin attempting delete_user on an inactive user, operation fails and user remains unchanged\",\n    \"Audit records include a preserved audit entry for the delete action with proper fields\",\n    \"Audit log store is reachable; if unavailable, operation does not proceed and returns a failure indicating audit log issue\"\n  ]\n}",
+  "response_hash": "324dd8fe940546cca0c1d145fffbdc306e7480594a68541406eebd81c0cbd10b",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0fb53c6698062cd1006a0363260ec88194889b6866c674113a",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 368,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 468,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 836
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Audit log retention on delete user",
+    "behavior_requirements": [
+      "delete_user(admin) on inactive user: mark as deleted in active user table, do not remove from all records, return success",
+      "delete_user(non-admin) must fail with appropriate error",
+      "Upon deletion, required audit records must be preserved per policy audit.delete.preserve_records",
+      "Audit log must reflect the deletion event with timestamp, actor, target user, and reason 'inactive user deletion'",
+      "No deletion of active users or non-inactive users; operation is gated by user status",
+      "If required audit records cannot be preserved, the operation must fail and no state changes occur"
+    ],
+    "edge_cases": [
+      "Attempt to delete a user that is already marked as deleted",
+      "Deletion requested for non-existent user",
+      "Deletion attempted when audit log service is unavailable",
+      "Admin lacks permission scope due to role misconfiguration but authenticated as admin",
+      "Deletion attempted during concurrent operations on the same user"
+    ],
+    "acceptance_criteria": [
+      "Admin delete succeeds for an inactive user and returns success",
+      "Non-admin delete fails with authorization error and no change to user state",
+      "User is marked as deleted in active user table; original records are preserved in audit/history logs",
+      "Audit log contains an entry for the delete event with timestamp, actor, target, and action",
+      "No removal of user data from historical records; only status flag updated and audit preserved"
+    ],
+    "non_goals": [
+      "Patching or deleting active users",
+      "Automatic deletion of non-inactive users",
+      "Purging audit history beyond retention requirements"
+    ],
+    "testable_assertions": [
+      "Given an inactive user and an admin performing delete_user, user is marked as deleted and function returns success",
+      "Given a non-admin attempting delete_user on an inactive user, operation fails and user remains unchanged",
+      "Audit records include a preserved audit entry for the delete action with proper fields",
+      "Audit log store is reachable; if unavailable, operation does not proceed and returns a failure indicating audit log issue"
+    ]
+  },
+  "public_spec": "Title: Audit log retention on delete user\n\nBehavior requirements:\n- delete_user(admin) on inactive user: mark as deleted in active user table, do not remove from all records, return success\n- delete_user(non-admin) must fail with appropriate error\n- Upon deletion, required audit records must be preserved per policy audit.delete.preserve_records\n- Audit log must reflect the deletion event with timestamp, actor, target user, and reason 'inactive user deletion'\n- No deletion of active users or non-inactive users; operation is gated by user status\n- If required audit records cannot be preserved, the operation must fail and no state changes occur\n\nEdge cases:\n- Attempt to delete a user that is already marked as deleted\n- Deletion requested for non-existent user\n- Deletion attempted when audit log service is unavailable\n- Admin lacks permission scope due to role misconfiguration but authenticated as admin\n- Deletion attempted during concurrent operations on the same user\n\nAcceptance criteria:\n- Admin delete succeeds for an inactive user and returns success\n- Non-admin delete fails with authorization error and no change to user state\n- User is marked as deleted in active user table; original records are preserved in audit/history logs\n- Audit log contains an entry for the delete event with timestamp, actor, target, and action\n- No removal of user data from historical records; only status flag updated and audit preserved\n\nNon-goals:\n- Patching or deleting active users\n- Automatic deletion of non-inactive users\n- Purging audit history beyond retention requirements\n\nTestable assertions:\n- Given an inactive user and an admin performing delete_user, user is marked as deleted and function returns success\n- Given a non-admin attempting delete_user on an inactive user, operation fails and user remains unchanged\n- Audit records include a preserved audit entry for the delete action with proper fields\n- Audit log store is reachable; if unavailable, operation does not proceed and returns a failure indicating audit log issue",
+  "generation_empty": false,
+  "generation_error": null
+}

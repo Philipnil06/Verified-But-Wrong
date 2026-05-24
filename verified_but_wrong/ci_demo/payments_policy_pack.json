@@ -1,0 +1,12 @@
+{
+  "policy_cards": [
+    {
+      "id": "payments.refund.loyalty_reversal",
+      "requirement": "Refunds must reverse proportional loyalty points awarded by the original purchase.",
+      "category": "business_rule_omission",
+      "severity": "high",
+      "keywords": ["loyalty", "reward points", "reverse points", "proportional loyalty", "proportional reversal"],
+      "suggested_spec_patch": "Successful refunds must reverse dependent loyalty points in proportion to the refunded amount."
+    }
+  ]
+}

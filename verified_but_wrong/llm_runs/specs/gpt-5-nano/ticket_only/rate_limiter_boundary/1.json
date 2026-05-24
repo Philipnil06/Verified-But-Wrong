@@ -1,0 +1,68 @@
+{
+  "timestamp": "2026-05-12T17:30:06.221431+00:00",
+  "task_id": "rate_limiter_boundary",
+  "task_title": "Rate limiter boundary and per-user state",
+  "condition": "ticket_only",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse only the product ticket below.\nDo not assume access to hidden organization policies.\nWrite the best implementation spec you can from the ticket.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse only the product ticket below. Do not assume access to hidden organization policies. Write the best implementation spec you can from the ticket.\n\nTask title: Rate limiter boundary and per-user state\nFunction entrypoint: allow_request\n\nProduct ticket:\n# Product ticket: request rate limiter\n\n## Background\nThe API should track recent requests and block excessive traffic.\n\n## Happy path\n- First normal requests are allowed.\n- Request state is updated when a request is allowed.\n\n## Policy note\nThe intended quota is five requests per rolling minute.\n\n## Acceptance criteria\n- First request is allowed.\n- State stores allowed request timestamps.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "1d62247bc59db331dc1c62f1c45a054e719bedaa0a7c7856ca916fc8330c2e52",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Rate limiter boundary and per-user state for allow_request\",\n  \"behavior_requirements\": [\n    \"On invocation of allow_request for a given user, the system must determine if the request is within the rolling 60-second window.\",\n    \"If the user has fewer than 5 requests in the last 60 seconds, allow the request and record the timestamp of this allowed request.\",\n    \"If the user has 5 or more requests in the last 60 seconds, block the request and do not record a new timestamp.\",\n    \"Per-user state must be maintained independently so that each user has its own rolling window of request timestamps.\",\n    \"State storage must be append-only for allowed requests (timestamps) and should not mutate past timestamps except by removing those older than 60 seconds during evaluation.\"\n  ],\n  \"edge_cases\": [\n    \"First ever request for a user should be allowed and create initial per-user state with one timestamp.\",\n    \"Timestamps are processed in ascending order; concurrent requests for the same user should be treated atomically to avoid double-counting.\",\n    \"Timestamps older than 60 seconds must be pruned from the per-user state before evaluating the current request.\",\n    \"Requests arriving exactly at the 60-second boundary should be considered inside the window if within the last 60 seconds (i.e., timestamp difference < 60 or <= 59.999...).\",\n    \"Multiple users share the same storage backend but must not influence each other's per-user state.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Acceptance: First request is allowed and per-user state contains one timestamp.\",\n    \"Acceptance: A subsequent request within 60 seconds is allowed until five total allowed requests occur in that rolling minute.\",\n    \"Acceptance: Upon the fifth allowed request within the rolling minute, the next request within the same minute is blocked.\",\n    \"Acceptance: After the rolling minute from the earliest of the five allowed requests, new requests are allowed again and state is pruned accordingly.\",\n    \"Acceptance: JSON response is not specified in this ticket; only state changes occur internally and acceptance is based on allow/block decisions and per-user state updates.\"\n  ],\n  \"non_goals\": [\n    \"Not implementing cross-service rate limits beyond per-user rolling window.\",\n    \"Not exposing internal per-user timestamp storage format in responses.\",\n    \"Not pre-warming the cache or pre-allocating slots beyond actual rolling window calculations.\"\n  ],\n  \"testable_assertions\": [\n    \"Given a new user, allow_request returns allowed and state includes 1 timestamp.\",\n    \"Five consecutive allowed requests within 60 seconds are allowed; the sixth request within 60 seconds is blocked.\",\n    \"If 60 seconds pass since the earliest of the five allowed requests, a new request is allowed and the state prunes the expired timestamp.\",\n    \"State for two different users does not interfere; each has its own independent list of timestamps.\"\n  ]\n}",
+  "response_hash": "3074efe558fc1d6fa2bcece80684f5d3e0ac127b2261fa1af9aa6709aa7a53e9",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0523d3b24d77c5f3006a03639d36ec81a0ad18cb1a5c7959c5",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 317,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 618,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 935
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Rate limiter boundary and per-user state for allow_request",
+    "behavior_requirements": [
+      "On invocation of allow_request for a given user, the system must determine if the request is within the rolling 60-second window.",
+      "If the user has fewer than 5 requests in the last 60 seconds, allow the request and record the timestamp of this allowed request.",
+      "If the user has 5 or more requests in the last 60 seconds, block the request and do not record a new timestamp.",
+      "Per-user state must be maintained independently so that each user has its own rolling window of request timestamps.",
+      "State storage must be append-only for allowed requests (timestamps) and should not mutate past timestamps except by removing those older than 60 seconds during evaluation."
+    ],
+    "edge_cases": [
+      "First ever request for a user should be allowed and create initial per-user state with one timestamp.",
+      "Timestamps are processed in ascending order; concurrent requests for the same user should be treated atomically to avoid double-counting.",
+      "Timestamps older than 60 seconds must be pruned from the per-user state before evaluating the current request.",
+      "Requests arriving exactly at the 60-second boundary should be considered inside the window if within the last 60 seconds (i.e., timestamp difference < 60 or <= 59.999...).",
+      "Multiple users share the same storage backend but must not influence each other's per-user state."
+    ],
+    "acceptance_criteria": [
+      "Acceptance: First request is allowed and per-user state contains one timestamp.",
+      "Acceptance: A subsequent request within 60 seconds is allowed until five total allowed requests occur in that rolling minute.",
+      "Acceptance: Upon the fifth allowed request within the rolling minute, the next request within the same minute is blocked.",
+      "Acceptance: After the rolling minute from the earliest of the five allowed requests, new requests are allowed again and state is pruned accordingly.",
+      "Acceptance: JSON response is not specified in this ticket; only state changes occur internally and acceptance is based on allow/block decisions and per-user state updates."
+    ],
+    "non_goals": [
+      "Not implementing cross-service rate limits beyond per-user rolling window.",
+      "Not exposing internal per-user timestamp storage format in responses.",
+      "Not pre-warming the cache or pre-allocating slots beyond actual rolling window calculations."
+    ],
+    "testable_assertions": [
+      "Given a new user, allow_request returns allowed and state includes 1 timestamp.",
+      "Five consecutive allowed requests within 60 seconds are allowed; the sixth request within 60 seconds is blocked.",
+      "If 60 seconds pass since the earliest of the five allowed requests, a new request is allowed and the state prunes the expired timestamp.",
+      "State for two different users does not interfere; each has its own independent list of timestamps."
+    ]
+  },
+  "public_spec": "Title: Rate limiter boundary and per-user state for allow_request\n\nBehavior requirements:\n- On invocation of allow_request for a given user, the system must determine if the request is within the rolling 60-second window.\n- If the user has fewer than 5 requests in the last 60 seconds, allow the request and record the timestamp of this allowed request.\n- If the user has 5 or more requests in the last 60 seconds, block the request and do not record a new timestamp.\n- Per-user state must be maintained independently so that each user has its own rolling window of request timestamps.\n- State storage must be append-only for allowed requests (timestamps) and should not mutate past timestamps except by removing those older than 60 seconds during evaluation.\n\nEdge cases:\n- First ever request for a user should be allowed and create initial per-user state with one timestamp.\n- Timestamps are processed in ascending order; concurrent requests for the same user should be treated atomically to avoid double-counting.\n- Timestamps older than 60 seconds must be pruned from the per-user state before evaluating the current request.\n- Requests arriving exactly at the 60-second boundary should be considered inside the window if within the last 60 seconds (i.e., timestamp difference < 60 or <= 59.999...).\n- Multiple users share the same storage backend but must not influence each other's per-user state.\n\nAcceptance criteria:\n- Acceptance: First request is allowed and per-user state contains one timestamp.\n- Acceptance: A subsequent request within 60 seconds is allowed until five total allowed requests occur in that rolling minute.\n- Acceptance: Upon the fifth allowed request within the rolling minute, the next request within the same minute is blocked.\n- Acceptance: After the rolling minute from the earliest of the five allowed requests, new requests are allowed again and state is pruned accordingly.\n- Acceptance: JSON response is not specified in this ticket; only state changes occur internally and acceptance is based on allow/block decisions and per-user state updates.\n\nNon-goals:\n- Not implementing cross-service rate limits beyond per-user rolling window.\n- Not exposing internal per-user timestamp storage format in responses.\n- Not pre-warming the cache or pre-allocating slots beyond actual rolling window calculations.\n\nTestable assertions:\n- Given a new user, allow_request returns allowed and state includes 1 timestamp.\n- Five consecutive allowed requests within 60 seconds are allowed; the sixth request within 60 seconds is blocked.\n- If 60 seconds pass since the earliest of the five allowed requests, a new request is allowed and the state prunes the expired timestamp.\n- State for two different users does not interfere; each has its own independent list of timestamps.",
+  "generation_empty": false,
+  "generation_error": null
+}

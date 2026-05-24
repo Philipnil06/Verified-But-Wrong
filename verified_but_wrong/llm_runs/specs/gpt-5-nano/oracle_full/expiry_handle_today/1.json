@@ -1,0 +1,71 @@
+{
+  "timestamp": "2026-05-12T17:28:57.230298+00:00",
+  "task_id": "expiry_handle_today",
+  "task_title": "Expiry handling with lead time",
+  "condition": "oracle_full",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the full intended behavior.\nThis is an upper-bound condition and is not a deployable retrieval setting.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the full intended behavior. This is an upper-bound condition.\n\nTask title: Expiry handling with lead time\nFunction entrypoint: should_handle_today\n\nFull intended behavior:\nMark items as handle_today when expiry_date minus category_lead_time_days is today or earlier. Already expired items must be handled. Invalid dates must return an error.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "0c7e3ab0b8d7cf8b3919cda5a9a5db8bd23d09f82af9363a1cb5ec47a3e21488",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Expiry handling with lead time\",\n  \"behavior_requirements\": [\n    \"Given an item with expiry_date and category_lead_time_days (integer, non-negative), compute threshold_date = expiry_date - category_lead_time_days.\",\n    \"If today's date is on or before threshold_date, mark the item as handle_today.\",\n    \"If expiry_date is in the past relative to today (i.e., already expired), mark as handle_today.\",\n    \"If either expiry_date or category_lead_time_days is missing or invalid, return an error.\",\n    \"Invalid date formats for expiry_date must result in an error response and no state change.\"\n  ],\n  \"edge_cases\": [\n    \"category_lead_time_days is zero: handle_today if today <= expiry_date.\",\n    \"category_lead_time_days is negative: treat as invalid and return error.\",\n    \"expiry_date is today: handle_today if lead time is zero or expiry_date - lead_time equals today.\",\n    \"expiry_date with time component vs date-only input: consider date portion for comparison.\",\n    \"Large lead times that push threshold_date far in the past: handle_today only if today <= threshold_date (likely false unless lead_time is negative/zero).\",\n    \"Null or missing today context: use system date; if unavailable, return error.\"\n  ],\n  \"acceptance_criteria\": [\n    \"All items with expiry_date and category_lead_time_days satisfying today <= (expiry_date - lead) are marked handle_today.\",\n    \"All items with expiry_date already in the past are marked handle_today.\",\n    \"Items that do not meet handle_today criteria are not marked as handle_today.\",\n    \"Invalid or missing expiry_date or category_lead_time_days lead to an error response and no marking.\",\n    \"Date arithmetic uses date granularity of days (ignore time components unless time is provided).\"\n  ],\n  \"non_goals\": [\n    \"Handling of time zones beyond date comparison scope.\",\n    \"Persisting changes to a database or external systems (not specified here).\",\n    \"Other statuses or actions beyond handle_today.\",\n    \"Performance optimizations for large datasets beyond basic correctness.\"\n  ],\n  \"testable_assertions\": [\n    \"Given expiry_date 2024-12-31 and category_lead_time_days 30 on date 2024-12-01, should_handle_today returns handle_today true.\",\n    \"Given expiry_date 2024-12-31 and category_lead_time_days 0 on date 2024-12-31, should_handle_today returns handle_today true.\",\n    \"Given expiry_date 2024-12-31 and category_lead_time_days 0 on date 2025-01-01, should_handle_today returns handle_today true or false depending on date comparison (false).\",\n    \"Given expiry_date 2023-01-01 and category_lead_time_days 10 on any current date, since expiry_date is in the past, should_handle_today returns handle_today true.\",\n    \"Given expiry_date invalid format, function returns error and no handle_today.\"\n  ]\n}",
+  "response_hash": "9c3f498d2d883556af8bd330a6a8a9c24d4fd4be4ee0986c0fd49a211a9cd9f7",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0c0511ce7d156dd3006a03635840308194bcf35059fd135259",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 256,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 654,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 910
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Expiry handling with lead time",
+    "behavior_requirements": [
+      "Given an item with expiry_date and category_lead_time_days (integer, non-negative), compute threshold_date = expiry_date - category_lead_time_days.",
+      "If today's date is on or before threshold_date, mark the item as handle_today.",
+      "If expiry_date is in the past relative to today (i.e., already expired), mark as handle_today.",
+      "If either expiry_date or category_lead_time_days is missing or invalid, return an error.",
+      "Invalid date formats for expiry_date must result in an error response and no state change."
+    ],
+    "edge_cases": [
+      "category_lead_time_days is zero: handle_today if today <= expiry_date.",
+      "category_lead_time_days is negative: treat as invalid and return error.",
+      "expiry_date is today: handle_today if lead time is zero or expiry_date - lead_time equals today.",
+      "expiry_date with time component vs date-only input: consider date portion for comparison.",
+      "Large lead times that push threshold_date far in the past: handle_today only if today <= threshold_date (likely false unless lead_time is negative/zero).",
+      "Null or missing today context: use system date; if unavailable, return error."
+    ],
+    "acceptance_criteria": [
+      "All items with expiry_date and category_lead_time_days satisfying today <= (expiry_date - lead) are marked handle_today.",
+      "All items with expiry_date already in the past are marked handle_today.",
+      "Items that do not meet handle_today criteria are not marked as handle_today.",
+      "Invalid or missing expiry_date or category_lead_time_days lead to an error response and no marking.",
+      "Date arithmetic uses date granularity of days (ignore time components unless time is provided)."
+    ],
+    "non_goals": [
+      "Handling of time zones beyond date comparison scope.",
+      "Persisting changes to a database or external systems (not specified here).",
+      "Other statuses or actions beyond handle_today.",
+      "Performance optimizations for large datasets beyond basic correctness."
+    ],
+    "testable_assertions": [
+      "Given expiry_date 2024-12-31 and category_lead_time_days 30 on date 2024-12-01, should_handle_today returns handle_today true.",
+      "Given expiry_date 2024-12-31 and category_lead_time_days 0 on date 2024-12-31, should_handle_today returns handle_today true.",
+      "Given expiry_date 2024-12-31 and category_lead_time_days 0 on date 2025-01-01, should_handle_today returns handle_today true or false depending on date comparison (false).",
+      "Given expiry_date 2023-01-01 and category_lead_time_days 10 on any current date, since expiry_date is in the past, should_handle_today returns handle_today true.",
+      "Given expiry_date invalid format, function returns error and no handle_today."
+    ]
+  },
+  "public_spec": "Title: Expiry handling with lead time\n\nBehavior requirements:\n- Given an item with expiry_date and category_lead_time_days (integer, non-negative), compute threshold_date = expiry_date - category_lead_time_days.\n- If today's date is on or before threshold_date, mark the item as handle_today.\n- If expiry_date is in the past relative to today (i.e., already expired), mark as handle_today.\n- If either expiry_date or category_lead_time_days is missing or invalid, return an error.\n- Invalid date formats for expiry_date must result in an error response and no state change.\n\nEdge cases:\n- category_lead_time_days is zero: handle_today if today <= expiry_date.\n- category_lead_time_days is negative: treat as invalid and return error.\n- expiry_date is today: handle_today if lead time is zero or expiry_date - lead_time equals today.\n- expiry_date with time component vs date-only input: consider date portion for comparison.\n- Large lead times that push threshold_date far in the past: handle_today only if today <= threshold_date (likely false unless lead_time is negative/zero).\n- Null or missing today context: use system date; if unavailable, return error.\n\nAcceptance criteria:\n- All items with expiry_date and category_lead_time_days satisfying today <= (expiry_date - lead) are marked handle_today.\n- All items with expiry_date already in the past are marked handle_today.\n- Items that do not meet handle_today criteria are not marked as handle_today.\n- Invalid or missing expiry_date or category_lead_time_days lead to an error response and no marking.\n- Date arithmetic uses date granularity of days (ignore time components unless time is provided).\n\nNon-goals:\n- Handling of time zones beyond date comparison scope.\n- Persisting changes to a database or external systems (not specified here).\n- Other statuses or actions beyond handle_today.\n- Performance optimizations for large datasets beyond basic correctness.\n\nTestable assertions:\n- Given expiry_date 2024-12-31 and category_lead_time_days 30 on date 2024-12-01, should_handle_today returns handle_today true.\n- Given expiry_date 2024-12-31 and category_lead_time_days 0 on date 2024-12-31, should_handle_today returns handle_today true.\n- Given expiry_date 2024-12-31 and category_lead_time_days 0 on date 2025-01-01, should_handle_today returns handle_today true or false depending on date comparison (false).\n- Given expiry_date 2023-01-01 and category_lead_time_days 10 on any current date, since expiry_date is in the past, should_handle_today returns handle_today true.\n- Given expiry_date invalid format, function returns error and no handle_today.",
+  "generation_empty": false,
+  "generation_error": null
+}

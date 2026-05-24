@@ -1,0 +1,9 @@
+{
+  "status": "ok",
+  "source_scan_file": "C:\\Users\\Philip Nilsson\\OneDrive - M\u00e4lardalens Tekniska Gymnasium\\Skrivbordet\\Hackathon apartresearch The Secure Program Synthesis\\verified_but_wrong\\reports\\external_vericoding_gap_candidates.json",
+  "source_jsonl_file": "C:\\Users\\Philip Nilsson\\OneDrive - M\u00e4lardalens Tekniska Gymnasium\\Skrivbordet\\Hackathon apartresearch The Secure Program Synthesis\\verified_but_wrong\\external_data\\vericoding-benchmark\\jsonl\\dafny_tasks.jsonl",
+  "candidate_total": 128,
+  "high_confidence_count": 41,
+  "reconstruction": "high-confidence defined as confidence == 'high' from scanner output; ranking by score desc then case id.",
+  "has_expected_41": true
+}

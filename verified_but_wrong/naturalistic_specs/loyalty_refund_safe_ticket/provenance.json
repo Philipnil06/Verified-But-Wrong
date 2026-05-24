@@ -1,0 +1,11 @@
+{
+  "doc_id": "loyalty_refund_safe_ticket",
+  "task_id": "loyalty_refund_reversal",
+  "source_type": "product-ticket-style fixture",
+  "author": "benchmark_author",
+  "external_url": null,
+  "created_for": "naturalistic validation",
+  "contains_hidden_policy_in_public_ticket": true,
+  "policy_pack_accessible_to_gate": true,
+  "hidden_oracle_accessible_to_gate": false
+}

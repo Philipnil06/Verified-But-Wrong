@@ -1,0 +1,73 @@
+{
+  "timestamp": "2026-05-12T17:28:31.274297+00:00",
+  "task_id": "discount_nonnegative_price",
+  "task_title": "Discount with non-negative final price",
+  "condition": "ticket_plus_retrieved_policy",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the product ticket and the retrieved policy card.\nThe policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the product ticket and the retrieved policy card. The policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nTask title: Discount with non-negative final price\nFunction entrypoint: apply_discount\n\nProduct ticket:\nImplement apply_discount. Price must be non negative. Discount percent must be between 0 and 100 inclusive. Final price must never be negative.\n\nRetrieved policy card:\nPolicy card ID: pricing.final_price_non_negative\nTitle: Final price must never be negative\nRequirement: Final price must never be negative.\nWhy it matters: Negative prices create incorrect customer charges and accounting state.\nAudit questions:\n- Does the spec explicitly prevent negative final prices?\nKeywords:\n- final price\n- never negative\n- not be negative\n- below zero\n- non-negative\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "910f60e7034e59b40cf0dd72c1ae69f5eda137422b74616d3c8028a854ae21f2",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Discount with non-negative final price\",\n  \"behavior_requirements\": [\n    \"apply_discount(price, discount_percent) computes final_price as price * (1 - discount_percent/100).\",\n    \"price must be non-negative; if price < 0, the function should reject or raise an error.\",\n    \"discount_percent must be between 0 and 100 inclusive; if outside, the function should reject or raise an error.\",\n    \"final_price must be non-negative (final_price >= 0) for all valid inputs.\",\n    \"final_price is returned or exposed in a manner consistent with non-negative constraint; negative results must not be produced as a valid outcome.\"\n  ],\n  \"edge_cases\": [\n    \"price = 0 with any discount_percent yields final_price = 0.\",\n    \"discount_percent = 0 yields final_price = price.\",\n    \"discount_percent = 100 yields final_price = 0.\",\n    \"price > 0 and discount_percent = 100 results in final_price = 0.\",\n    \"price > 0 and discount_percent slightly above 0 yields positive final_price.\",\n    \"price = 0 and discount_percent = 100 yields final_price = 0.\",\n    \"Invalid inputs: negative price, negative discount_percent, discount_percent > 100, discount_percent not a number, price not a number should be rejected.\"\n  ],\n  \"acceptance_criteria\": [\n    \"For valid inputs (price >= 0, 0 <= discount_percent <= 100), final_price >= 0.\",\n    \"Inputs outside allowed ranges cause a controlled error (no final_price computed).\",\n    \"No scenario yields a negative final_price.\",\n    \"Edge cases min-max boundaries (0, 100) are handled correctly.\",\n    \"Behavior matches policy: final_price_non_negative.\"\n  ],\n  \"non_goals\": [\n    \"Optimizing for minimal floating-point error beyond standard arithmetic; not required for this specification.\",\n    \"Handling negative price or discount values in final_price; these are explicitly disallowed.\",\n    \"Other pricing rules beyond non-negativity of final price.\"\n  ],\n  \"testable_assertions\": [\n    \"Given price = 50, discount_percent = 20, final_price == 40.\",\n    \"Given price = 0, discount_percent = 50, final_price == 0.\",\n    \"Given price = 100, discount_percent = 100, final_price == 0.\",\n    \"Given price = 25, discount_percent = 0, final_price == 25.\",\n    \"Given price = -5, discount_percent = 10, function rejects input (error raised).\",\n    \"Given price = 10, discount_percent = -5, function rejects input (error raised).\",\n    \"Given price = 10, discount_percent = 105, function rejects input (error raised).\"\n  ]\n}",
+  "response_hash": "a86ca16abc088790fd7f8d5bbe4b052b65d1fd92db4bac7c6e3c9640e97dbd90",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0f845e6b0acf82f6006a03633e68cc81909500ea1f2b26adfb",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 350,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 609,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 959
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Discount with non-negative final price",
+    "behavior_requirements": [
+      "apply_discount(price, discount_percent) computes final_price as price * (1 - discount_percent/100).",
+      "price must be non-negative; if price < 0, the function should reject or raise an error.",
+      "discount_percent must be between 0 and 100 inclusive; if outside, the function should reject or raise an error.",
+      "final_price must be non-negative (final_price >= 0) for all valid inputs.",
+      "final_price is returned or exposed in a manner consistent with non-negative constraint; negative results must not be produced as a valid outcome."
+    ],
+    "edge_cases": [
+      "price = 0 with any discount_percent yields final_price = 0.",
+      "discount_percent = 0 yields final_price = price.",
+      "discount_percent = 100 yields final_price = 0.",
+      "price > 0 and discount_percent = 100 results in final_price = 0.",
+      "price > 0 and discount_percent slightly above 0 yields positive final_price.",
+      "price = 0 and discount_percent = 100 yields final_price = 0.",
+      "Invalid inputs: negative price, negative discount_percent, discount_percent > 100, discount_percent not a number, price not a number should be rejected."
+    ],
+    "acceptance_criteria": [
+      "For valid inputs (price >= 0, 0 <= discount_percent <= 100), final_price >= 0.",
+      "Inputs outside allowed ranges cause a controlled error (no final_price computed).",
+      "No scenario yields a negative final_price.",
+      "Edge cases min-max boundaries (0, 100) are handled correctly.",
+      "Behavior matches policy: final_price_non_negative."
+    ],
+    "non_goals": [
+      "Optimizing for minimal floating-point error beyond standard arithmetic; not required for this specification.",
+      "Handling negative price or discount values in final_price; these are explicitly disallowed.",
+      "Other pricing rules beyond non-negativity of final price."
+    ],
+    "testable_assertions": [
+      "Given price = 50, discount_percent = 20, final_price == 40.",
+      "Given price = 0, discount_percent = 50, final_price == 0.",
+      "Given price = 100, discount_percent = 100, final_price == 0.",
+      "Given price = 25, discount_percent = 0, final_price == 25.",
+      "Given price = -5, discount_percent = 10, function rejects input (error raised).",
+      "Given price = 10, discount_percent = -5, function rejects input (error raised).",
+      "Given price = 10, discount_percent = 105, function rejects input (error raised)."
+    ]
+  },
+  "public_spec": "Title: Discount with non-negative final price\n\nBehavior requirements:\n- apply_discount(price, discount_percent) computes final_price as price * (1 - discount_percent/100).\n- price must be non-negative; if price < 0, the function should reject or raise an error.\n- discount_percent must be between 0 and 100 inclusive; if outside, the function should reject or raise an error.\n- final_price must be non-negative (final_price >= 0) for all valid inputs.\n- final_price is returned or exposed in a manner consistent with non-negative constraint; negative results must not be produced as a valid outcome.\n\nEdge cases:\n- price = 0 with any discount_percent yields final_price = 0.\n- discount_percent = 0 yields final_price = price.\n- discount_percent = 100 yields final_price = 0.\n- price > 0 and discount_percent = 100 results in final_price = 0.\n- price > 0 and discount_percent slightly above 0 yields positive final_price.\n- price = 0 and discount_percent = 100 yields final_price = 0.\n- Invalid inputs: negative price, negative discount_percent, discount_percent > 100, discount_percent not a number, price not a number should be rejected.\n\nAcceptance criteria:\n- For valid inputs (price >= 0, 0 <= discount_percent <= 100), final_price >= 0.\n- Inputs outside allowed ranges cause a controlled error (no final_price computed).\n- No scenario yields a negative final_price.\n- Edge cases min-max boundaries (0, 100) are handled correctly.\n- Behavior matches policy: final_price_non_negative.\n\nNon-goals:\n- Optimizing for minimal floating-point error beyond standard arithmetic; not required for this specification.\n- Handling negative price or discount values in final_price; these are explicitly disallowed.\n- Other pricing rules beyond non-negativity of final price.\n\nTestable assertions:\n- Given price = 50, discount_percent = 20, final_price == 40.\n- Given price = 0, discount_percent = 50, final_price == 0.\n- Given price = 100, discount_percent = 100, final_price == 0.\n- Given price = 25, discount_percent = 0, final_price == 25.\n- Given price = -5, discount_percent = 10, function rejects input (error raised).\n- Given price = 10, discount_percent = -5, function rejects input (error raised).\n- Given price = 10, discount_percent = 105, function rejects input (error raised).",
+  "generation_empty": false,
+  "generation_error": null
+}

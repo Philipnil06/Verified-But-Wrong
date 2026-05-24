@@ -1,0 +1,28 @@
+{
+  "id": "external_case.woocommerce_payment_webhook_idempotency",
+  "source_type": "externally sourced adapted issue case",
+  "policy_cards": [
+    {
+      "id": "payments.webhook.idempotent_event",
+      "title": "Payment webhooks must be idempotent",
+      "requirement": "Payment webhook events must be processed at most once per event_id and duplicate events must not credit balances twice.",
+      "category": "idempotency_omission",
+      "severity": "critical",
+      "keywords": ["idempotent", "idempotency", "duplicate event", "same event_id", "already processed", "process once", "credited twice", "double credit"],
+      "suggested_spec_patch": "Successful payment events must be idempotent: the same event_id must be credited at most once.",
+      "audit_questions": ["Does the spec explicitly require duplicate event IDs to be ignored or processed once?"],
+      "requirement_test": "The same event_id must not be credited twice"
+    },
+    {
+      "id": "payments.webhook.event_id_required",
+      "title": "Webhook event IDs are required",
+      "requirement": "Payment webhook events must include a non-empty event_id.",
+      "category": "invalid_input_omission",
+      "severity": "high",
+      "keywords": ["event_id", "missing event_id", "require event_id", "event_id must be present"],
+      "suggested_spec_patch": "Missing or empty event_id must fail without changing balances.",
+      "audit_questions": ["Does the spec require a non-empty event_id?"],
+      "requirement_test": "Missing event_id must fail"
+    }
+  ]
+}

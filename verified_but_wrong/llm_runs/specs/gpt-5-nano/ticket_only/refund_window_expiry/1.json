@@ -1,0 +1,74 @@
+{
+  "timestamp": "2026-05-12T17:30:48.065403+00:00",
+  "task_id": "refund_window_expiry",
+  "task_title": "Refund window expiry",
+  "condition": "ticket_only",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse only the product ticket below.\nDo not assume access to hidden organization policies.\nWrite the best implementation spec you can from the ticket.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse only the product ticket below. Do not assume access to hidden organization policies. Write the best implementation spec you can from the ticket.\n\nTask title: Refund window expiry\nFunction entrypoint: process_refund\n\nProduct ticket:\n# Product ticket: refund eligibility window\n\n## Background\nFinance allows normal refunds for paid orders. The service should calculate eligibility and update the refunded total.\n\n## Happy path\n- Paid orders can be refunded.\n- Refund amount must be positive.\n- Refund amount cannot exceed remaining paid amount.\n- Successful refunds update `refunded_total`.\n\n## Policy note\nRefund policy is based on purchase date. Manual override may apply for exceptional support cases.\n\n## Acceptance criteria\n- Valid refund succeeds.\n- Over-refund fails.\n- Cancelled and chargeback orders fail.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "3eab3c8de8f724788161b40de95fc849dbfbd8070f22c7cd9b250d84f1ab81ef",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Refund window expiry\",\n  \"behavior_requirements\": [\n    \"process_refund accepts an order_id and refund_amount as inputs.\",\n    \"Only paid orders are eligible for refunds.\",\n    \"refund_amount must be positive (> 0).\",\n    \"refund_amount cannot exceed the remaining paid amount (paid_amount - refunded_total).\",\n    \"On successful refund: increment refunded_total by refund_amount.\",\n    \"On failure due to ineligible state or invalid amount: return an error without modifying refunded_total.\",\n    \"Orders with status cancelled or chargeback are ineligible for refunds.\",\n    \"Policy-based exceptions may apply via a manual override mechanism (must be explicitly allowed by business logic).\"\n  ],\n  \"edge_cases\": [\n    \"Refund amount exactly equal to the remaining paid amount is allowed (full refund).\",\n    \"Refund amount of zero or negative values is rejected.\",\n    \"Refund requested for a non-paid or non-existent order is rejected.\",\n    \"Refund requested for cancelled or chargeback orders is rejected.\",\n    \"Refund requests for orders with previous refunds that already reach paid_total are rejected.\",\n    \"Manual override, when invoked, should bypass standard checks only if an override flag or approval is present.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Valid refund succeeds: paid order with sufficient remaining amount results in refunded_total increased by refund_amount and no errors.\",\n    \"Over-refund fails: refund_amount greater than remaining paid amount is rejected and refunded_total remains unchanged.\",\n    \"Cancelled and chargeback orders fail: refunds are rejected and refunded_total remains unchanged.\",\n    \"Refund amount must be positive; zero or negative refunds are rejected.\",\n    \"Refund policy is respected by using purchase date window if applicable, and manual overrides are allowed only when explicitly provided.\"\n  ],\n  \"non_goals\": [\n    \"Implementing non-financial side effects beyond updating refunded_total (e.g., no impact on inventory or unrelated accounting).\",\n    \"Handling refunds for non-existent orders beyond erroring appropriately.\",\n    \"Bulk refund processing beyond the single order_refund use-case.\"\n  ],\n  \"testable_assertions\": [\n    \"process_refund returns success when order is paid and refund_amount is positive and <= remaining_paid_amount.\",\n    \"process_refund returns failure when refund_amount > remaining_paid_amount.\",\n    \"process_refund returns failure when order status is cancelled or chargeback.\",\n    \"process_refund returns failure when refund_amount <= 0.\",\n    \"refunded_total is incremented correctly after a successful refund.\",\n    \"No changes to refunded_total occur on failed refunds.\"\n  ]\n}",
+  "response_hash": "a691a3f6ffdfbff09c18f882d9ec47eee415ffe0dc052bf3328e84dece66ec57",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_00b5e5ef42260e71006a0363c707d08196b1f48e34e59a9c61",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 350,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 547,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 897
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Refund window expiry",
+    "behavior_requirements": [
+      "process_refund accepts an order_id and refund_amount as inputs.",
+      "Only paid orders are eligible for refunds.",
+      "refund_amount must be positive (> 0).",
+      "refund_amount cannot exceed the remaining paid amount (paid_amount - refunded_total).",
+      "On successful refund: increment refunded_total by refund_amount.",
+      "On failure due to ineligible state or invalid amount: return an error without modifying refunded_total.",
+      "Orders with status cancelled or chargeback are ineligible for refunds.",
+      "Policy-based exceptions may apply via a manual override mechanism (must be explicitly allowed by business logic)."
+    ],
+    "edge_cases": [
+      "Refund amount exactly equal to the remaining paid amount is allowed (full refund).",
+      "Refund amount of zero or negative values is rejected.",
+      "Refund requested for a non-paid or non-existent order is rejected.",
+      "Refund requested for cancelled or chargeback orders is rejected.",
+      "Refund requests for orders with previous refunds that already reach paid_total are rejected.",
+      "Manual override, when invoked, should bypass standard checks only if an override flag or approval is present."
+    ],
+    "acceptance_criteria": [
+      "Valid refund succeeds: paid order with sufficient remaining amount results in refunded_total increased by refund_amount and no errors.",
+      "Over-refund fails: refund_amount greater than remaining paid amount is rejected and refunded_total remains unchanged.",
+      "Cancelled and chargeback orders fail: refunds are rejected and refunded_total remains unchanged.",
+      "Refund amount must be positive; zero or negative refunds are rejected.",
+      "Refund policy is respected by using purchase date window if applicable, and manual overrides are allowed only when explicitly provided."
+    ],
+    "non_goals": [
+      "Implementing non-financial side effects beyond updating refunded_total (e.g., no impact on inventory or unrelated accounting).",
+      "Handling refunds for non-existent orders beyond erroring appropriately.",
+      "Bulk refund processing beyond the single order_refund use-case."
+    ],
+    "testable_assertions": [
+      "process_refund returns success when order is paid and refund_amount is positive and <= remaining_paid_amount.",
+      "process_refund returns failure when refund_amount > remaining_paid_amount.",
+      "process_refund returns failure when order status is cancelled or chargeback.",
+      "process_refund returns failure when refund_amount <= 0.",
+      "refunded_total is incremented correctly after a successful refund.",
+      "No changes to refunded_total occur on failed refunds."
+    ]
+  },
+  "public_spec": "Title: Refund window expiry\n\nBehavior requirements:\n- process_refund accepts an order_id and refund_amount as inputs.\n- Only paid orders are eligible for refunds.\n- refund_amount must be positive (> 0).\n- refund_amount cannot exceed the remaining paid amount (paid_amount - refunded_total).\n- On successful refund: increment refunded_total by refund_amount.\n- On failure due to ineligible state or invalid amount: return an error without modifying refunded_total.\n- Orders with status cancelled or chargeback are ineligible for refunds.\n- Policy-based exceptions may apply via a manual override mechanism (must be explicitly allowed by business logic).\n\nEdge cases:\n- Refund amount exactly equal to the remaining paid amount is allowed (full refund).\n- Refund amount of zero or negative values is rejected.\n- Refund requested for a non-paid or non-existent order is rejected.\n- Refund requested for cancelled or chargeback orders is rejected.\n- Refund requests for orders with previous refunds that already reach paid_total are rejected.\n- Manual override, when invoked, should bypass standard checks only if an override flag or approval is present.\n\nAcceptance criteria:\n- Valid refund succeeds: paid order with sufficient remaining amount results in refunded_total increased by refund_amount and no errors.\n- Over-refund fails: refund_amount greater than remaining paid amount is rejected and refunded_total remains unchanged.\n- Cancelled and chargeback orders fail: refunds are rejected and refunded_total remains unchanged.\n- Refund amount must be positive; zero or negative refunds are rejected.\n- Refund policy is respected by using purchase date window if applicable, and manual overrides are allowed only when explicitly provided.\n\nNon-goals:\n- Implementing non-financial side effects beyond updating refunded_total (e.g., no impact on inventory or unrelated accounting).\n- Handling refunds for non-existent orders beyond erroring appropriately.\n- Bulk refund processing beyond the single order_refund use-case.\n\nTestable assertions:\n- process_refund returns success when order is paid and refund_amount is positive and <= remaining_paid_amount.\n- process_refund returns failure when refund_amount > remaining_paid_amount.\n- process_refund returns failure when order status is cancelled or chargeback.\n- process_refund returns failure when refund_amount <= 0.\n- refunded_total is incremented correctly after a successful refund.\n- No changes to refunded_total occur on failed refunds.",
+  "generation_empty": false,
+  "generation_error": null
+}

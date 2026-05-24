@@ -1,0 +1,63 @@
+{
+  "id": "inventory_policy",
+  "title": "Inventory and expiry policy",
+  "policy_cards": [
+    {
+      "id": "inventory.expiry.lead_time",
+      "title": "Category lead time must be applied",
+      "requirement": "Category lead time rules must be applied before deciding whether an item should be handled today.",
+      "category": "domain_rule_omission",
+      "severity": "high",
+      "applies_to_tasks": [
+        "expiry_handle_today"
+      ],
+      "keywords": [
+        "lead time",
+        "category_lead_time",
+        "category lead",
+        "subtract",
+        "minus"
+      ],
+      "why_it_matters": "Items that need early handling can be missed.",
+      "suggested_spec_patch": "handle_today is true when expiry_date minus category_lead_time_days is today or earlier.",
+      "audit_question": "Does the spec apply category lead time?",
+      "requirement_test": "Category lead time must be applied",
+      "applies_to": [],
+      "failure_if_omitted": "Items that need early handling can be missed.",
+      "audit_questions": [
+        "Does the spec apply category lead time?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "Items that need early handling can be missed.",
+      "safe_spec_example": "handle_today is true when expiry_date minus category_lead_time_days is today or earlier."
+    },
+    {
+      "id": "inventory.expiry.expired_items",
+      "title": "Expired items must be handled",
+      "requirement": "Already expired items must be marked for handling.",
+      "category": "temporal_omission",
+      "severity": "high",
+      "applies_to_tasks": [
+        "expiry_handle_today"
+      ],
+      "keywords": [
+        "expired",
+        "already expired",
+        "past expiry",
+        "today or earlier"
+      ],
+      "why_it_matters": "Expired items can remain untreated.",
+      "suggested_spec_patch": "Already expired items must return handle_today true.",
+      "audit_question": "Does the spec explicitly handle already expired items?",
+      "requirement_test": "Already expired items must be handled",
+      "applies_to": [],
+      "failure_if_omitted": "Expired items can remain untreated.",
+      "audit_questions": [
+        "Does the spec explicitly handle already expired items?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "Expired items can remain untreated.",
+      "safe_spec_example": "Already expired items must return handle_today true."
+    }
+  ]
+}

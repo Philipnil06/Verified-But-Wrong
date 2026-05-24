@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-05-12T17:31:30.502201+00:00",
+  "task_id": "role_downgrade_session_invalidation",
+  "task_title": "Role downgrade session invalidation",
+  "condition": "oracle_full",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the full intended behavior.\nThis is an upper-bound condition and is not a deployable retrieval setting.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the full intended behavior. This is an upper-bound condition.\n\nTask title: Role downgrade session invalidation\nFunction entrypoint: update_role\n\nFull intended behavior:\nSet user role to requested value. When a user loses admin privileges, invalidate existing privileged sessions for that user. Reject invalid roles or missing users.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "45fe1cc12962105a3265c32389c4efae95b4a93b17dfd360945e44716a02ef0f",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Role downgrade session invalidation\",\n  \"behavior_requirements\": [\n    \"Set the authenticated user's role to the requested value provided by the caller.\",\n    \"If the requested role includes admin privileges, allow the change only when the caller has permission to assign admin roles.\",\n    \"If the requested role does not include admin privileges and the user previously had admin privileges, invalidate all active privileged sessions for that user immediately after the role is updated.\",\n    \"Reject requests where the target user does not exist.\",\n    \"Reject requests with invalid or unsupported role values.\"\n  ],\n  \"edge_cases\": [\n    \"User already has the requested role; still return success and perform no-op invalidation.\",\n    \" downgrade from admin to non-admin when there are multiple privileged sessions across devices; invalidate all such sessions.\",\n    \"Downgrade to an equivalent non-admin role (no privilege difference) treated as valid and may still invalidate sessions if admin status is removed.\",\n    \"Race condition where session invalidation occurs concurrently with new admin session creation; ensure atomicity or proper ordering to prevent privilege elevation.\",\n    \"Missing or malformed input (e.g., missing user_id or role) results in a clear validation error.\",\n    \"Role value contains additional attributes or scopes; validate against allowed role taxonomy.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Role of target user is updated to the requested value when valid.\",\n    \"If new role lacks admin privileges, all existing privileged sessions for that user are invalidated immediately.\",\n    \"All invalid requests (non-existent user, invalid/unsupported role) are rejected with appropriate error codes and messages.\",\n    \"No privileged sessions remain active for a user after downgrade to non-admin.\",\n    \"Operation is idempotent for repeated requests with the same valid non-admin role.\"\n  ],\n  \"non_goals\": [\n    \"Managing non-privileged session data beyond invalidation on downgrade.\",\n    \"Handling role elevation or temporary privilege grants in this operation.\",\n    \"Auditing or logging beyond standard success/failure responses.\"\n  ],\n  \"testable_assertions\": [\n    \"Given a user with admin role and multiple active privileged sessions, updating to a non-admin role invalidates all privileged sessions for that user.\",\n    \"Updating a non-existent user returns a rejection with user-not-found error.\",\n    \"Providing an invalid role returns a rejection with invalid-role error.\",\n    \"Updating to the same role as current results in success with no additional side effects.\",\n    \"After downgrade, attempts to use privileged endpoints fail due to session invalidation.\"\n  ]\n}",
+  "response_hash": "33ebbcbbd452aedd5594812f15bd76c8429db84d070a8df72961928ffe154043",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0b88e47d3621d1a0006a0363f17ef88190837148cf605d5e2c",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 250,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 540,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 790
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Role downgrade session invalidation",
+    "behavior_requirements": [
+      "Set the authenticated user's role to the requested value provided by the caller.",
+      "If the requested role includes admin privileges, allow the change only when the caller has permission to assign admin roles.",
+      "If the requested role does not include admin privileges and the user previously had admin privileges, invalidate all active privileged sessions for that user immediately after the role is updated.",
+      "Reject requests where the target user does not exist.",
+      "Reject requests with invalid or unsupported role values."
+    ],
+    "edge_cases": [
+      "User already has the requested role; still return success and perform no-op invalidation.",
+      "downgrade from admin to non-admin when there are multiple privileged sessions across devices; invalidate all such sessions.",
+      "Downgrade to an equivalent non-admin role (no privilege difference) treated as valid and may still invalidate sessions if admin status is removed.",
+      "Race condition where session invalidation occurs concurrently with new admin session creation; ensure atomicity or proper ordering to prevent privilege elevation.",
+      "Missing or malformed input (e.g., missing user_id or role) results in a clear validation error.",
+      "Role value contains additional attributes or scopes; validate against allowed role taxonomy."
+    ],
+    "acceptance_criteria": [
+      "Role of target user is updated to the requested value when valid.",
+      "If new role lacks admin privileges, all existing privileged sessions for that user are invalidated immediately.",
+      "All invalid requests (non-existent user, invalid/unsupported role) are rejected with appropriate error codes and messages.",
+      "No privileged sessions remain active for a user after downgrade to non-admin.",
+      "Operation is idempotent for repeated requests with the same valid non-admin role."
+    ],
+    "non_goals": [
+      "Managing non-privileged session data beyond invalidation on downgrade.",
+      "Handling role elevation or temporary privilege grants in this operation.",
+      "Auditing or logging beyond standard success/failure responses."
+    ],
+    "testable_assertions": [
+      "Given a user with admin role and multiple active privileged sessions, updating to a non-admin role invalidates all privileged sessions for that user.",
+      "Updating a non-existent user returns a rejection with user-not-found error.",
+      "Providing an invalid role returns a rejection with invalid-role error.",
+      "Updating to the same role as current results in success with no additional side effects.",
+      "After downgrade, attempts to use privileged endpoints fail due to session invalidation."
+    ]
+  },
+  "public_spec": "Title: Role downgrade session invalidation\n\nBehavior requirements:\n- Set the authenticated user's role to the requested value provided by the caller.\n- If the requested role includes admin privileges, allow the change only when the caller has permission to assign admin roles.\n- If the requested role does not include admin privileges and the user previously had admin privileges, invalidate all active privileged sessions for that user immediately after the role is updated.\n- Reject requests where the target user does not exist.\n- Reject requests with invalid or unsupported role values.\n\nEdge cases:\n- User already has the requested role; still return success and perform no-op invalidation.\n- downgrade from admin to non-admin when there are multiple privileged sessions across devices; invalidate all such sessions.\n- Downgrade to an equivalent non-admin role (no privilege difference) treated as valid and may still invalidate sessions if admin status is removed.\n- Race condition where session invalidation occurs concurrently with new admin session creation; ensure atomicity or proper ordering to prevent privilege elevation.\n- Missing or malformed input (e.g., missing user_id or role) results in a clear validation error.\n- Role value contains additional attributes or scopes; validate against allowed role taxonomy.\n\nAcceptance criteria:\n- Role of target user is updated to the requested value when valid.\n- If new role lacks admin privileges, all existing privileged sessions for that user are invalidated immediately.\n- All invalid requests (non-existent user, invalid/unsupported role) are rejected with appropriate error codes and messages.\n- No privileged sessions remain active for a user after downgrade to non-admin.\n- Operation is idempotent for repeated requests with the same valid non-admin role.\n\nNon-goals:\n- Managing non-privileged session data beyond invalidation on downgrade.\n- Handling role elevation or temporary privilege grants in this operation.\n- Auditing or logging beyond standard success/failure responses.\n\nTestable assertions:\n- Given a user with admin role and multiple active privileged sessions, updating to a non-admin role invalidates all privileged sessions for that user.\n- Updating a non-existent user returns a rejection with user-not-found error.\n- Providing an invalid role returns a rejection with invalid-role error.\n- Updating to the same role as current results in success with no additional side effects.\n- After downgrade, attempts to use privileged endpoints fail due to session invalidation.",
+  "generation_empty": false,
+  "generation_error": null
+}

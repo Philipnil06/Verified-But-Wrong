@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-05-13T13:28:31.889836+00:00",
+  "note": "Because the benchmark is controlled and small, intervals are descriptive rather than claims about real-world prevalence.",
+  "wilson_95_intervals": {
+    "naive_vbw_rate": {
+      "estimate": 1.0,
+      "low": 0.7574992425007574,
+      "high": 1.0
+    },
+    "critic_vbw_rate": {
+      "estimate": 0.4166666666666667,
+      "low": 0.19325746190524654,
+      "high": 0.6804926643446272
+    },
+    "oracle_vbw_rate": {
+      "estimate": 0.0,
+      "low": 0.0,
+      "high": 0.2425007574992425
+    },
+    "gate_dangerous_catch_rate": {
+      "estimate": 1.0,
+      "low": 0.8156763396284354,
+      "high": 1.0
+    },
+    "gate_safe_allow_rate": {
+      "estimate": 0.7894736842105263,
+      "low": 0.5666528575973392,
+      "high": 0.9149246150840843
+    },
+    "high_or_critical_dangerous_catch_rate": {
+      "estimate": 1.0,
+      "low": 0.8156763396284354,
+      "high": 1.0
+    }
+  }
+}

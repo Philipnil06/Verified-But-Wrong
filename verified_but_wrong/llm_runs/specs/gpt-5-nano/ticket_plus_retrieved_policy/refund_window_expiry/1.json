@@ -1,0 +1,67 @@
+{
+  "timestamp": "2026-05-12T17:30:59.368920+00:00",
+  "task_id": "refund_window_expiry",
+  "task_title": "Refund window expiry",
+  "condition": "ticket_plus_retrieved_policy",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the product ticket and the retrieved policy card.\nThe policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the product ticket and the retrieved policy card. The policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nTask title: Refund window expiry\nFunction entrypoint: process_refund\n\nProduct ticket:\n# Product ticket: refund eligibility window\n\n## Background\nFinance allows normal refunds for paid orders. The service should calculate eligibility and update the refunded total.\n\n## Happy path\n- Paid orders can be refunded.\n- Refund amount must be positive.\n- Refund amount cannot exceed remaining paid amount.\n- Successful refunds update `refunded_total`.\n\n## Policy note\nRefund policy is based on purchase date. Manual override may apply for exceptional support cases.\n\n## Acceptance criteria\n- Valid refund succeeds.\n- Over-refund fails.\n- Cancelled and chargeback orders fail.\n\nRetrieved policy card:\nPolicy card ID: payments.refund.window_30_days\nTitle: Refund window must be enforced\nRequirement: Normal refunds are only allowed within 30 days of purchase unless manual_override is true.\nWhy it matters: Refunds outside finance policy may be incorrectly approved.\nAudit questions:\n- Does the spec explicitly preserve the 30-day refund window and manual override exception?\nKeywords:\n- 30 days\n- within 30 days\n- refund window\n- purchase date\n- days since purchase\n- refund period\n- manual_override\n- manual override\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "844c3c4d41837b26e0cf6ce41a21042a0feedc2313e92d52c79363e1045726d0",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Refund window expiry\",\n  \"behavior_requirements\": [\n    \"Refunds are only allowed for paid orders within 30 days of purchase unless manual_override is true.\",\n    \"Refund amount must be positive.\",\n    \"Refund amount cannot exceed remaining paid amount.\",\n    \"Successful refunds must update refunded_total.\",\n    \"Cancelled and chargeback orders must not be refundable, regardless of window.\"\n  ],\n  \"edge_cases\": [\n    \"Refund request exactly on the 30th day is allowed when manual_override is false.\",\n    \"manual_override = true allows refunds outside 30-day window.\",\n    \"Refund requests for zero or negative amounts are rejected.\",\n    \"Refund requests for orders without a purchase date or with missing monetary fields are rejected.\",\n    \"Partial refunds that would exhaust remaining paid amount are allowed if within window.\",\n    \"Refunds attempted on non-paid, cancelled, or chargeback orders are rejected even if within window.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Valid refund succeeds when order is paid, within 30 days (or manual_override applied) and refund amount > 0 and <= remaining paid amount.\",\n    \"Over-refund attempts fail with an error and do not modify refunded_total.\",\n    \"Refunds on cancelled or chargeback orders fail with an error and do not modify refunded_total.\",\n    \"refunded_total is updated correctly after a successful refund.\"\n  ],\n  \"non_goals\": [\n    \"Implementing refunds for non-financial transactions (e.g., promotional credits) beyond basic paid orders.\",\n    \"Handling refunds for non-monetary items or unsupported currencies.\"\n  ],\n  \"testable_assertions\": [\n    \"Given a paid order with purchase_date, refund window = 30 days, no manual_override, a refund of amount A where 0 < A <= remaining_paid_amount succeeds and refunded_total increases by A.\",\n    \"Given a paid order beyond 30 days with manual_override = false a refund attempt fails and refunded_total remains unchanged.\",\n    \"Given a paid order beyond 30 days with manual_override = true a refund of amount A succeeds if A <= remaining_paid_amount and refunded_total updates accordingly.\",\n    \"Given a refunded_total already equals remaining_paid_amount and another positive refund request is made, it fails with no change to refunded_total.\"\n  ]\n}",
+  "response_hash": "1442d3a0a309fbd82896bf67a7e4cdb4ad613a0d3e9a60f220805ccc464677fe",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0a34e777d4cd9d1f006a0363d2579c81a1b3e2238c9e58a1d0",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 463,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 489,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 952
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Refund window expiry",
+    "behavior_requirements": [
+      "Refunds are only allowed for paid orders within 30 days of purchase unless manual_override is true.",
+      "Refund amount must be positive.",
+      "Refund amount cannot exceed remaining paid amount.",
+      "Successful refunds must update refunded_total.",
+      "Cancelled and chargeback orders must not be refundable, regardless of window."
+    ],
+    "edge_cases": [
+      "Refund request exactly on the 30th day is allowed when manual_override is false.",
+      "manual_override = true allows refunds outside 30-day window.",
+      "Refund requests for zero or negative amounts are rejected.",
+      "Refund requests for orders without a purchase date or with missing monetary fields are rejected.",
+      "Partial refunds that would exhaust remaining paid amount are allowed if within window.",
+      "Refunds attempted on non-paid, cancelled, or chargeback orders are rejected even if within window."
+    ],
+    "acceptance_criteria": [
+      "Valid refund succeeds when order is paid, within 30 days (or manual_override applied) and refund amount > 0 and <= remaining paid amount.",
+      "Over-refund attempts fail with an error and do not modify refunded_total.",
+      "Refunds on cancelled or chargeback orders fail with an error and do not modify refunded_total.",
+      "refunded_total is updated correctly after a successful refund."
+    ],
+    "non_goals": [
+      "Implementing refunds for non-financial transactions (e.g., promotional credits) beyond basic paid orders.",
+      "Handling refunds for non-monetary items or unsupported currencies."
+    ],
+    "testable_assertions": [
+      "Given a paid order with purchase_date, refund window = 30 days, no manual_override, a refund of amount A where 0 < A <= remaining_paid_amount succeeds and refunded_total increases by A.",
+      "Given a paid order beyond 30 days with manual_override = false a refund attempt fails and refunded_total remains unchanged.",
+      "Given a paid order beyond 30 days with manual_override = true a refund of amount A succeeds if A <= remaining_paid_amount and refunded_total updates accordingly.",
+      "Given a refunded_total already equals remaining_paid_amount and another positive refund request is made, it fails with no change to refunded_total."
+    ]
+  },
+  "public_spec": "Title: Refund window expiry\n\nBehavior requirements:\n- Refunds are only allowed for paid orders within 30 days of purchase unless manual_override is true.\n- Refund amount must be positive.\n- Refund amount cannot exceed remaining paid amount.\n- Successful refunds must update refunded_total.\n- Cancelled and chargeback orders must not be refundable, regardless of window.\n\nEdge cases:\n- Refund request exactly on the 30th day is allowed when manual_override is false.\n- manual_override = true allows refunds outside 30-day window.\n- Refund requests for zero or negative amounts are rejected.\n- Refund requests for orders without a purchase date or with missing monetary fields are rejected.\n- Partial refunds that would exhaust remaining paid amount are allowed if within window.\n- Refunds attempted on non-paid, cancelled, or chargeback orders are rejected even if within window.\n\nAcceptance criteria:\n- Valid refund succeeds when order is paid, within 30 days (or manual_override applied) and refund amount > 0 and <= remaining paid amount.\n- Over-refund attempts fail with an error and do not modify refunded_total.\n- Refunds on cancelled or chargeback orders fail with an error and do not modify refunded_total.\n- refunded_total is updated correctly after a successful refund.\n\nNon-goals:\n- Implementing refunds for non-financial transactions (e.g., promotional credits) beyond basic paid orders.\n- Handling refunds for non-monetary items or unsupported currencies.\n\nTestable assertions:\n- Given a paid order with purchase_date, refund window = 30 days, no manual_override, a refund of amount A where 0 < A <= remaining_paid_amount succeeds and refunded_total increases by A.\n- Given a paid order beyond 30 days with manual_override = false a refund attempt fails and refunded_total remains unchanged.\n- Given a paid order beyond 30 days with manual_override = true a refund of amount A succeeds if A <= remaining_paid_amount and refunded_total updates accordingly.\n- Given a refunded_total already equals remaining_paid_amount and another positive refund request is made, it fails with no change to refunded_total.",
+  "generation_empty": false,
+  "generation_error": null
+}

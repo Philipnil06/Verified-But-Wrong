@@ -1,0 +1,8 @@
+name: Spec Audit Gate
+on: [pull_request]
+jobs:
+  spec-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python ci_demo/ci_policy_gate.py --spec ci_demo/spec_missing_policy.md --policy ci_demo/payments_policy_pack.json

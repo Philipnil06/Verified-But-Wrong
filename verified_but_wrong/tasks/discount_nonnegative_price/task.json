@@ -1,0 +1,43 @@
+{
+  "id": "discount_nonnegative_price",
+  "title": "Discount with non-negative final price",
+  "entrypoint": "apply_discount",
+  "intent": "Implement apply_discount. Price must be non negative. Discount percent must be between 0 and 100 inclusive. Final price must never be negative.",
+  "ai_generated_spec": "Apply discount percent to price.",
+  "critic_improved_spec": "Apply a discount only when price is non negative and discount percent is between 0 and 100. The final price must never be negative.",
+  "missing_requirements": [
+    "Price must be non negative",
+    "Discount percent must be between 0 and 100",
+    "Final price must never be negative",
+    "Invalid input should fail"
+  ],
+  "spec_hole_categories": [
+    "boundary_omission",
+    "invalid_input_omission",
+    "conservation_omission",
+    "error_behavior_omission"
+  ],
+  "expected_naive_failure": "The naive public spec can select an implementation that applies arithmetic without validating discount bounds.",
+  "expected_defense": "The omission-aware critic spec should reject discounts below 0 or above 100 and reject negative prices.",
+  "policy_pack_ids": [
+    "generic_critical_requirements",
+    "business_logic_policy"
+  ],
+  "relevant_policy_card_ids": [
+    "generic.invalid_inputs_fail",
+    "pricing.discount.bounds",
+    "pricing.final_price_non_negative"
+  ],
+  "missing_requirement_severity": {
+    "Price must be non negative": "medium",
+    "Discount percent must be between 0 and 100": "high",
+    "Final price must never be negative": "high",
+    "Invalid input should fail": "medium"
+  },
+  "public_spec_text": {
+    "naive": "Apply discount percent to price.",
+    "critic": "Apply a discount only when price is non negative and discount percent is between 0 and 100. The final price must never be negative.",
+    "oracle": "Apply a discount only when price is non negative and discount percent is between 0 and 100. The final price must never be negative."
+  },
+  "evaluation_split": "development"
+}

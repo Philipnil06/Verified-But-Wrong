@@ -1,0 +1,74 @@
+{
+  "timestamp": "2026-05-12T17:29:26.769458+00:00",
+  "task_id": "loyalty_refund_reversal",
+  "task_title": "Loyalty points refund reversal",
+  "condition": "ticket_plus_generic_checklist",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the product ticket and the generic checklist.\nThe checklist is generic and may not mention task-specific organization policies.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the product ticket and the generic checklist. The checklist is generic and may not mention task-specific organization policies.\n\nTask title: Loyalty points refund reversal\nFunction entrypoint: process_refund\n\nProduct ticket:\n# Product ticket: refund processing with customer rewards\n\n## Background\nCustomers may request partial or full refunds for paid orders. The refund service should update the order refund state and return a clear success or error result.\n\n## Happy path\n- Paid orders can be refunded.\n- Refund amount must be positive.\n- Refund amount must not exceed the remaining paid amount.\n- Successful refunds update `refunded_total`.\n\n## Policy note\nCustomer reward balances are maintained by a separate account service.\n\n## Acceptance criteria\n- A valid partial refund succeeds.\n- Over-refunds fail.\n- Cancelled orders fail.\n\nGeneric checklist:\n- authorization and access control\n- idempotency and duplicate handling\n- boundary conditions and off-by-one cases\n- state consistency and required state updates\n- audit logging or record retention where relevant\n- tenant or data isolation where relevant\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "40e8ea785aaf1ece260a9528289540e76280de013e7578330b74567b2dc5fc26",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Loyalty points refund reversal\",\n  \"behavior_requirements\": [\n    \"process_refund accepts order_id and refund_amount (positive number).\",\n    \"Only orders with status 'paid' are eligible for refunds; 'cancelled' orders are rejected.\",\n    \"Refund amount must be greater than 0 and less than or equal to remaining_paid_amount.\",\n    \"refunded_total for the order is atomically incremented by refund_amount on successful refund.\",\n    \"Refunds do not directly modify customer reward balances; that is handled by the separate account service.\",\n    \"Return result indicates success or error with a clear message.\"\n  ],\n  \"edge_cases\": [\n    \"Partial refund that exactly equals remaining_paid_amount is allowed.\",\n    \"Refund amount equals zero or negative is rejected.\",\n    \"Over-refund attempts (refund_amount > remaining_paid_amount) are rejected.\",\n    \"Refund for non-paid or cancelled orders is rejected.\",\n    \"Repeated refund requests for the same portion of amount should be idempotent or recognized as duplicates and rejected if already refunded.\",\n    \"Null or missing refund_amount or order_id should be rejected with proper error.\",\n    \"Boundary: remaining_paid_amount equals 0 should reject any further refunds.\"\n  ],\n  \"acceptance_criteria\": [\n    \"A valid partial refund succeeds and updates refunded_total accordingly.\",\n    \"Over-refunds fail with a clear error and do not modify refunded_total.\",\n    \"Cancelled orders fail refund attempts with a clear error.\",\n    \"Authorization and access control are enforced for the refund operation.\",\n    \"Idempotent handling for repeated identical refund requests where applicable.\",\n    \"Audit logs record refund transactions with order_id, refund_amount, refunded_total, timestamp, and outcome.\"\n  ],\n  \"non_goals\": [\n    \"Adjusting customer reward balances directly within this service.\",\n    \"Refunds for non-existent orders without clear error propagation.\",\n    \"Enforcing organization-specific policies not implied by the ticket.\"\n  ],\n  \"testable_assertions\": [\n    \"Refund with amount > 0 on a paid order decreases remaining_paid_amount accordingly and increases refunded_total by the same amount.\",\n    \"Refund of amount equal to remaining_paid_amount completes the refund without errors.\",\n    \"Refund with amount > remaining_paid_amount is rejected with appropriate error, and refunded_total remains unchanged.\",\n    \"Refund on a cancelled order is rejected with appropriate error, and no state changes occur.\",\n    \"Refund requests are idempotent for identical requests; duplicate identical requests do not double-refund.\",\n    \"Authorization required for processing refunds; unauthorized requests are rejected.\"\n  ]\n}",
+  "response_hash": "3db2b7c5d2d97a963b936d17199d95541fd6883fbe39efc74da9638b97951157",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_09d516610559ce00006a036375bca88193a2e034c24ab2af73",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 399,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 547,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 946
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Loyalty points refund reversal",
+    "behavior_requirements": [
+      "process_refund accepts order_id and refund_amount (positive number).",
+      "Only orders with status 'paid' are eligible for refunds; 'cancelled' orders are rejected.",
+      "Refund amount must be greater than 0 and less than or equal to remaining_paid_amount.",
+      "refunded_total for the order is atomically incremented by refund_amount on successful refund.",
+      "Refunds do not directly modify customer reward balances; that is handled by the separate account service.",
+      "Return result indicates success or error with a clear message."
+    ],
+    "edge_cases": [
+      "Partial refund that exactly equals remaining_paid_amount is allowed.",
+      "Refund amount equals zero or negative is rejected.",
+      "Over-refund attempts (refund_amount > remaining_paid_amount) are rejected.",
+      "Refund for non-paid or cancelled orders is rejected.",
+      "Repeated refund requests for the same portion of amount should be idempotent or recognized as duplicates and rejected if already refunded.",
+      "Null or missing refund_amount or order_id should be rejected with proper error.",
+      "Boundary: remaining_paid_amount equals 0 should reject any further refunds."
+    ],
+    "acceptance_criteria": [
+      "A valid partial refund succeeds and updates refunded_total accordingly.",
+      "Over-refunds fail with a clear error and do not modify refunded_total.",
+      "Cancelled orders fail refund attempts with a clear error.",
+      "Authorization and access control are enforced for the refund operation.",
+      "Idempotent handling for repeated identical refund requests where applicable.",
+      "Audit logs record refund transactions with order_id, refund_amount, refunded_total, timestamp, and outcome."
+    ],
+    "non_goals": [
+      "Adjusting customer reward balances directly within this service.",
+      "Refunds for non-existent orders without clear error propagation.",
+      "Enforcing organization-specific policies not implied by the ticket."
+    ],
+    "testable_assertions": [
+      "Refund with amount > 0 on a paid order decreases remaining_paid_amount accordingly and increases refunded_total by the same amount.",
+      "Refund of amount equal to remaining_paid_amount completes the refund without errors.",
+      "Refund with amount > remaining_paid_amount is rejected with appropriate error, and refunded_total remains unchanged.",
+      "Refund on a cancelled order is rejected with appropriate error, and no state changes occur.",
+      "Refund requests are idempotent for identical requests; duplicate identical requests do not double-refund.",
+      "Authorization required for processing refunds; unauthorized requests are rejected."
+    ]
+  },
+  "public_spec": "Title: Loyalty points refund reversal\n\nBehavior requirements:\n- process_refund accepts order_id and refund_amount (positive number).\n- Only orders with status 'paid' are eligible for refunds; 'cancelled' orders are rejected.\n- Refund amount must be greater than 0 and less than or equal to remaining_paid_amount.\n- refunded_total for the order is atomically incremented by refund_amount on successful refund.\n- Refunds do not directly modify customer reward balances; that is handled by the separate account service.\n- Return result indicates success or error with a clear message.\n\nEdge cases:\n- Partial refund that exactly equals remaining_paid_amount is allowed.\n- Refund amount equals zero or negative is rejected.\n- Over-refund attempts (refund_amount > remaining_paid_amount) are rejected.\n- Refund for non-paid or cancelled orders is rejected.\n- Repeated refund requests for the same portion of amount should be idempotent or recognized as duplicates and rejected if already refunded.\n- Null or missing refund_amount or order_id should be rejected with proper error.\n- Boundary: remaining_paid_amount equals 0 should reject any further refunds.\n\nAcceptance criteria:\n- A valid partial refund succeeds and updates refunded_total accordingly.\n- Over-refunds fail with a clear error and do not modify refunded_total.\n- Cancelled orders fail refund attempts with a clear error.\n- Authorization and access control are enforced for the refund operation.\n- Idempotent handling for repeated identical refund requests where applicable.\n- Audit logs record refund transactions with order_id, refund_amount, refunded_total, timestamp, and outcome.\n\nNon-goals:\n- Adjusting customer reward balances directly within this service.\n- Refunds for non-existent orders without clear error propagation.\n- Enforcing organization-specific policies not implied by the ticket.\n\nTestable assertions:\n- Refund with amount > 0 on a paid order decreases remaining_paid_amount accordingly and increases refunded_total by the same amount.\n- Refund of amount equal to remaining_paid_amount completes the refund without errors.\n- Refund with amount > remaining_paid_amount is rejected with appropriate error, and refunded_total remains unchanged.\n- Refund on a cancelled order is rejected with appropriate error, and no state changes occur.\n- Refund requests are idempotent for identical requests; duplicate identical requests do not double-refund.\n- Authorization required for processing refunds; unauthorized requests are rejected.",
+  "generation_empty": false,
+  "generation_error": null
+}

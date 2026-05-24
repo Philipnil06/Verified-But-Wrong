@@ -1,0 +1,40 @@
+{
+  "status": "completed",
+  "cases": [
+    {
+      "task_id": "DA0003",
+      "status": "direct_dafny_verified_and_intent_failed",
+      "jsonl_path": "C:\\Users\\Philip Nilsson\\OneDrive - Mälardalens Tekniska Gymnasium\\Skrivbordet\\Hackathon apartresearch The Secure Program Synthesis\\verified_but_wrong\\external_data\\vericoding-benchmark\\jsonl\\dafny_tasks.jsonl",
+      "dafny_version": "4.11.0+fcb2042d6d043a2634f0854338c08feeaaaf4ae2",
+      "verify_command": "dotnet tool run dafny verify C:\\Users\\Philip Nilsson\\OneDrive - Mälardalens Tekniska Gymnasium\\Skrivbordet\\Hackathon apartresearch The Secure Program Synthesis\\verified_but_wrong\\external_vericoding_cases\\candidate_DA0003\\dafny_direct\\bad_candidate.dfy",
+      "verify_returncode": 0,
+      "intended_examples_all_pass": false,
+      "timestamp": "2026-05-13T13:28:20.649246+00:00"
+    },
+    {
+      "task_id": "DA0208",
+      "status": "direct_dafny_verified_and_intent_failed",
+      "jsonl_path": "C:\\Users\\Philip Nilsson\\OneDrive - Mälardalens Tekniska Gymnasium\\Skrivbordet\\Hackathon apartresearch The Secure Program Synthesis\\verified_but_wrong\\external_data\\vericoding-benchmark\\jsonl\\dafny_tasks.jsonl",
+      "dafny_version": "4.11.0+fcb2042d6d043a2634f0854338c08feeaaaf4ae2",
+      "verify_command": "dotnet tool run dafny verify C:\\Users\\Philip Nilsson\\OneDrive - Mälardalens Tekniska Gymnasium\\Skrivbordet\\Hackathon apartresearch The Secure Program Synthesis\\verified_but_wrong\\external_vericoding_cases\\candidate_DA0208\\dafny_direct\\bad_candidate.dfy",
+      "verify_returncode": 0,
+      "intended_examples_all_pass": false,
+      "timestamp": "2026-05-13T13:28:23.431209+00:00"
+    }
+  ],
+  "dafny_available": true,
+  "dotnet_tool_dafny_probe": {
+    "command": "dotnet tool run dafny --version",
+    "returncode": 0,
+    "stdout": "4.11.0+fcb2042d6d043a2634f0854338c08feeaaaf4ae2\n",
+    "stderr": "",
+    "not_found": false
+  },
+  "dafny_path_probe": {
+    "command": "dafny --version",
+    "returncode": 127,
+    "stdout": "",
+    "stderr": "[WinError 2] Det går inte att hitta filen",
+    "not_found": true
+  }
+}

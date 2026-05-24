@@ -1,0 +1,27 @@
+{
+  "panel_a": {
+    "useful_tasks": 1448,
+    "scanner_candidates": 128,
+    "high_confidence": 41,
+    "inspected_high_confidence": 41,
+    "validated": 11,
+    "direct_dafny": 2,
+    "repaired_blocks": 2
+  },
+  "panel_b": {
+    "naive_selected_vbw": 12,
+    "critic_selected_vbw": 5,
+    "oracle_selected_vbw": 0
+  },
+  "panel_c": {
+    "naive_hidden_failing_public_passing": "34/46",
+    "critic_hidden_failing_public_passing": "12/24",
+    "oracle_hidden_failing": "0"
+  },
+  "panel_d": {
+    "dangerous_caught": "17/17",
+    "dangerous_allowed": "0/17",
+    "safe_allowed": "15/19",
+    "safe_allow_rate": 78.95
+  }
+}

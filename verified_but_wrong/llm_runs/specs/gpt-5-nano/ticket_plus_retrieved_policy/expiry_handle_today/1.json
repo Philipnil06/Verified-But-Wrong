@@ -1,0 +1,64 @@
+{
+  "timestamp": "2026-05-12T17:28:52.054867+00:00",
+  "task_id": "expiry_handle_today",
+  "task_title": "Expiry handling with lead time",
+  "condition": "ticket_plus_retrieved_policy",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the product ticket and the retrieved policy card.\nThe policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the product ticket and the retrieved policy card. The policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nTask title: Expiry handling with lead time\nFunction entrypoint: should_handle_today\n\nProduct ticket:\n# Product ticket: expiry handling\n\n## Background\nInventory items should be marked for handling based on expiry dates.\n\n## Happy path\n- Items expiring today should be handled.\n- Items expiring tomorrow should not be handled by default.\n\n## Policy note\nSome categories have lead-time rules.\n\n## Acceptance criteria\n- Expiring today returns handle_today true.\n- Invalid dates return an error.\n\nRetrieved policy card:\nPolicy card ID: inventory.expiry.lead_time\nTitle: Category lead time must be applied\nRequirement: Category lead time rules must be applied before deciding whether an item should be handled today.\nWhy it matters: Items that need early handling can be missed.\nAudit questions:\n- Does the spec apply category lead time?\nKeywords:\n- lead time\n- category_lead_time\n- category lead\n- subtract\n- minus\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "ef2a42a067ded51d7a30af30394eff63278bf390278e38d219b17cc833f9f85f",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Expiry handling with lead time\",\n  \"behavior_requirements\": [\n    \"apply category lead time rules before deciding whether an item should be handled today\",\n    \"if an item’s expiry date is today after lead time adjustment, return handle_today = true\",\n    \"if an item’s expiry date is tomorrow or later after lead time adjustment, return handle_today = false by default\",\n    \"invalid expiry dates must produce an error\",\n    \"lead time adjustments should be derived from category_lead_time per policy_id inventory.expiry.lead_time\"\n  ],\n  \"edge_cases\": [\n    \"expiry date exactly today but negative or non-existent lead time should still be treated as today after rule application\",\n    \"expiry date in the past with positive lead time should be considered invalid or produce error\",\n    \"categories without explicit lead time rules default to no lead time (i.e., treat as today only if expiry is today)\",\n    \"null or malformed date input should produce an error\"\n  ],\n  \"acceptance_criteria\": [\n    \"Expiring today returns handle_today = true after applying category lead time\",\n    \"Expiring tomorrow returns handle_today = false after applying category lead time\",\n    \"Invalid dates return an error\"\n  ],\n  \"non_goals\": [\n    \"defining or altering lead time values themselves (policy dictates source of lead time)\",\n    \"handling of items with expiry beyond a fixed horizon unless mandated by expiry date\"\n  ],\n  \"testable_assertions\": [\n    \"Given an item with expiry date = today and category with zero lead time, should_handle_today returns true\",\n    \"Given an item with expiry date = today and category with positive lead time that shifts expiry to today after subtraction, should_handle_today returns true\",\n    \"Given an item with expiry date = tomorrow after lead time adjustment, should_handle_today returns false\",\n    \"Given an item with invalid expiry date, an error is returned\"\n  ]\n}",
+  "response_hash": "3619e9915171d3106cd98d7d4835f8c0abff054994fcbd8c67ce8d2eada65ca9",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_07ca93044a7bb517006a03635326148197b96acda6a5cd9233",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 408,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 417,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 825
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Expiry handling with lead time",
+    "behavior_requirements": [
+      "apply category lead time rules before deciding whether an item should be handled today",
+      "if an item’s expiry date is today after lead time adjustment, return handle_today = true",
+      "if an item’s expiry date is tomorrow or later after lead time adjustment, return handle_today = false by default",
+      "invalid expiry dates must produce an error",
+      "lead time adjustments should be derived from category_lead_time per policy_id inventory.expiry.lead_time"
+    ],
+    "edge_cases": [
+      "expiry date exactly today but negative or non-existent lead time should still be treated as today after rule application",
+      "expiry date in the past with positive lead time should be considered invalid or produce error",
+      "categories without explicit lead time rules default to no lead time (i.e., treat as today only if expiry is today)",
+      "null or malformed date input should produce an error"
+    ],
+    "acceptance_criteria": [
+      "Expiring today returns handle_today = true after applying category lead time",
+      "Expiring tomorrow returns handle_today = false after applying category lead time",
+      "Invalid dates return an error"
+    ],
+    "non_goals": [
+      "defining or altering lead time values themselves (policy dictates source of lead time)",
+      "handling of items with expiry beyond a fixed horizon unless mandated by expiry date"
+    ],
+    "testable_assertions": [
+      "Given an item with expiry date = today and category with zero lead time, should_handle_today returns true",
+      "Given an item with expiry date = today and category with positive lead time that shifts expiry to today after subtraction, should_handle_today returns true",
+      "Given an item with expiry date = tomorrow after lead time adjustment, should_handle_today returns false",
+      "Given an item with invalid expiry date, an error is returned"
+    ]
+  },
+  "public_spec": "Title: Expiry handling with lead time\n\nBehavior requirements:\n- apply category lead time rules before deciding whether an item should be handled today\n- if an item’s expiry date is today after lead time adjustment, return handle_today = true\n- if an item’s expiry date is tomorrow or later after lead time adjustment, return handle_today = false by default\n- invalid expiry dates must produce an error\n- lead time adjustments should be derived from category_lead_time per policy_id inventory.expiry.lead_time\n\nEdge cases:\n- expiry date exactly today but negative or non-existent lead time should still be treated as today after rule application\n- expiry date in the past with positive lead time should be considered invalid or produce error\n- categories without explicit lead time rules default to no lead time (i.e., treat as today only if expiry is today)\n- null or malformed date input should produce an error\n\nAcceptance criteria:\n- Expiring today returns handle_today = true after applying category lead time\n- Expiring tomorrow returns handle_today = false after applying category lead time\n- Invalid dates return an error\n\nNon-goals:\n- defining or altering lead time values themselves (policy dictates source of lead time)\n- handling of items with expiry beyond a fixed horizon unless mandated by expiry date\n\nTestable assertions:\n- Given an item with expiry date = today and category with zero lead time, should_handle_today returns true\n- Given an item with expiry date = today and category with positive lead time that shifts expiry to today after subtraction, should_handle_today returns true\n- Given an item with expiry date = tomorrow after lead time adjustment, should_handle_today returns false\n- Given an item with invalid expiry date, an error is returned",
+  "generation_empty": false,
+  "generation_error": null
+}

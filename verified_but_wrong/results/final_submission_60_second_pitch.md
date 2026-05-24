@@ -1,0 +1,1 @@
+Vericoding moves the failure surface from code to specifications. Verified but Wrong provides a benchmark, policy-pack audit gate, repair loop, baselines, ablations, and CI demo for catching intent gaps before spec-driven systems select code.

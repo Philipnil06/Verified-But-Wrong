@@ -1,0 +1,1 @@
+Policy-pack perturbation clarifies the dependency structure of the gate. Noisy inventories may increase conservatism, while incomplete inventories can miss dangerous specs by removing the causally relevant policy card.

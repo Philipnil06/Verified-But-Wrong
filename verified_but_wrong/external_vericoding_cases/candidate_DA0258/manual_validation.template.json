@@ -1,0 +1,12 @@
+{
+  "status": "candidate",
+  "reason": "Fill this manually. Change status to validated only after task-specific human review.",
+  "gap_category": "trivial_postcondition",
+  "nl_requirement": "",
+  "formal_spec_gap": "",
+  "weak_spec_proxy_description": "",
+  "weak_spec_proxy_pass": null,
+  "bad_candidate_behavior": "return a range/shape-valid but semantically wrong value",
+  "intended_oracle_description": "",
+  "reviewer_notes": ""
+}

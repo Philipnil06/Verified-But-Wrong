@@ -1,0 +1,33 @@
+{
+  "status": "manual_inspection_log",
+  "inspected_total": 24,
+  "validated_total": 7,
+  "rejected_total": 9,
+  "deferred_total": 8,
+  "entries": [
+    {"id":"DA0136","status":"rejected","reason":"formal spec stronger than scanner assumed","rejection_category":"formal spec stronger than scanner assumed"},
+    {"id":"DA0152","status":"deferred","reason":"record has incomplete executable target (vc-spec empty, vc-code axiom stub)","rejection_category":"insufficient original description"},
+    {"id":"DA0157","status":"validated","reason":"optimization requirement missing from formal target"},
+    {"id":"DA0003","status":"validated","reason":"formal target only ensures non-negativity"},
+    {"id":"DA0010","status":"validated","reason":"simulation semantics missing from formal target"},
+    {"id":"DA0045","status":"rejected","reason":"formal spec encodes optimality/tie behavior","rejection_category":"formal spec stronger than scanner assumed"},
+    {"id":"DA0082","status":"deferred","reason":"task-specific oracle would require heavier queue simulation and tie handling for defensible minimal demo","rejection_category":"intended oracle too hard for minimal demo"},
+    {"id":"DA0199","status":"rejected","reason":"formal spec already defines exact attacking-pairs count","rejection_category":"formal spec stronger than scanner assumed"},
+    {"id":"DA0208","status":"validated","reason":"formal target only ensures non-negativity"},
+    {"id":"DA0244","status":"validated","reason":"formal target omits minimization objective"},
+    {"id":"DA0258","status":"rejected","reason":"formal spec already encodes global minimum window with tie condition","rejection_category":"formal spec stronger than scanner assumed"},
+    {"id":"DA0265","status":"rejected","reason":"formal spec already encodes best-index constraints","rejection_category":"formal spec stronger than scanner assumed"},
+    {"id":"DA0281","status":"rejected","reason":"formal spec already encodes required witness relation for result index","rejection_category":"formal spec stronger than scanner assumed"},
+    {"id":"DA0293","status":"validated","reason":"formal target only constrains range"},
+    {"id":"DA0306","status":"validated","reason":"formal target only constrains output length"},
+    {"id":"DA0315","status":"deferred","reason":"full staircase/box dynamics oracle is non-trivial for minimal adapted demo","rejection_category":"intended oracle too hard for minimal demo"},
+    {"id":"DA0359","status":"deferred","reason":"combinatorial counting oracle is heavy for minimal adapted demo","rejection_category":"intended oracle too hard for minimal demo"},
+    {"id":"DA0363","status":"deferred","reason":"record lacks executable solve contract in extracted formal target","rejection_category":"insufficient original description"},
+    {"id":"DA0406","status":"deferred","reason":"bad candidate not defensible against strong explicit pattern predicate","rejection_category":"bad candidate not defensible"},
+    {"id":"DA0409","status":"rejected","reason":"formal target already encodes exact max-distance computation","rejection_category":"formal spec stronger than scanner assumed"},
+    {"id":"DA0417","status":"deferred","reason":"domain dynamics oracle too heavy for minimal adapted demo","rejection_category":"intended oracle too hard for minimal demo"},
+    {"id":"DA0438","status":"deferred","reason":"shape-counting oracle too heavy for minimal adapted demo","rejection_category":"intended oracle too hard for minimal demo"},
+    {"id":"DA0515","status":"rejected","reason":"formal target already encodes exact output mapping","rejection_category":"formal spec stronger than scanner assumed"},
+    {"id":"DA0673","status":"rejected","reason":"formal target already encodes exact transformed output string","rejection_category":"formal spec stronger than scanner assumed"}
+  ]
+}

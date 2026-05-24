@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-05-12T17:28:01.413488+00:00",
+  "task_id": "audit_log_retention_delete_user",
+  "task_title": "Audit log retention on delete user",
+  "condition": "ticket_plus_generic_checklist",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the product ticket and the generic checklist.\nThe checklist is generic and may not mention task-specific organization policies.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the product ticket and the generic checklist. The checklist is generic and may not mention task-specific organization policies.\n\nTask title: Audit log retention on delete user\nFunction entrypoint: delete_user\n\nProduct ticket:\n# Ticket: delete inactive user\n\nAllow administrators to delete an inactive user from the active user table. Mark the user as deleted and return success.\n\nAcceptance criteria:\n- Admin delete succeeds.\n- Non-admin delete fails.\n\nGeneric checklist:\n- authorization and access control\n- idempotency and duplicate handling\n- boundary conditions and off-by-one cases\n- state consistency and required state updates\n- audit logging or record retention where relevant\n- tenant or data isolation where relevant\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "780c3f380ed29f14be2414c5d7b1550b75045ab7c6345619c0b4e99fe67ab2ff",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Audit log retention on delete user\",\n  \"behavior_requirements\": [\n    \"delete_user(transactional): Mark the user as deleted in active_user table by setting a deleted flag or status instead of physically removing the record.\",\n    \"Only admins can invoke delete_user; non-admin attempts must fail with a permission error.\",\n    \"Return success on admin deletion and appropriate failure on non-admin attempts.\",\n    \"Operation must be idempotent: repeated delete_user calls for the same inactive user should not change state or cause errors.\",\n    \"Audit log entry must be created for the delete action including actor, timestamp, target user_id, and result (success/denied).\",\n    \"Maintain tenant/data isolation: ensure the deletion request operates within the same tenant context as the target user.\",\n    \"Ensure database state remains consistent: update user status and audit log within a single transaction.\"\n  ],\n  \"edge_cases\": [\n    \"Delete request for a user already marked as deleted should be idempotent and succeed without additional side effects.\",\n    \"Delete request for a user that does not exist should fail with a not-found error or be treated as idempotent if allowed by policy.\",\n    \"Requests from non-admins across tenants attempting to delete users should be rejected due to authorization checks.\",\n    \"Database failures during update or audit logging should rollback and surface a failure to the caller.\",\n    \"Boundary: ensure deletion only applies to inactive users; attempting to delete an active user should be rejected.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Admins can successfully delete an inactive user, which updates the user's status to deleted and returns success.\",\n    \"Non-admin attempts to delete a user are rejected with appropriate authorization error.\",\n    \"A corresponding audit log record is created for each delete attempt with actor, target_user_id, timestamp, and outcome.\",\n    \"The operation is idempotent for repeated delete attempts on the same user.\"\n  ],\n  \"non_goals\": [\n    \"Physical deletion of user records from the database.\",\n    \"Audit log retention policy beyond the scope of this operation (no archival policy changes).\",\n    \"Any changes to user permissions, roles, or associated resources beyond marking as deleted.\"\n  ],\n  \"testable_assertions\": [\n    \"Given an admin user and an inactive target user, delete_user returns success and target user.status is set to deleted.\",\n    \"Given a non-admin user attempts to delete an inactive user, delete_user returns permission denied.\",\n    \"Calling delete_user twice for the same inactive user results in a single success state and a single audit log entry, with no errors on the second call.\",\n    \"Audit log contains entry with actor_id, target_user_id, timestamp, action=delete_user, and result=success or denied.\",\n    \"Attempting to delete an active user returns rejection with appropriate error and no change to user.status.\"\n  ]\n}",
+  "response_hash": "bc2e171c4a8c18c600dbabf4ad46aa47f52e14f226935e6dc0b0dbb0948b7df0",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_021ac2209065f44c006a03632082b08190a69b8f6898dd22e6",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 325,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 607,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 932
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Audit log retention on delete user",
+    "behavior_requirements": [
+      "delete_user(transactional): Mark the user as deleted in active_user table by setting a deleted flag or status instead of physically removing the record.",
+      "Only admins can invoke delete_user; non-admin attempts must fail with a permission error.",
+      "Return success on admin deletion and appropriate failure on non-admin attempts.",
+      "Operation must be idempotent: repeated delete_user calls for the same inactive user should not change state or cause errors.",
+      "Audit log entry must be created for the delete action including actor, timestamp, target user_id, and result (success/denied).",
+      "Maintain tenant/data isolation: ensure the deletion request operates within the same tenant context as the target user.",
+      "Ensure database state remains consistent: update user status and audit log within a single transaction."
+    ],
+    "edge_cases": [
+      "Delete request for a user already marked as deleted should be idempotent and succeed without additional side effects.",
+      "Delete request for a user that does not exist should fail with a not-found error or be treated as idempotent if allowed by policy.",
+      "Requests from non-admins across tenants attempting to delete users should be rejected due to authorization checks.",
+      "Database failures during update or audit logging should rollback and surface a failure to the caller.",
+      "Boundary: ensure deletion only applies to inactive users; attempting to delete an active user should be rejected."
+    ],
+    "acceptance_criteria": [
+      "Admins can successfully delete an inactive user, which updates the user's status to deleted and returns success.",
+      "Non-admin attempts to delete a user are rejected with appropriate authorization error.",
+      "A corresponding audit log record is created for each delete attempt with actor, target_user_id, timestamp, and outcome.",
+      "The operation is idempotent for repeated delete attempts on the same user."
+    ],
+    "non_goals": [
+      "Physical deletion of user records from the database.",
+      "Audit log retention policy beyond the scope of this operation (no archival policy changes).",
+      "Any changes to user permissions, roles, or associated resources beyond marking as deleted."
+    ],
+    "testable_assertions": [
+      "Given an admin user and an inactive target user, delete_user returns success and target user.status is set to deleted.",
+      "Given a non-admin user attempts to delete an inactive user, delete_user returns permission denied.",
+      "Calling delete_user twice for the same inactive user results in a single success state and a single audit log entry, with no errors on the second call.",
+      "Audit log contains entry with actor_id, target_user_id, timestamp, action=delete_user, and result=success or denied.",
+      "Attempting to delete an active user returns rejection with appropriate error and no change to user.status."
+    ]
+  },
+  "public_spec": "Title: Audit log retention on delete user\n\nBehavior requirements:\n- delete_user(transactional): Mark the user as deleted in active_user table by setting a deleted flag or status instead of physically removing the record.\n- Only admins can invoke delete_user; non-admin attempts must fail with a permission error.\n- Return success on admin deletion and appropriate failure on non-admin attempts.\n- Operation must be idempotent: repeated delete_user calls for the same inactive user should not change state or cause errors.\n- Audit log entry must be created for the delete action including actor, timestamp, target user_id, and result (success/denied).\n- Maintain tenant/data isolation: ensure the deletion request operates within the same tenant context as the target user.\n- Ensure database state remains consistent: update user status and audit log within a single transaction.\n\nEdge cases:\n- Delete request for a user already marked as deleted should be idempotent and succeed without additional side effects.\n- Delete request for a user that does not exist should fail with a not-found error or be treated as idempotent if allowed by policy.\n- Requests from non-admins across tenants attempting to delete users should be rejected due to authorization checks.\n- Database failures during update or audit logging should rollback and surface a failure to the caller.\n- Boundary: ensure deletion only applies to inactive users; attempting to delete an active user should be rejected.\n\nAcceptance criteria:\n- Admins can successfully delete an inactive user, which updates the user's status to deleted and returns success.\n- Non-admin attempts to delete a user are rejected with appropriate authorization error.\n- A corresponding audit log record is created for each delete attempt with actor, target_user_id, timestamp, and outcome.\n- The operation is idempotent for repeated delete attempts on the same user.\n\nNon-goals:\n- Physical deletion of user records from the database.\n- Audit log retention policy beyond the scope of this operation (no archival policy changes).\n- Any changes to user permissions, roles, or associated resources beyond marking as deleted.\n\nTestable assertions:\n- Given an admin user and an inactive target user, delete_user returns success and target user.status is set to deleted.\n- Given a non-admin user attempts to delete an inactive user, delete_user returns permission denied.\n- Calling delete_user twice for the same inactive user results in a single success state and a single audit log entry, with no errors on the second call.\n- Audit log contains entry with actor_id, target_user_id, timestamp, action=delete_user, and result=success or denied.\n- Attempting to delete an active user returns rejection with appropriate error and no change to user.status.",
+  "generation_empty": false,
+  "generation_error": null
+}

@@ -1,0 +1,75 @@
+{
+  "timestamp": "2026-05-12T17:29:21.499665+00:00",
+  "task_id": "loyalty_refund_reversal",
+  "task_title": "Loyalty points refund reversal",
+  "condition": "ticket_only",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse only the product ticket below.\nDo not assume access to hidden organization policies.\nWrite the best implementation spec you can from the ticket.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse only the product ticket below. Do not assume access to hidden organization policies. Write the best implementation spec you can from the ticket.\n\nTask title: Loyalty points refund reversal\nFunction entrypoint: process_refund\n\nProduct ticket:\n# Product ticket: refund processing with customer rewards\n\n## Background\nCustomers may request partial or full refunds for paid orders. The refund service should update the order refund state and return a clear success or error result.\n\n## Happy path\n- Paid orders can be refunded.\n- Refund amount must be positive.\n- Refund amount must not exceed the remaining paid amount.\n- Successful refunds update `refunded_total`.\n\n## Policy note\nCustomer reward balances are maintained by a separate account service.\n\n## Acceptance criteria\n- A valid partial refund succeeds.\n- Over-refunds fail.\n- Cancelled orders fail.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "7f62752554834d7384ea07ceaebf2ad7c71d224223c14c24c1af6c564d53a2cf",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Refund processing for loyalty points with order state validation\",\n  \"behavior_requirements\": [\n    \"Only process_refund on orders that are in a paid state.\",\n    \"Refund amount must be a positive number.\",\n    \"Refund amount must not exceed the remaining paid amount (paid_amount - refunded_total).\",\n    \"On successful refund, update refunded_total to refunded_total + refund_amount.\",\n    \"Return a success result only if all validations pass; otherwise return an error result with a clear message.\",\n    \"Do not modify customer reward balances directly; rewards are managed by a separate account service.\",\n    \"Refunds on cancelled orders must fail with an explicit error.\",\n    \"Refunds must be idempotent for the same refund request amount within a single invocation scope.\"\n  ],\n  \"edge_cases\": [\n    \"Refund amount equals exactly the remaining paid amount (full refund).\",\n    \"Partial refunds leading to zero remaining paid amount.\",\n    \"Refund request with zero or negative amount.\",\n    \"Refund on an order with zero paid amount but non-zero refunded_total.\",\n    \"Concurrent refund requests approaching the remaining amount.\",\n    \"Refund request when order state transitions to cancelled during processing.\"\n  ],\n  \"acceptance_criteria\": [\n    \"A valid partial refund succeeds and updates refunded_total accordingly.\",\n    \"Refund amount greater than remaining paid amount is rejected with an error.\",\n    \"Refund on a cancelled order is rejected with an error.\",\n    \"Refund on a fully refunded order is rejected with an error.\",\n    \"All acceptance scenarios return a JSON-formatted result with clear status and message.\"\n  ],\n  \"non_goals\": [\n    \"Modifying or querying customer reward balances directly; integration with account service is assumed but not implemented here.\",\n    \"Handling non-refund-related order state transitions beyond paid, refunded, or cancelled.\",\n    \"Implementing a full auditing/logging framework beyond returning status messages.\"\n  ],\n  \"testable_assertions\": [\n    \"process_refund returns success when order is paid and refund_amount > 0 and refund_amount <= remaining_paid_amount.\",\n    \"process_refund returns error when refund_amount <= 0.\",\n    \"process_refund returns error when refund_amount > remaining_paid_amount.\",\n    \"process_refund returns error when order state is cancelled.\",\n    \"process_refund updates refunded_total to refunded_total + refund_amount on success.\",\n    \"process_refund does not alter paid_amount or other unrelated fields.\",\n    \"process_refund indicates invalid state transitions clearly in the error message.\"\n  ]\n}",
+  "response_hash": "531b38e48c4363ea6a2ace08fb91a9c65500c71a4f6de59cd127f0f872d69f1a",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_02a193f013920af6006a036370748c8190b66f85679e23b009",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 358,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 533,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 891
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Refund processing for loyalty points with order state validation",
+    "behavior_requirements": [
+      "Only process_refund on orders that are in a paid state.",
+      "Refund amount must be a positive number.",
+      "Refund amount must not exceed the remaining paid amount (paid_amount - refunded_total).",
+      "On successful refund, update refunded_total to refunded_total + refund_amount.",
+      "Return a success result only if all validations pass; otherwise return an error result with a clear message.",
+      "Do not modify customer reward balances directly; rewards are managed by a separate account service.",
+      "Refunds on cancelled orders must fail with an explicit error.",
+      "Refunds must be idempotent for the same refund request amount within a single invocation scope."
+    ],
+    "edge_cases": [
+      "Refund amount equals exactly the remaining paid amount (full refund).",
+      "Partial refunds leading to zero remaining paid amount.",
+      "Refund request with zero or negative amount.",
+      "Refund on an order with zero paid amount but non-zero refunded_total.",
+      "Concurrent refund requests approaching the remaining amount.",
+      "Refund request when order state transitions to cancelled during processing."
+    ],
+    "acceptance_criteria": [
+      "A valid partial refund succeeds and updates refunded_total accordingly.",
+      "Refund amount greater than remaining paid amount is rejected with an error.",
+      "Refund on a cancelled order is rejected with an error.",
+      "Refund on a fully refunded order is rejected with an error.",
+      "All acceptance scenarios return a JSON-formatted result with clear status and message."
+    ],
+    "non_goals": [
+      "Modifying or querying customer reward balances directly; integration with account service is assumed but not implemented here.",
+      "Handling non-refund-related order state transitions beyond paid, refunded, or cancelled.",
+      "Implementing a full auditing/logging framework beyond returning status messages."
+    ],
+    "testable_assertions": [
+      "process_refund returns success when order is paid and refund_amount > 0 and refund_amount <= remaining_paid_amount.",
+      "process_refund returns error when refund_amount <= 0.",
+      "process_refund returns error when refund_amount > remaining_paid_amount.",
+      "process_refund returns error when order state is cancelled.",
+      "process_refund updates refunded_total to refunded_total + refund_amount on success.",
+      "process_refund does not alter paid_amount or other unrelated fields.",
+      "process_refund indicates invalid state transitions clearly in the error message."
+    ]
+  },
+  "public_spec": "Title: Refund processing for loyalty points with order state validation\n\nBehavior requirements:\n- Only process_refund on orders that are in a paid state.\n- Refund amount must be a positive number.\n- Refund amount must not exceed the remaining paid amount (paid_amount - refunded_total).\n- On successful refund, update refunded_total to refunded_total + refund_amount.\n- Return a success result only if all validations pass; otherwise return an error result with a clear message.\n- Do not modify customer reward balances directly; rewards are managed by a separate account service.\n- Refunds on cancelled orders must fail with an explicit error.\n- Refunds must be idempotent for the same refund request amount within a single invocation scope.\n\nEdge cases:\n- Refund amount equals exactly the remaining paid amount (full refund).\n- Partial refunds leading to zero remaining paid amount.\n- Refund request with zero or negative amount.\n- Refund on an order with zero paid amount but non-zero refunded_total.\n- Concurrent refund requests approaching the remaining amount.\n- Refund request when order state transitions to cancelled during processing.\n\nAcceptance criteria:\n- A valid partial refund succeeds and updates refunded_total accordingly.\n- Refund amount greater than remaining paid amount is rejected with an error.\n- Refund on a cancelled order is rejected with an error.\n- Refund on a fully refunded order is rejected with an error.\n- All acceptance scenarios return a JSON-formatted result with clear status and message.\n\nNon-goals:\n- Modifying or querying customer reward balances directly; integration with account service is assumed but not implemented here.\n- Handling non-refund-related order state transitions beyond paid, refunded, or cancelled.\n- Implementing a full auditing/logging framework beyond returning status messages.\n\nTestable assertions:\n- process_refund returns success when order is paid and refund_amount > 0 and refund_amount <= remaining_paid_amount.\n- process_refund returns error when refund_amount <= 0.\n- process_refund returns error when refund_amount > remaining_paid_amount.\n- process_refund returns error when order state is cancelled.\n- process_refund updates refunded_total to refunded_total + refund_amount on success.\n- process_refund does not alter paid_amount or other unrelated fields.\n- process_refund indicates invalid state transitions clearly in the error message.",
+  "generation_empty": false,
+  "generation_error": null
+}

@@ -1,0 +1,78 @@
+{
+  "timestamp": "2026-05-12T17:31:04.423303+00:00",
+  "task_id": "refund_window_expiry",
+  "task_title": "Refund window expiry",
+  "condition": "oracle_full",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the full intended behavior.\nThis is an upper-bound condition and is not a deployable retrieval setting.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the full intended behavior. This is an upper-bound condition.\n\nTask title: Refund window expiry\nFunction entrypoint: process_refund\n\nFull intended behavior:\nRefund amounts must be positive and cannot exceed the remaining paid amount. Only paid orders can be refunded. Normal refunds are allowed only within 30 calendar days of purchase unless manual_override is true. Cancelled and chargeback orders must fail. Successful refunds must update refunded_total.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "b57c11f1db3ed44c085cc56453d4c849c14e69dffa08d8d3a0c9b43a9e1aeaf4",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Refund window expiry\",\n  \"behavior_requirements\": [\n    \"process_refund must accept a refund amount and an order object (or equivalent data structure) containing status, purchase_date, paid_amount, refunded_total, and remaining_amount.\",\n    \"Refund amounts must be positive numbers greater than zero.\",\n    \"Refund amount must not exceed the remaining paid amount (paid_amount - refunded_total).\",\n    \"Only orders with status 'paid' may be refunded. Orders with status 'cancelled' or 'chargeback' must fail refund attempts.\",\n    \"Normal refunds are allowed only within 30 calendar days of purchase unless manual_override is true.\",\n    \"If manual_override is true, the 30-day limit must be ignored and refund can proceed if other conditions are satisfied.\",\n    \"On successful refund, refunded_total must be increased by the refund amount and remaining_amount decreased accordingly.\",\n    \"Refund processing should return a success indication and updated refunded_total, or a failure indication with a reason.\"\n  ],\n  \"edge_cases\": [\n    \"Refund amount exactly equal to remaining_amount (paid_amount - refunded_total) is allowed.\",\n    \"Refund amount is zero or negative is rejected.\",\n    \"Order status is undefined or unrecognized (must fail).\",\n    \"manual_override flag is missing or false; enforce 30-day rule.\",\n    \"Purchase date is in the future or missing; treat as invalid for 30-day calculation.\",\n    \"Rounding issues: handle monetary values with two decimals; avoid floating precision errors.\",\n    \"Concurrent refunds: if two calls attempt to refund overlapping amounts, ensure atomic update to refunded_total and remaining_amount.\",\n    \"Refund would cause refunded_total to exceed paid_amount; detect and reject.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Refunds only succeed when amount > 0 and amount <= (paid_amount - refunded_total).\",\n    \"Only orders with status 'paid' can be refunded unless manual_override is true; 'cancelled' and 'chargeback' fail.\",\n    \"If manual_override is false, current date must be within 30 days of purchase_date; otherwise fail.\",\n    \"Upon success, refunded_total increases by refund amount and remaining_amount decreases accordingly.\",\n    \"Return payload indicates success and updated refunded_total; on failure, return a clear error message.\"\n  ],\n  \"non_goals\": [\n    \"Handling restoration of a previously refunded amount to paid_amount (no operation here).\",\n    \"Refunds for non-monetary goods or services beyond the scope of amount fields.\",\n    \"Persisting refunds to external payment gateways or external systems (not part of this function).\"\n  ],\n  \"testable_assertions\": [\n    \"Given a paid order with paid_amount 100, refunded_total 20, request refund 50 within 30 days, result is success and refunded_total becomes 70.\",\n    \"Given a paid order with paid_amount 100, refunded_total 90, request refund 20, result is failure due to exceeding remaining_amount (only 10 left).\",\n    \"Given a cancelled order, any refund attempt fails with appropriate error.\",\n    \"Given a chargeback order, any refund attempt fails with appropriate error.\",\n    \"Given an order within 31 days, without manual_override, a refund of 10 fails due to time window.\",\n    \"Given manual_override = true, an order within 31+ days allows refund and updates totals correctly.\",\n    \"Refund amount 0 or negative fails with invalid amount error.\",\n    \"Consecutive refund requests update totals atomically without overshoot.\"\n  ]\n}",
+  "response_hash": "b4a3b765c46d4ad8d31fe011fe13d3238c3e5fe65420c44c82d4e39e9f7073a6",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_04771f0361b95e77006a0363d7737081969bfaae3d4c6e4a69",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 274,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 746,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 1020
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Refund window expiry",
+    "behavior_requirements": [
+      "process_refund must accept a refund amount and an order object (or equivalent data structure) containing status, purchase_date, paid_amount, refunded_total, and remaining_amount.",
+      "Refund amounts must be positive numbers greater than zero.",
+      "Refund amount must not exceed the remaining paid amount (paid_amount - refunded_total).",
+      "Only orders with status 'paid' may be refunded. Orders with status 'cancelled' or 'chargeback' must fail refund attempts.",
+      "Normal refunds are allowed only within 30 calendar days of purchase unless manual_override is true.",
+      "If manual_override is true, the 30-day limit must be ignored and refund can proceed if other conditions are satisfied.",
+      "On successful refund, refunded_total must be increased by the refund amount and remaining_amount decreased accordingly.",
+      "Refund processing should return a success indication and updated refunded_total, or a failure indication with a reason."
+    ],
+    "edge_cases": [
+      "Refund amount exactly equal to remaining_amount (paid_amount - refunded_total) is allowed.",
+      "Refund amount is zero or negative is rejected.",
+      "Order status is undefined or unrecognized (must fail).",
+      "manual_override flag is missing or false; enforce 30-day rule.",
+      "Purchase date is in the future or missing; treat as invalid for 30-day calculation.",
+      "Rounding issues: handle monetary values with two decimals; avoid floating precision errors.",
+      "Concurrent refunds: if two calls attempt to refund overlapping amounts, ensure atomic update to refunded_total and remaining_amount.",
+      "Refund would cause refunded_total to exceed paid_amount; detect and reject."
+    ],
+    "acceptance_criteria": [
+      "Refunds only succeed when amount > 0 and amount <= (paid_amount - refunded_total).",
+      "Only orders with status 'paid' can be refunded unless manual_override is true; 'cancelled' and 'chargeback' fail.",
+      "If manual_override is false, current date must be within 30 days of purchase_date; otherwise fail.",
+      "Upon success, refunded_total increases by refund amount and remaining_amount decreases accordingly.",
+      "Return payload indicates success and updated refunded_total; on failure, return a clear error message."
+    ],
+    "non_goals": [
+      "Handling restoration of a previously refunded amount to paid_amount (no operation here).",
+      "Refunds for non-monetary goods or services beyond the scope of amount fields.",
+      "Persisting refunds to external payment gateways or external systems (not part of this function)."
+    ],
+    "testable_assertions": [
+      "Given a paid order with paid_amount 100, refunded_total 20, request refund 50 within 30 days, result is success and refunded_total becomes 70.",
+      "Given a paid order with paid_amount 100, refunded_total 90, request refund 20, result is failure due to exceeding remaining_amount (only 10 left).",
+      "Given a cancelled order, any refund attempt fails with appropriate error.",
+      "Given a chargeback order, any refund attempt fails with appropriate error.",
+      "Given an order within 31 days, without manual_override, a refund of 10 fails due to time window.",
+      "Given manual_override = true, an order within 31+ days allows refund and updates totals correctly.",
+      "Refund amount 0 or negative fails with invalid amount error.",
+      "Consecutive refund requests update totals atomically without overshoot."
+    ]
+  },
+  "public_spec": "Title: Refund window expiry\n\nBehavior requirements:\n- process_refund must accept a refund amount and an order object (or equivalent data structure) containing status, purchase_date, paid_amount, refunded_total, and remaining_amount.\n- Refund amounts must be positive numbers greater than zero.\n- Refund amount must not exceed the remaining paid amount (paid_amount - refunded_total).\n- Only orders with status 'paid' may be refunded. Orders with status 'cancelled' or 'chargeback' must fail refund attempts.\n- Normal refunds are allowed only within 30 calendar days of purchase unless manual_override is true.\n- If manual_override is true, the 30-day limit must be ignored and refund can proceed if other conditions are satisfied.\n- On successful refund, refunded_total must be increased by the refund amount and remaining_amount decreased accordingly.\n- Refund processing should return a success indication and updated refunded_total, or a failure indication with a reason.\n\nEdge cases:\n- Refund amount exactly equal to remaining_amount (paid_amount - refunded_total) is allowed.\n- Refund amount is zero or negative is rejected.\n- Order status is undefined or unrecognized (must fail).\n- manual_override flag is missing or false; enforce 30-day rule.\n- Purchase date is in the future or missing; treat as invalid for 30-day calculation.\n- Rounding issues: handle monetary values with two decimals; avoid floating precision errors.\n- Concurrent refunds: if two calls attempt to refund overlapping amounts, ensure atomic update to refunded_total and remaining_amount.\n- Refund would cause refunded_total to exceed paid_amount; detect and reject.\n\nAcceptance criteria:\n- Refunds only succeed when amount > 0 and amount <= (paid_amount - refunded_total).\n- Only orders with status 'paid' can be refunded unless manual_override is true; 'cancelled' and 'chargeback' fail.\n- If manual_override is false, current date must be within 30 days of purchase_date; otherwise fail.\n- Upon success, refunded_total increases by refund amount and remaining_amount decreases accordingly.\n- Return payload indicates success and updated refunded_total; on failure, return a clear error message.\n\nNon-goals:\n- Handling restoration of a previously refunded amount to paid_amount (no operation here).\n- Refunds for non-monetary goods or services beyond the scope of amount fields.\n- Persisting refunds to external payment gateways or external systems (not part of this function).\n\nTestable assertions:\n- Given a paid order with paid_amount 100, refunded_total 20, request refund 50 within 30 days, result is success and refunded_total becomes 70.\n- Given a paid order with paid_amount 100, refunded_total 90, request refund 20, result is failure due to exceeding remaining_amount (only 10 left).\n- Given a cancelled order, any refund attempt fails with appropriate error.\n- Given a chargeback order, any refund attempt fails with appropriate error.\n- Given an order within 31 days, without manual_override, a refund of 10 fails due to time window.\n- Given manual_override = true, an order within 31+ days allows refund and updates totals correctly.\n- Refund amount 0 or negative fails with invalid amount error.\n- Consecutive refund requests update totals atomically without overshoot.",
+  "generation_empty": false,
+  "generation_error": null
+}

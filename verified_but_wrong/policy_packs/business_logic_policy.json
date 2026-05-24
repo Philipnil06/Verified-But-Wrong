@@ -1,0 +1,157 @@
+{
+  "id": "business_logic_policy",
+  "title": "Business logic policy",
+  "policy_cards": [
+    {
+      "id": "pricing.discount.bounds",
+      "title": "Discount percentage must be bounded",
+      "requirement": "Discount percent must be between 0 and 100 inclusive.",
+      "category": "boundary_omission",
+      "severity": "high",
+      "applies_to_tasks": [
+        "discount_nonnegative_price"
+      ],
+      "keywords": [
+        "between 0 and 100",
+        "0 to 100",
+        "percent <= 100",
+        "percent must not exceed 100",
+        "inclusive"
+      ],
+      "why_it_matters": "Out-of-range discounts can create negative prices or surcharges.",
+      "suggested_spec_patch": "Discount percent must be between 0 and 100 inclusive.",
+      "audit_question": "Does the spec bound the discount percentage?",
+      "requirement_test": "Discount percent must be between 0 and 100",
+      "applies_to": [],
+      "failure_if_omitted": "Out-of-range discounts can create negative prices or surcharges.",
+      "audit_questions": [
+        "Does the spec bound the discount percentage?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "Out-of-range discounts can create negative prices or surcharges.",
+      "safe_spec_example": "Discount percent must be between 0 and 100 inclusive."
+    },
+    {
+      "id": "pricing.final_price_non_negative",
+      "title": "Final price must never be negative",
+      "requirement": "Final price must never be negative.",
+      "category": "conservation_omission",
+      "severity": "high",
+      "applies_to_tasks": [
+        "discount_nonnegative_price"
+      ],
+      "keywords": [
+        "final price",
+        "never negative",
+        "not be negative",
+        "below zero",
+        "non-negative"
+      ],
+      "why_it_matters": "Negative prices create incorrect customer charges and accounting state.",
+      "suggested_spec_patch": "The final price after discount must never be below zero.",
+      "audit_question": "Does the spec explicitly prevent negative final prices?",
+      "requirement_test": "Final price must never be negative",
+      "applies_to": [],
+      "failure_if_omitted": "Negative prices create incorrect customer charges and accounting state.",
+      "audit_questions": [
+        "Does the spec explicitly prevent negative final prices?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "Negative prices create incorrect customer charges and accounting state.",
+      "safe_spec_example": "The final price after discount must never be below zero."
+    },
+    {
+      "id": "order.status.refundable_only_paid",
+      "title": "Cancelled or chargeback orders cannot be refunded",
+      "requirement": "Cancelled or chargeback orders cannot be refunded.",
+      "category": "error_behavior_omission",
+      "severity": "high",
+      "applies_to_tasks": [
+        "refund_window_expiry",
+        "loyalty_refund_reversal"
+      ],
+      "keywords": [
+        "cancelled",
+        "canceled",
+        "chargeback",
+        "only paid orders",
+        "invalid status"
+      ],
+      "why_it_matters": "Refunding invalid order states can violate finance and dispute workflows.",
+      "suggested_spec_patch": "Cancelled and chargeback orders must return an error and must not change refund state.",
+      "audit_question": "Does the spec reject cancelled and chargeback orders?",
+      "requirement_test": "Cancelled or chargeback orders cannot be refunded",
+      "applies_to": [],
+      "failure_if_omitted": "Refunding invalid order states can violate finance and dispute workflows.",
+      "audit_questions": [
+        "Does the spec reject cancelled and chargeback orders?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "Refunding invalid order states can violate finance and dispute workflows.",
+      "safe_spec_example": "Cancelled and chargeback orders must return an error and must not change refund state."
+    },
+    {
+      "id": "invoice.cancel.restore_stock",
+      "title": "Invoice cancellation must restore reserved stock",
+      "requirement": "Reserved inventory must be restored when invoice is cancelled.",
+      "category": "business_rule_omission",
+      "severity": "high",
+      "applies_to_tasks": [
+        "invoice_cancellation_stock_restore"
+      ],
+      "applies_to": [
+        "invoice",
+        "inventory",
+        "cancellation"
+      ],
+      "keywords": [
+        "reserved inventory",
+        "restore stock",
+        "reserved stock",
+        "inventory",
+        "stock restored",
+        "available",
+        "reserved"
+      ],
+      "why_it_matters": "Cancelled orders can keep stock unavailable and corrupt inventory state.",
+      "failure_if_omitted": "Invoice is cancelled but reserved stock remains reserved.",
+      "audit_questions": [
+        "Does cancellation restore reserved inventory?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "suggested_spec_patch": "Cancelling an invoice must increase available inventory and decrease reserved inventory for each invoice line.",
+      "example_failure": "Invoice status is cancelled while inventory reserved count remains unchanged.",
+      "safe_spec_example": "Each cancelled line restores available stock and clears reserved quantity.",
+      "requirement_test": "Reserved inventory must be restored when invoice is cancelled"
+    },
+    {
+      "id": "invoice.cancel.paid_fails",
+      "title": "Paid invoices cannot be cancelled by normal cancellation",
+      "requirement": "Paid invoices cannot be cancelled.",
+      "category": "error_behavior_omission",
+      "severity": "medium",
+      "applies_to_tasks": [
+        "invoice_cancellation_stock_restore"
+      ],
+      "applies_to": [
+        "invoice"
+      ],
+      "keywords": [
+        "paid invoices",
+        "paid invoice",
+        "cannot be cancelled",
+        "reject paid"
+      ],
+      "why_it_matters": "Cancelling paid invoices can bypass payment/refund workflows.",
+      "failure_if_omitted": "Paid invoice is marked cancelled without refund workflow.",
+      "audit_questions": [
+        "Does the spec reject paid invoice cancellation?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "suggested_spec_patch": "Paid invoices must return an error from the normal cancellation path.",
+      "example_failure": "status paid becomes cancelled.",
+      "safe_spec_example": "Paid invoice cancellation returns error.",
+      "requirement_test": "Paid invoices cannot be cancelled"
+    }
+  ]
+}

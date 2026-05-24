@@ -1,0 +1,3 @@
+{"case_id": "DA0003", "expected_outputs": [13, 28], "bad_candidate_outputs": [0, 0], "pass_or_fail": "fail", "notes": "Dafny verifies formal target separately; intended behavior checked via independent examples."}
+{"case_id": "DA0157", "expected_outputs": [[10, 1, 10], [12, 3, 4]], "bad_candidate_outputs": [[100, 10, 10], [36, 6, 6]], "pass_or_fail": "fail", "notes": "Dafny verifies formal target separately; intended behavior checked via independent examples."}
+{"case_id": "DA0208", "expected_outputs": [5, 10], "bad_candidate_outputs": [0, 0], "pass_or_fail": "fail", "notes": "Dafny verifies formal target separately; intended behavior checked via independent examples."}

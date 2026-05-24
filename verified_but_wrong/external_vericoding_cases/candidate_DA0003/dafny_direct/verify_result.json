@@ -1,0 +1,10 @@
+{
+  "task_id": "DA0003",
+  "status": "direct_dafny_verified_and_intent_failed",
+  "jsonl_path": "C:\\Users\\Philip Nilsson\\OneDrive - Mälardalens Tekniska Gymnasium\\Skrivbordet\\Hackathon apartresearch The Secure Program Synthesis\\verified_but_wrong\\external_data\\vericoding-benchmark\\jsonl\\dafny_tasks.jsonl",
+  "dafny_version": "4.11.0+fcb2042d6d043a2634f0854338c08feeaaaf4ae2",
+  "verify_command": "dotnet tool run dafny verify C:\\Users\\Philip Nilsson\\OneDrive - Mälardalens Tekniska Gymnasium\\Skrivbordet\\Hackathon apartresearch The Secure Program Synthesis\\verified_but_wrong\\external_vericoding_cases\\candidate_DA0003\\dafny_direct\\bad_candidate.dfy",
+  "verify_returncode": 0,
+  "intended_examples_all_pass": false,
+  "timestamp": "2026-05-13T13:28:20.649246+00:00"
+}

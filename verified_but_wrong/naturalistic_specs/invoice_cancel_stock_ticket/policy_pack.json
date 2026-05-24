@@ -1,0 +1,7 @@
+{
+  "policy_pack_ids": [
+    "generic_critical_requirements",
+    "business_logic_policy",
+    "inventory_policy"
+  ]
+}

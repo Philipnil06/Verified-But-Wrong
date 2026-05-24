@@ -1,0 +1,156 @@
+{
+  "id": "multi_tenant_policy",
+  "title": "Isolation and rate-limit policy",
+  "policy_cards": [
+    {
+      "id": "rate.limit.window_count",
+      "title": "Rate limit count and window must be explicit",
+      "requirement": "Rate limits must define the exact maximum count and rolling time window.",
+      "category": "boundary_omission",
+      "severity": "medium",
+      "applies_to_tasks": [
+        "rate_limiter_boundary"
+      ],
+      "keywords": [
+        "at most 5",
+        "5 requests",
+        "60 second",
+        "60-second",
+        "rolling window",
+        "window"
+      ],
+      "why_it_matters": "Ambiguous limits cause off-by-one or unbounded request behavior.",
+      "suggested_spec_patch": "A user may make at most 5 requests in any rolling 60 second window.",
+      "audit_question": "Does the spec define both the exact request count and time window?",
+      "requirement_test": "Boundary behavior at exactly 5 requests must be correct",
+      "applies_to": [],
+      "failure_if_omitted": "Ambiguous limits cause off-by-one or unbounded request behavior.",
+      "audit_questions": [
+        "Does the spec define both the exact request count and time window?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "Ambiguous limits cause off-by-one or unbounded request behavior.",
+      "safe_spec_example": "A user may make at most 5 requests in any rolling 60 second window."
+    },
+    {
+      "id": "rate.limit.per_user",
+      "title": "Rate limits must be per user",
+      "requirement": "Different users must have independent rate limits.",
+      "category": "state_invariant_omission",
+      "severity": "medium",
+      "applies_to_tasks": [
+        "rate_limiter_boundary"
+      ],
+      "keywords": [
+        "per user",
+        "different users",
+        "independent",
+        "not global"
+      ],
+      "why_it_matters": "A global limiter can block unrelated users or let one user consume another user's quota.",
+      "suggested_spec_patch": "Rate limit state must be tracked independently per user.",
+      "audit_question": "Does the spec say the limit is per user, not global?",
+      "requirement_test": "The limit is per user, not global",
+      "applies_to": [],
+      "failure_if_omitted": "A global limiter can block unrelated users or let one user consume another user's quota.",
+      "audit_questions": [
+        "Does the spec say the limit is per user, not global?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "A global limiter can block unrelated users or let one user consume another user's quota.",
+      "safe_spec_example": "Rate limit state must be tracked independently per user."
+    },
+    {
+      "id": "rate.limit.sixth_blocked",
+      "title": "The first request over the limit must be blocked",
+      "requirement": "The 6th request inside a 60 second window must be blocked.",
+      "category": "boundary_omission",
+      "severity": "medium",
+      "applies_to_tasks": [
+        "rate_limiter_boundary"
+      ],
+      "keywords": [
+        "6th",
+        "sixth",
+        "blocked",
+        "limit exceeded",
+        "at most 5"
+      ],
+      "why_it_matters": "The limiter can appear implemented while allowing the first abusive request over the limit.",
+      "suggested_spec_patch": "The 6th request inside the same 60 second window must be blocked.",
+      "audit_question": "Does the spec explicitly block the 6th request?",
+      "requirement_test": "The 6th request must be blocked",
+      "applies_to": [],
+      "failure_if_omitted": "The limiter can appear implemented while allowing the first abusive request over the limit.",
+      "audit_questions": [
+        "Does the spec explicitly block the 6th request?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "The limiter can appear implemented while allowing the first abusive request over the limit.",
+      "safe_spec_example": "The 6th request inside the same 60 second window must be blocked."
+    },
+    {
+      "id": "tenant.export.isolation",
+      "title": "Tenant exports must not cross tenant boundary",
+      "requirement": "Export must not include records from other tenants.",
+      "category": "tenant_isolation_omission",
+      "severity": "critical",
+      "applies_to_tasks": [
+        "tenant_isolation_export"
+      ],
+      "applies_to": [
+        "export",
+        "tenant",
+        "data access"
+      ],
+      "keywords": [
+        "tenant",
+        "tenant_id",
+        "other tenants",
+        "tenant boundary",
+        "cross tenant",
+        "requesting tenant"
+      ],
+      "why_it_matters": "Cross-tenant exports leak data across customer boundaries.",
+      "failure_if_omitted": "Records from another tenant can be exported if they match non-tenant filters.",
+      "audit_questions": [
+        "Does the spec require tenant_id scoping for every exported record?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "suggested_spec_patch": "Exports must include only records whose tenant_id matches the requesting actor tenant_id, regardless of other filters.",
+      "example_failure": "Filtering by status returns another tenant record with the same status.",
+      "safe_spec_example": "Exported records must all have tenant_id equal to actor.tenant_id.",
+      "requirement_test": "Export must not include records from other tenants"
+    },
+    {
+      "id": "tenant.export.filter_override",
+      "title": "Filters must not override tenant isolation",
+      "requirement": "Filters must not override tenant isolation.",
+      "category": "tenant_isolation_omission",
+      "severity": "critical",
+      "applies_to_tasks": [
+        "tenant_isolation_export"
+      ],
+      "applies_to": [
+        "export",
+        "tenant"
+      ],
+      "keywords": [
+        "override tenant",
+        "filters must not override",
+        "actor tenant",
+        "requesting tenant"
+      ],
+      "why_it_matters": "A user-provided tenant filter can bypass isolation.",
+      "failure_if_omitted": "An attacker can request another tenant_id in filters.",
+      "audit_questions": [
+        "Does the spec say user filters cannot override actor tenant scope?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "suggested_spec_patch": "User-provided filters must not override tenant scope; actor.tenant_id is authoritative.",
+      "example_failure": "filters.tenant_id=t2 returns t2 records for a t1 actor.",
+      "safe_spec_example": "Tenant scope is derived only from the authenticated actor.",
+      "requirement_test": "Filters must not override tenant isolation"
+    }
+  ]
+}

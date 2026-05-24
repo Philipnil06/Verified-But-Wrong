@@ -1,0 +1,12 @@
+{
+  "status": "validated",
+  "reason": "Clear external target-validity gap: NL requires minimum-area construction, while formal target only checks a valid enlarged rectangle.",
+  "gap_category": "optimization_missing",
+  "nl_requirement": "Find minimum possible area (and corresponding dimensions) meeting area >= 6*n and dimension-growth constraints.",
+  "formal_spec_gap": "Formal target enforces only validity/shape constraints and omits minimality optimization over feasible dimensions.",
+  "weak_spec_proxy_description": "Proxy checks result structure, area/product consistency, and dimension feasibility, but not minimal area.",
+  "bad_candidate_behavior": "Always output a deliberately oversized valid rectangle.",
+  "intended_oracle_description": "Oracle computes minimal area for small inputs by bounded search over feasible dimensions and compares exact minimum area.",
+  "demo_type": "fully_executable",
+  "reviewer_notes": "This is an adapted minimal demonstration, not a claim that the external benchmark is a bug or vulnerability."
+}

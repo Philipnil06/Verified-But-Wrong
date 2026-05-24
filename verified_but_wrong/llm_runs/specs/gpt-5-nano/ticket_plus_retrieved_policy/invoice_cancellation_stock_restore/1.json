@@ -1,0 +1,67 @@
+{
+  "timestamp": "2026-05-12T17:29:11.926390+00:00",
+  "task_id": "invoice_cancellation_stock_restore",
+  "task_title": "Invoice cancellation restores stock",
+  "condition": "ticket_plus_retrieved_policy",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the product ticket and the retrieved policy card.\nThe policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the product ticket and the retrieved policy card. The policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nTask title: Invoice cancellation restores stock\nFunction entrypoint: cancel_invoice\n\nProduct ticket:\n# Ticket: cancel invoice\n\nOperations can cancel an open invoice. The invoice status should become cancelled. Paid invoices should not use this path.\n\nAcceptance criteria:\n- Open invoice cancellation succeeds.\n- Paid invoice cancellation fails.\n\nRetrieved policy card:\nPolicy card ID: invoice.cancel.restore_stock\nTitle: Invoice cancellation must restore reserved stock\nRequirement: Reserved inventory must be restored when invoice is cancelled.\nWhy it matters: Cancelled orders can keep stock unavailable and corrupt inventory state.\nAudit questions:\n- Does cancellation restore reserved inventory?\nKeywords:\n- reserved inventory\n- restore stock\n- reserved stock\n- inventory\n- stock restored\n- available\n- reserved\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "5329a8c5e88d93a50da9b5f404b454693f82e37c15756edc3625356ce48c7b85",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Invoice cancellation restores reserved stock\",\n  \"behavior_requirements\": [\n    \"cancel_invoice(id) may only operate on invoices with status OPEN\",\n    \"upon successful cancellation, the invoice status must be set to CANCELLED\",\n    \"cancellation must release any reserved stock associated with the invoice, restoring it to AVAILABLE\",\n    \"no reserved stock should remain tied to the cancelled invoice\",\n    \"paid invoices must not be cancellable via cancel_invoice; attempt should fail with appropriate error\"\n  ],\n  \"edge_cases\": [\n    \"cancellation of an OPEN invoice with zero reserved stock\",\n    \"cancellation of an OPEN invoice where reserved stock partially or fully differs from line items due to external adjustments\",\n    \"concurrent cancellation attempts on the same OPEN invoice\",\n    \"cancellation attempt when stock restore would exceed current available stock (e.g., reservations in other orders)\",\n    \"cancellation of an OPEN invoice that references non-existent or already-released inventory items\"\n  ],\n  \"acceptance_criteria\": [\n    \"Open invoice cancellation succeeds: status becomes CANCELLED and all reserved stock for the invoice is restored to AVAILABLE\",\n    \"Paid invoice cancellation fails: cancel_invoice returns failure and no stock is altered\",\n    \"Reserved inventory is accurately restored per line item quantities on the cancelled invoice\",\n    \"Audit trail records the cancellation and stock restoration events with timestamps and IDs\"\n  ],\n  \"non_goals\": [\n    \"canceling invoices other than OPEN (e.g., already CANCELLED or VOID) is out of scope\",\n    \"modifying pricing or invoice totals during cancellation\",\n    \"restoring stock for invoices not involved in the cancellation\"\n  ],\n  \"testable_assertions\": [\n    \"Given an OPEN invoice with reserve_quantity across items, cancel_invoice(invoice_id) returns success and invoice.status == CANCELLED\",\n    \"Reserved quantities for each item on the invoice are moved from RESERVED to AVAILABLE\",\n    \"Inventory.lock or reservation records reflect zero remaining reservation for the cancelled invoice\",\n    \"Given a PAID invoice, cancel_invoice(invoice_id) returns failure and no inventory state changes occur\"\n  ]\n}",
+  "response_hash": "4ff56bc782d5a5be9eebe94534b38a768fbfd42cc2158f077fd7381861684a43",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0172fd12fa0c1b15006a036366f734819da28f806af1f3d595",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 367,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 449,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 816
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Invoice cancellation restores reserved stock",
+    "behavior_requirements": [
+      "cancel_invoice(id) may only operate on invoices with status OPEN",
+      "upon successful cancellation, the invoice status must be set to CANCELLED",
+      "cancellation must release any reserved stock associated with the invoice, restoring it to AVAILABLE",
+      "no reserved stock should remain tied to the cancelled invoice",
+      "paid invoices must not be cancellable via cancel_invoice; attempt should fail with appropriate error"
+    ],
+    "edge_cases": [
+      "cancellation of an OPEN invoice with zero reserved stock",
+      "cancellation of an OPEN invoice where reserved stock partially or fully differs from line items due to external adjustments",
+      "concurrent cancellation attempts on the same OPEN invoice",
+      "cancellation attempt when stock restore would exceed current available stock (e.g., reservations in other orders)",
+      "cancellation of an OPEN invoice that references non-existent or already-released inventory items"
+    ],
+    "acceptance_criteria": [
+      "Open invoice cancellation succeeds: status becomes CANCELLED and all reserved stock for the invoice is restored to AVAILABLE",
+      "Paid invoice cancellation fails: cancel_invoice returns failure and no stock is altered",
+      "Reserved inventory is accurately restored per line item quantities on the cancelled invoice",
+      "Audit trail records the cancellation and stock restoration events with timestamps and IDs"
+    ],
+    "non_goals": [
+      "canceling invoices other than OPEN (e.g., already CANCELLED or VOID) is out of scope",
+      "modifying pricing or invoice totals during cancellation",
+      "restoring stock for invoices not involved in the cancellation"
+    ],
+    "testable_assertions": [
+      "Given an OPEN invoice with reserve_quantity across items, cancel_invoice(invoice_id) returns success and invoice.status == CANCELLED",
+      "Reserved quantities for each item on the invoice are moved from RESERVED to AVAILABLE",
+      "Inventory.lock or reservation records reflect zero remaining reservation for the cancelled invoice",
+      "Given a PAID invoice, cancel_invoice(invoice_id) returns failure and no inventory state changes occur"
+    ]
+  },
+  "public_spec": "Title: Invoice cancellation restores reserved stock\n\nBehavior requirements:\n- cancel_invoice(id) may only operate on invoices with status OPEN\n- upon successful cancellation, the invoice status must be set to CANCELLED\n- cancellation must release any reserved stock associated with the invoice, restoring it to AVAILABLE\n- no reserved stock should remain tied to the cancelled invoice\n- paid invoices must not be cancellable via cancel_invoice; attempt should fail with appropriate error\n\nEdge cases:\n- cancellation of an OPEN invoice with zero reserved stock\n- cancellation of an OPEN invoice where reserved stock partially or fully differs from line items due to external adjustments\n- concurrent cancellation attempts on the same OPEN invoice\n- cancellation attempt when stock restore would exceed current available stock (e.g., reservations in other orders)\n- cancellation of an OPEN invoice that references non-existent or already-released inventory items\n\nAcceptance criteria:\n- Open invoice cancellation succeeds: status becomes CANCELLED and all reserved stock for the invoice is restored to AVAILABLE\n- Paid invoice cancellation fails: cancel_invoice returns failure and no stock is altered\n- Reserved inventory is accurately restored per line item quantities on the cancelled invoice\n- Audit trail records the cancellation and stock restoration events with timestamps and IDs\n\nNon-goals:\n- canceling invoices other than OPEN (e.g., already CANCELLED or VOID) is out of scope\n- modifying pricing or invoice totals during cancellation\n- restoring stock for invoices not involved in the cancellation\n\nTestable assertions:\n- Given an OPEN invoice with reserve_quantity across items, cancel_invoice(invoice_id) returns success and invoice.status == CANCELLED\n- Reserved quantities for each item on the invoice are moved from RESERVED to AVAILABLE\n- Inventory.lock or reservation records reflect zero remaining reservation for the cancelled invoice\n- Given a PAID invoice, cancel_invoice(invoice_id) returns failure and no inventory state changes occur",
+  "generation_empty": false,
+  "generation_error": null
+}

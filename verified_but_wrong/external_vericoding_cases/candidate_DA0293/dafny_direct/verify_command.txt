@@ -1,0 +1,1 @@
+dotnet tool run dafny verify external_vericoding_cases/candidate_DA0293/dafny_direct/bad_candidate.dfy

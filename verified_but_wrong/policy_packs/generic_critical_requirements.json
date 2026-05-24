@@ -1,0 +1,72 @@
+{
+  "id": "generic_critical_requirements",
+  "title": "Generic critical requirements",
+  "policy_cards": [
+    {
+      "id": "generic.state.update_success",
+      "title": "Successful operations must update persistent state",
+      "requirement": "Successful state-changing operations must update the relevant persisted state or ledger field.",
+      "category": "state_invariant_omission",
+      "severity": "high",
+      "applies_to_tasks": [
+        "refund_double_refund",
+        "access_control_delete_user",
+        "rate_limiter_boundary",
+        "loyalty_refund_reversal",
+        "refund_window_expiry"
+      ],
+      "keywords": [
+        "update",
+        "state",
+        "refunded_total",
+        "deleted",
+        "append",
+        "record",
+        "processed",
+        "persist"
+      ],
+      "why_it_matters": "A function can return success while leaving the system in an inconsistent state.",
+      "suggested_spec_patch": "Successful operations must update the relevant persisted state before returning success.",
+      "audit_question": "Does the spec explicitly state which state changes must happen after success?",
+      "requirement_test": "Successful refunds must update refunded_total",
+      "applies_to": [],
+      "failure_if_omitted": "A function can return success while leaving the system in an inconsistent state.",
+      "audit_questions": [
+        "Does the spec explicitly state which state changes must happen after success?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "A function can return success while leaving the system in an inconsistent state.",
+      "safe_spec_example": "Successful operations must update the relevant persisted state before returning success."
+    },
+    {
+      "id": "generic.invalid_inputs_fail",
+      "title": "Invalid inputs must fail safely",
+      "requirement": "Invalid, missing, malformed, or unsupported inputs must fail without changing protected state.",
+      "category": "invalid_input_omission",
+      "severity": "medium",
+      "applies_to_tasks": [
+        "*"
+      ],
+      "keywords": [
+        "invalid",
+        "missing",
+        "malformed",
+        "unsupported",
+        "error",
+        "fail",
+        "reject"
+      ],
+      "why_it_matters": "Unchecked invalid inputs can drive unsafe or undefined behavior.",
+      "suggested_spec_patch": "Invalid or unsupported inputs must return an error and must not mutate state.",
+      "audit_question": "Does the spec say how invalid inputs are rejected?",
+      "applies_to": [],
+      "failure_if_omitted": "Unchecked invalid inputs can drive unsafe or undefined behavior.",
+      "audit_questions": [
+        "Does the spec say how invalid inputs are rejected?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "Unchecked invalid inputs can drive unsafe or undefined behavior.",
+      "safe_spec_example": "Invalid or unsupported inputs must return an error and must not mutate state."
+    }
+  ]
+}

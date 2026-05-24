@@ -1,0 +1,77 @@
+{
+  "timestamp": "2026-05-12T17:30:52.938263+00:00",
+  "task_id": "refund_window_expiry",
+  "task_title": "Refund window expiry",
+  "condition": "ticket_plus_generic_checklist",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the product ticket and the generic checklist.\nThe checklist is generic and may not mention task-specific organization policies.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the product ticket and the generic checklist. The checklist is generic and may not mention task-specific organization policies.\n\nTask title: Refund window expiry\nFunction entrypoint: process_refund\n\nProduct ticket:\n# Product ticket: refund eligibility window\n\n## Background\nFinance allows normal refunds for paid orders. The service should calculate eligibility and update the refunded total.\n\n## Happy path\n- Paid orders can be refunded.\n- Refund amount must be positive.\n- Refund amount cannot exceed remaining paid amount.\n- Successful refunds update `refunded_total`.\n\n## Policy note\nRefund policy is based on purchase date. Manual override may apply for exceptional support cases.\n\n## Acceptance criteria\n- Valid refund succeeds.\n- Over-refund fails.\n- Cancelled and chargeback orders fail.\n\nGeneric checklist:\n- authorization and access control\n- idempotency and duplicate handling\n- boundary conditions and off-by-one cases\n- state consistency and required state updates\n- audit logging or record retention where relevant\n- tenant or data isolation where relevant\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "b1eb13206709a9dcab5383ee78648c1fb1d2d2f69410d63244a876b342b8bc3c",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Refund window expiry\",\n  \"behavior_requirements\": [\n    \"process_refund must be called with a paid order and positive refund amount.\",\n    \"Refund amount must not exceed remaining_paid_amount (paid_amount - refunded_total).\",\n    \"If refund is valid, refunded_total is incremented by refund_amount.\",\n    \"Cancelled or chargeback orders must be rejected for refunds.\",\n    \"If the order is not paid or already fully refunded, the refund must be rejected.\",\n    \"Over-refund attempts must fail with a clear error code/message.\",\n    \"All eligible refunds should be governed by the policy note: refunds based on purchase date with possible manual override for exceptional cases.\"\n  ],\n  \"edge_cases\": [\n    \"Refund amount equals remaining paid amount (exact full refund).\",\n    \"Refund amount is zero or negative (reject).\",\n    \"Order status transitions between paid, cancelled, chargeback, and refunded states between calls.\",\n    \"Refunds attempted after a business rule-based expiry window (if applicable) should be rejected.\",\n    \"Multiple sequential small refunds that cumulatively equal total paid amount (should be allowed until full exhausted, not exceeding total).\",\n    \"Concurrent refund requests on the same order (idempotency required; duplicate refunds should be detected and ignored or deduplicated).\",\n    \"Manual override flag is present (and allowed) versus automatic policy (ensure audit trail).\"\n  ],\n  \"acceptance_criteria\": [\n    \"Valid refund succeeds for paid orders with positive amount <= remaining_paid_amount.\",\n    \"Over-refund attempt fails with appropriate error and no change to refunded_total.\",\n    \"Cancelled orders fail refunds.\",\n    \"Chargeback orders fail refunds.\",\n    \"refunded_total accurately reflects cumulative refunds after each successful refund.\",\n    \"Refund operations are idempotent for duplicate requests (no double-refund).\",\n    \"All actions are auditable with timestamp, order_id, refund_amount, and result.\"\n  ],\n  \"non_goals\": [\n    \"Implementing refund policies not related to purchase date (e.g., non-standard exceptions) beyond manual override.\",\n    \"Automated policy changes without auditability.\",\n    \"Refunds for non-paid orders or non-existent orders.\"\n  ],\n  \"testable_assertions\": [\n    \"Given a paid order with paid_amount 100, refunded_total 0, refund_amount 30 -> refunded_total becomes 30 and operation succeeds.\",\n    \"Given a paid order with paid_amount 100, refunded_total 70, refund_amount 40 -> operation fails and refunded_total remains 70.\",\n    \"Given a cancelled order, any refund attempt fails with appropriate error.\",\n    \"Given a chargeback order, any refund attempt fails with appropriate error.\",\n    \"Given a paid order, refund_amount 0 -> operation fails and no state change.\",\n    \"Concurrent identical refund requests for the same amount are treated idempotently (only one refund applied).\",\n    \"Audit log records an entry for each successful refund with order_id, refund_amount, timestamp, and new_refunded_total.\"\n  ]\n}",
+  "response_hash": "ceeccb29bf21f0be886361add731154187e336f49db1ad81a2da64f519552d4d",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0d8b1cd2132ae89e006a0363cbe7788197a8e09fdfa285f537",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 391,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 643,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 1034
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Refund window expiry",
+    "behavior_requirements": [
+      "process_refund must be called with a paid order and positive refund amount.",
+      "Refund amount must not exceed remaining_paid_amount (paid_amount - refunded_total).",
+      "If refund is valid, refunded_total is incremented by refund_amount.",
+      "Cancelled or chargeback orders must be rejected for refunds.",
+      "If the order is not paid or already fully refunded, the refund must be rejected.",
+      "Over-refund attempts must fail with a clear error code/message.",
+      "All eligible refunds should be governed by the policy note: refunds based on purchase date with possible manual override for exceptional cases."
+    ],
+    "edge_cases": [
+      "Refund amount equals remaining paid amount (exact full refund).",
+      "Refund amount is zero or negative (reject).",
+      "Order status transitions between paid, cancelled, chargeback, and refunded states between calls.",
+      "Refunds attempted after a business rule-based expiry window (if applicable) should be rejected.",
+      "Multiple sequential small refunds that cumulatively equal total paid amount (should be allowed until full exhausted, not exceeding total).",
+      "Concurrent refund requests on the same order (idempotency required; duplicate refunds should be detected and ignored or deduplicated).",
+      "Manual override flag is present (and allowed) versus automatic policy (ensure audit trail)."
+    ],
+    "acceptance_criteria": [
+      "Valid refund succeeds for paid orders with positive amount <= remaining_paid_amount.",
+      "Over-refund attempt fails with appropriate error and no change to refunded_total.",
+      "Cancelled orders fail refunds.",
+      "Chargeback orders fail refunds.",
+      "refunded_total accurately reflects cumulative refunds after each successful refund.",
+      "Refund operations are idempotent for duplicate requests (no double-refund).",
+      "All actions are auditable with timestamp, order_id, refund_amount, and result."
+    ],
+    "non_goals": [
+      "Implementing refund policies not related to purchase date (e.g., non-standard exceptions) beyond manual override.",
+      "Automated policy changes without auditability.",
+      "Refunds for non-paid orders or non-existent orders."
+    ],
+    "testable_assertions": [
+      "Given a paid order with paid_amount 100, refunded_total 0, refund_amount 30 -> refunded_total becomes 30 and operation succeeds.",
+      "Given a paid order with paid_amount 100, refunded_total 70, refund_amount 40 -> operation fails and refunded_total remains 70.",
+      "Given a cancelled order, any refund attempt fails with appropriate error.",
+      "Given a chargeback order, any refund attempt fails with appropriate error.",
+      "Given a paid order, refund_amount 0 -> operation fails and no state change.",
+      "Concurrent identical refund requests for the same amount are treated idempotently (only one refund applied).",
+      "Audit log records an entry for each successful refund with order_id, refund_amount, timestamp, and new_refunded_total."
+    ]
+  },
+  "public_spec": "Title: Refund window expiry\n\nBehavior requirements:\n- process_refund must be called with a paid order and positive refund amount.\n- Refund amount must not exceed remaining_paid_amount (paid_amount - refunded_total).\n- If refund is valid, refunded_total is incremented by refund_amount.\n- Cancelled or chargeback orders must be rejected for refunds.\n- If the order is not paid or already fully refunded, the refund must be rejected.\n- Over-refund attempts must fail with a clear error code/message.\n- All eligible refunds should be governed by the policy note: refunds based on purchase date with possible manual override for exceptional cases.\n\nEdge cases:\n- Refund amount equals remaining paid amount (exact full refund).\n- Refund amount is zero or negative (reject).\n- Order status transitions between paid, cancelled, chargeback, and refunded states between calls.\n- Refunds attempted after a business rule-based expiry window (if applicable) should be rejected.\n- Multiple sequential small refunds that cumulatively equal total paid amount (should be allowed until full exhausted, not exceeding total).\n- Concurrent refund requests on the same order (idempotency required; duplicate refunds should be detected and ignored or deduplicated).\n- Manual override flag is present (and allowed) versus automatic policy (ensure audit trail).\n\nAcceptance criteria:\n- Valid refund succeeds for paid orders with positive amount <= remaining_paid_amount.\n- Over-refund attempt fails with appropriate error and no change to refunded_total.\n- Cancelled orders fail refunds.\n- Chargeback orders fail refunds.\n- refunded_total accurately reflects cumulative refunds after each successful refund.\n- Refund operations are idempotent for duplicate requests (no double-refund).\n- All actions are auditable with timestamp, order_id, refund_amount, and result.\n\nNon-goals:\n- Implementing refund policies not related to purchase date (e.g., non-standard exceptions) beyond manual override.\n- Automated policy changes without auditability.\n- Refunds for non-paid orders or non-existent orders.\n\nTestable assertions:\n- Given a paid order with paid_amount 100, refunded_total 0, refund_amount 30 -> refunded_total becomes 30 and operation succeeds.\n- Given a paid order with paid_amount 100, refunded_total 70, refund_amount 40 -> operation fails and refunded_total remains 70.\n- Given a cancelled order, any refund attempt fails with appropriate error.\n- Given a chargeback order, any refund attempt fails with appropriate error.\n- Given a paid order, refund_amount 0 -> operation fails and no state change.\n- Concurrent identical refund requests for the same amount are treated idempotently (only one refund applied).\n- Audit log records an entry for each successful refund with order_id, refund_amount, timestamp, and new_refunded_total.",
+  "generation_empty": false,
+  "generation_error": null
+}

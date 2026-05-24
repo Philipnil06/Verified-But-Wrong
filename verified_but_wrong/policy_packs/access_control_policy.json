@@ -1,0 +1,157 @@
+{
+  "id": "access_control_policy",
+  "title": "Access control policy",
+  "policy_cards": [
+    {
+      "id": "access.destructive.admin_only",
+      "title": "Destructive user actions require admin authorization",
+      "requirement": "Only admins may perform destructive user actions such as deleting users.",
+      "category": "authorization_omission",
+      "severity": "high",
+      "applies_to_tasks": [
+        "access_control_delete_user"
+      ],
+      "keywords": [
+        "admin",
+        "only admins",
+        "administrator",
+        "authorization",
+        "authorized"
+      ],
+      "why_it_matters": "Unauthorized users may perform privileged destructive actions.",
+      "suggested_spec_patch": "Only actors with role exactly admin may delete users.",
+      "audit_question": "Does the spec explicitly restrict deletion to authorized admins?",
+      "requirement_test": "Only admins may delete users",
+      "applies_to": [],
+      "failure_if_omitted": "Unauthorized users may perform privileged destructive actions.",
+      "audit_questions": [
+        "Does the spec explicitly restrict deletion to authorized admins?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "Unauthorized users may perform privileged destructive actions.",
+      "safe_spec_example": "Only actors with role exactly admin may delete users."
+    },
+    {
+      "id": "access.self_delete.rejected",
+      "title": "Users must not delete themselves unless explicitly allowed",
+      "requirement": "A user must not delete their own account through a privileged delete operation unless explicitly allowed.",
+      "category": "state_invariant_omission",
+      "severity": "high",
+      "applies_to_tasks": [
+        "access_control_delete_user"
+      ],
+      "keywords": [
+        "self delete",
+        "delete themselves",
+        "same user",
+        "actor",
+        "target"
+      ],
+      "why_it_matters": "Self-delete can bypass operational controls or leave orphaned ownership state.",
+      "suggested_spec_patch": "The actor user_id must not equal the target user_id for delete_user.",
+      "audit_question": "Does the spec reject self-delete?",
+      "requirement_test": "Users cannot delete themselves",
+      "applies_to": [],
+      "failure_if_omitted": "Self-delete can bypass operational controls or leave orphaned ownership state.",
+      "audit_questions": [
+        "Does the spec reject self-delete?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "Self-delete can bypass operational controls or leave orphaned ownership state.",
+      "safe_spec_example": "The actor user_id must not equal the target user_id for delete_user."
+    },
+    {
+      "id": "access.delete.target_exists",
+      "title": "Missing targets must fail",
+      "requirement": "Missing or invalid target users must fail before deletion.",
+      "category": "error_behavior_omission",
+      "severity": "medium",
+      "applies_to_tasks": [
+        "access_control_delete_user"
+      ],
+      "keywords": [
+        "missing target",
+        "target exists",
+        "invalid target",
+        "target user",
+        "not found"
+      ],
+      "why_it_matters": "Deletion success on missing targets can hide data and workflow errors.",
+      "suggested_spec_patch": "Missing or invalid target users must return an error.",
+      "audit_question": "Does the spec require the target user to exist?",
+      "requirement_test": "Missing target users must fail",
+      "applies_to": [],
+      "failure_if_omitted": "Deletion success on missing targets can hide data and workflow errors.",
+      "audit_questions": [
+        "Does the spec require the target user to exist?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "example_failure": "Deletion success on missing targets can hide data and workflow errors.",
+      "safe_spec_example": "Missing or invalid target users must return an error."
+    },
+    {
+      "id": "access.role_downgrade.invalidate_sessions",
+      "title": "Role downgrade must invalidate privileged sessions",
+      "requirement": "When a user loses admin privileges, existing privileged sessions must be invalidated.",
+      "category": "session_invalidation_omission",
+      "severity": "high",
+      "applies_to_tasks": [
+        "role_downgrade_session_invalidation"
+      ],
+      "applies_to": [
+        "role",
+        "session",
+        "authorization"
+      ],
+      "keywords": [
+        "invalidate",
+        "session",
+        "privileged sessions",
+        "loses admin",
+        "downgrade",
+        "admin privileges"
+      ],
+      "why_it_matters": "Old sessions can retain privileges after a role downgrade.",
+      "failure_if_omitted": "A downgraded user can continue using an active admin session.",
+      "audit_questions": [
+        "Does the spec invalidate privileged sessions when admin role is removed?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "suggested_spec_patch": "When a user is downgraded from admin, all active privileged sessions for that user must be invalidated.",
+      "example_failure": "User role becomes member but existing admin session remains active.",
+      "safe_spec_example": "Downgrade from admin to non-admin sets privileged sessions inactive.",
+      "requirement_test": "Admin role downgrade must invalidate privileged sessions"
+    },
+    {
+      "id": "access.role.invalid_roles_fail",
+      "title": "Invalid roles must fail",
+      "requirement": "Invalid roles must fail.",
+      "category": "invalid_input_omission",
+      "severity": "medium",
+      "applies_to_tasks": [
+        "role_downgrade_session_invalidation"
+      ],
+      "applies_to": [
+        "role"
+      ],
+      "keywords": [
+        "invalid role",
+        "valid roles",
+        "admin",
+        "member",
+        "guest",
+        "reject"
+      ],
+      "why_it_matters": "Unexpected roles can bypass authorization assumptions.",
+      "failure_if_omitted": "A malformed role can be stored.",
+      "audit_questions": [
+        "Does the spec define valid roles and reject invalid roles?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "suggested_spec_patch": "Only admin, member, or guest roles are valid; other roles must fail.",
+      "example_failure": "Role owner is accepted.",
+      "safe_spec_example": "Unknown roles return error.",
+      "requirement_test": "Invalid roles must fail"
+    }
+  ]
+}

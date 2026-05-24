@@ -1,0 +1,33 @@
+# OS
+.DS_Store
+
+# Environment / secrets
+.env
+.env.*
+
+# Python
+__pycache__/
+.pytest_cache/
+.venv/
+venv/
+*.pyc
+
+# Node / frontend
+node_modules/
+demo/node_modules/
+demo/dist/
+
+# Logs (keep structured research outputs under results/reports)
+*.log
+
+# Common temporary render/cache folders
+.tmp/
+tmp/
+temp/
+.cache/
+# Local toolchains / oversized binaries
+verified_but_wrong/.tools/
+verified_but_wrong/.dotnet/
+
+# Oversized raw run dump (kept locally; summary artifacts remain versioned)
+verified_but_wrong/results/results.jsonl

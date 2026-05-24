@@ -1,0 +1,35 @@
+{
+  "task_id": "tenant_isolation_export",
+  "evaluation_split": "heldout",
+  "public_specs": {
+    "naive": "specs/public_spec_naive.py",
+    "critic": "specs/public_spec_critic.py",
+    "oracle": "specs/public_spec_oracle.py"
+  },
+  "policy_pack_ids": [
+    "generic_critical_requirements",
+    "multi_tenant_policy",
+    "access_control_policy"
+  ],
+  "policy_pack_paths": [
+    "policy_packs/generic_critical_requirements.json",
+    "policy_packs/multi_tenant_policy.json",
+    "policy_packs/access_control_policy.json"
+  ],
+  "hidden_oracle_path": "specs/hidden_oracle.py",
+  "candidate_dir": "candidates/",
+  "gate_can_access": [
+    "public_spec_text",
+    "policy_pack_cards",
+    "task_category"
+  ],
+  "gate_must_not_access": [
+    "hidden_oracle.py",
+    "selected_candidate",
+    "verified_but_wrong",
+    "candidate_source_code"
+  ],
+  "policy_pack_source": "benchmark_author_defined",
+  "policy_pack_type": "business_rule_inventory | security_policy | compliance_policy | domain_invariant_inventory",
+  "oracle_role": "evaluation_only"
+}

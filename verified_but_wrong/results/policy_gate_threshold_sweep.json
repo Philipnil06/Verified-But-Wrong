@@ -1,0 +1,29 @@
+{
+  "result_type": "policy_gate_threshold_sweep",
+  "profiles": [
+    {
+      "profile": "conservative",
+      "dangerous_allowed": 0,
+      "dangerous_caught": 17,
+      "safe_allow_rate": 0.42105263157894735,
+      "review_burden": 5,
+      "safe_blocked": 9
+    },
+    {
+      "profile": "default",
+      "dangerous_allowed": 0,
+      "dangerous_caught": 17,
+      "safe_allow_rate": 0.7894736842105263,
+      "review_burden": 12,
+      "safe_blocked": 4
+    },
+    {
+      "profile": "permissive",
+      "dangerous_allowed": 10,
+      "dangerous_caught": 7,
+      "safe_allow_rate": 0.7894736842105263,
+      "review_burden": 11,
+      "safe_blocked": 0
+    }
+  ]
+}

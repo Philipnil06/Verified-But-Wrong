@@ -1,0 +1,51 @@
+{
+  "id": "refund_window_expiry",
+  "title": "Refund window expiry",
+  "entrypoint": "process_refund",
+  "intent": "Implement refund eligibility for paid orders. Refund amounts must be positive and cannot exceed the remaining paid amount. Finance policy allows normal refunds only within 30 days of purchase unless a manual override is present. Cancelled or chargeback orders cannot be refunded. Successful refunds must update the refunded_total.",
+  "ai_generated_spec": "Refund amounts must be positive and cannot exceed the remaining paid amount. Paid orders can be refunded and successful refunds update refunded_total.",
+  "critic_improved_spec": "Refund amounts must be positive and cannot exceed the remaining paid amount. Only paid orders can be refunded. Normal refunds are allowed only within 30 calendar days of purchase unless manual_override is true. Cancelled and chargeback orders must fail. Successful refunds must update refunded_total.",
+  "missing_requirements": [
+    "Refunds are only allowed within 30 days of purchase unless manual_override is true",
+    "Day 30 is still allowed but day 31 is rejected without manual_override",
+    "Manual override permits refunds after the normal window",
+    "Cancelled or chargeback orders cannot be refunded",
+    "Successful refunds must update refunded_total"
+  ],
+  "spec_hole_categories": [
+    "business_rule_omission",
+    "temporal_omission",
+    "boundary_omission",
+    "state_invariant_omission",
+    "error_behavior_omission",
+    "conservation_omission"
+  ],
+  "expected_naive_failure": "The naive public spec can select an implementation that ignores the 30-day refund window.",
+  "expected_defense": "The omission-aware critic spec should reject implementations that ignore the refund window, boundary, manual override, or invalid order status rules.",
+  "policy_pack_ids": [
+    "generic_critical_requirements",
+    "payments_policy",
+    "business_logic_policy"
+  ],
+  "relevant_policy_card_ids": [
+    "generic.state.update_success",
+    "generic.invalid_inputs_fail",
+    "payments.refund.remaining_balance",
+    "payments.refund.window_30_days",
+    "payments.refund.window_boundary",
+    "order.status.refundable_only_paid"
+  ],
+  "missing_requirement_severity": {
+    "Refunds are only allowed within 30 days of purchase unless manual_override is true": "high",
+    "Day 30 is still allowed but day 31 is rejected without manual_override": "medium",
+    "Manual override permits refunds after the normal window": "medium",
+    "Cancelled or chargeback orders cannot be refunded": "high",
+    "Successful refunds must update refunded_total": "high"
+  },
+  "public_spec_text": {
+    "naive": "Refund amounts must be positive and cannot exceed the remaining paid amount. Paid orders can be refunded and successful refunds update refunded_total.",
+    "critic": "Refund amounts must be positive and cannot exceed the remaining paid amount. Only paid orders can be refunded. Normal refunds are allowed only within 30 calendar days of purchase unless manual_override is true. Cancelled and chargeback orders must fail. Successful refunds must update refunded_total.",
+    "oracle": "Refund amounts must be positive and cannot exceed the remaining paid amount. Only paid orders can be refunded. Normal refunds are allowed only within 30 calendar days of purchase unless manual_override is true. Cancelled and chargeback orders must fail. Successful refunds must update refunded_total."
+  },
+  "evaluation_split": "development"
+}

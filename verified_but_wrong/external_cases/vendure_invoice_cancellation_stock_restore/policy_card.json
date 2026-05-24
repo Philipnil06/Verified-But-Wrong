@@ -1,0 +1,28 @@
+{
+  "id": "external_case.vendure_invoice_cancellation_stock_restore",
+  "source_type": "externally sourced adapted issue case",
+  "policy_cards": [
+    {
+      "id": "invoice.cancel.restore_stock",
+      "title": "Cancellation must restore stock reservation balances",
+      "requirement": "Cancelling an invoice must increase available inventory and decrease reserved inventory for each affected line.",
+      "category": "business_rule_omission",
+      "severity": "high",
+      "keywords": ["reserved inventory", "restore stock", "reserved stock", "stock restored", "available inventory", "reservation balance"],
+      "suggested_spec_patch": "Cancelling an invoice must increase available inventory and decrease reserved inventory for each invoice line.",
+      "audit_questions": ["Does cancellation restore reserved inventory?"],
+      "requirement_test": "Reserved inventory must be restored when invoice is cancelled"
+    },
+    {
+      "id": "invoice.cancel.paid_fails",
+      "title": "Paid invoices cannot be cancelled by normal cancellation",
+      "requirement": "Paid invoices must return an error from the normal cancellation path.",
+      "category": "error_behavior_omission",
+      "severity": "medium",
+      "keywords": ["paid invoice", "paid invoices", "cannot be cancelled", "reject paid"],
+      "suggested_spec_patch": "Paid invoices must return an error from the normal cancellation path.",
+      "audit_questions": ["Does the spec reject paid invoice cancellation?"],
+      "requirement_test": "Paid invoices cannot be cancelled"
+    }
+  ]
+}

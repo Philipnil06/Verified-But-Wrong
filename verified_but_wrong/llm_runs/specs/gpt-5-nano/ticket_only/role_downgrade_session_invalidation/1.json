@@ -1,0 +1,69 @@
+{
+  "timestamp": "2026-05-12T17:31:12.646107+00:00",
+  "task_id": "role_downgrade_session_invalidation",
+  "task_title": "Role downgrade session invalidation",
+  "condition": "ticket_only",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse only the product ticket below.\nDo not assume access to hidden organization policies.\nWrite the best implementation spec you can from the ticket.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse only the product ticket below. Do not assume access to hidden organization policies. Write the best implementation spec you can from the ticket.\n\nTask title: Role downgrade session invalidation\nFunction entrypoint: update_role\n\nProduct ticket:\n# Ticket: update user role\n\nAdmins can update a user's role to admin, member, or guest. The profile should reflect the new role immediately.\n\nAcceptance criteria:\n- Valid role update succeeds.\n- Invalid roles fail.\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "7e820bd925d647f70d035e88fe8eb8a5e3cad09c3bf5dbb5f940ae8d9e3e431e",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Role downgrade session invalidation\",\n  \"behavior_requirements\": [\n    \"update_role(entrypoint) must accept a user identifier and a target_role string.\",\n    \"target_role must be one of: 'admin', 'member', 'guest'.\",\n    \"If target_role is valid, update the user's role immediately in the profile store and reflect the new role in the current or active session context for that user.\",\n    \"If the requester is an admin, permit role update; deny if requester lacks admin privileges.\",\n    \"On successful update, return a success response containing the updated role.\",\n    \"On invalid role input, do not change any state and return a clear error indicating invalid role.\"\n  ],\n  \"edge_cases\": [\n    \"Updating role to the same value as current role should still be treated as a successful no-op update with a confirmation.\",\n    \"Role update for non-existent user should fail with a user-not-found error.\",\n    \"Concurrent role update attempts for the same user must be serialized or handled to maintain a consistent final role.\",\n    \"Session context should reflect the new role even if the update occurs mid-session; ensure session token contains or is associated with the updated role.\",\n    \"Invalid requester credentials should result in an access denied error without side effects.\",\n    \"Role update payload with extra fields should be ignored except for the required user_id and target_role.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Valid role update to 'admin', 'member', or 'guest' succeeds and the profile shows the new role immediately.\",\n    \"Invalid roles (e.g., 'superuser', '', null, or missing role) fail and do not alter the profile or session.\",\n    \"Response clearly communicates success or failure with appropriate status and message.\"\n  ],\n  \"non_goals\": [\n    \"Implementing any role inheritance or hierarchical permissions beyond the three defined roles.\",\n    \"Auditing or rollback mechanisms beyond immediate consistency and error signaling.\",\n    \"UI rendering or frontend behavior; only backend behavior and return payloads are in scope.\"\n  ],\n  \"testable_assertions\": [\n    \"update_role with valid role updates the stored role to the target value.\",\n    \"update_role with invalid role returns an error and does not change stored role.\",\n    \"update_role to same as current role returns success with no state change (idempotent).\",\n    \"updating role for non-existent user returns user-not-found error.\",\n    \"admin-only enforcement: non-admin requester cannot update roles.\"\n  ]\n}",
+  "response_hash": "3582cf101f8b16f1b777ac744d569f12a3d548488e7e39d3f8e5681bca7f28bf",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0c0a58ded638e0af006a0363dfa4748196b51101f8af855305",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 284,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 533,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 817
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Role downgrade session invalidation",
+    "behavior_requirements": [
+      "update_role(entrypoint) must accept a user identifier and a target_role string.",
+      "target_role must be one of: 'admin', 'member', 'guest'.",
+      "If target_role is valid, update the user's role immediately in the profile store and reflect the new role in the current or active session context for that user.",
+      "If the requester is an admin, permit role update; deny if requester lacks admin privileges.",
+      "On successful update, return a success response containing the updated role.",
+      "On invalid role input, do not change any state and return a clear error indicating invalid role."
+    ],
+    "edge_cases": [
+      "Updating role to the same value as current role should still be treated as a successful no-op update with a confirmation.",
+      "Role update for non-existent user should fail with a user-not-found error.",
+      "Concurrent role update attempts for the same user must be serialized or handled to maintain a consistent final role.",
+      "Session context should reflect the new role even if the update occurs mid-session; ensure session token contains or is associated with the updated role.",
+      "Invalid requester credentials should result in an access denied error without side effects.",
+      "Role update payload with extra fields should be ignored except for the required user_id and target_role."
+    ],
+    "acceptance_criteria": [
+      "Valid role update to 'admin', 'member', or 'guest' succeeds and the profile shows the new role immediately.",
+      "Invalid roles (e.g., 'superuser', '', null, or missing role) fail and do not alter the profile or session.",
+      "Response clearly communicates success or failure with appropriate status and message."
+    ],
+    "non_goals": [
+      "Implementing any role inheritance or hierarchical permissions beyond the three defined roles.",
+      "Auditing or rollback mechanisms beyond immediate consistency and error signaling.",
+      "UI rendering or frontend behavior; only backend behavior and return payloads are in scope."
+    ],
+    "testable_assertions": [
+      "update_role with valid role updates the stored role to the target value.",
+      "update_role with invalid role returns an error and does not change stored role.",
+      "update_role to same as current role returns success with no state change (idempotent).",
+      "updating role for non-existent user returns user-not-found error.",
+      "admin-only enforcement: non-admin requester cannot update roles."
+    ]
+  },
+  "public_spec": "Title: Role downgrade session invalidation\n\nBehavior requirements:\n- update_role(entrypoint) must accept a user identifier and a target_role string.\n- target_role must be one of: 'admin', 'member', 'guest'.\n- If target_role is valid, update the user's role immediately in the profile store and reflect the new role in the current or active session context for that user.\n- If the requester is an admin, permit role update; deny if requester lacks admin privileges.\n- On successful update, return a success response containing the updated role.\n- On invalid role input, do not change any state and return a clear error indicating invalid role.\n\nEdge cases:\n- Updating role to the same value as current role should still be treated as a successful no-op update with a confirmation.\n- Role update for non-existent user should fail with a user-not-found error.\n- Concurrent role update attempts for the same user must be serialized or handled to maintain a consistent final role.\n- Session context should reflect the new role even if the update occurs mid-session; ensure session token contains or is associated with the updated role.\n- Invalid requester credentials should result in an access denied error without side effects.\n- Role update payload with extra fields should be ignored except for the required user_id and target_role.\n\nAcceptance criteria:\n- Valid role update to 'admin', 'member', or 'guest' succeeds and the profile shows the new role immediately.\n- Invalid roles (e.g., 'superuser', '', null, or missing role) fail and do not alter the profile or session.\n- Response clearly communicates success or failure with appropriate status and message.\n\nNon-goals:\n- Implementing any role inheritance or hierarchical permissions beyond the three defined roles.\n- Auditing or rollback mechanisms beyond immediate consistency and error signaling.\n- UI rendering or frontend behavior; only backend behavior and return payloads are in scope.\n\nTestable assertions:\n- update_role with valid role updates the stored role to the target value.\n- update_role with invalid role returns an error and does not change stored role.\n- update_role to same as current role returns success with no state change (idempotent).\n- updating role for non-existent user returns user-not-found error.\n- admin-only enforcement: non-admin requester cannot update roles.",
+  "generation_empty": false,
+  "generation_error": null
+}

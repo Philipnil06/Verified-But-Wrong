@@ -1,0 +1,65 @@
+{
+  "timestamp": "2026-05-12T17:27:36.951609+00:00",
+  "task_id": "access_control_delete_user",
+  "task_title": "Access control for deleting users",
+  "condition": "ticket_plus_retrieved_policy",
+  "run_id": 1,
+  "model": "gpt-5-nano",
+  "prompt": "You are writing an implementation specification for a secure program synthesis workflow.\nUse the product ticket and the retrieved policy card.\nThe policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nSystem instruction:\nYou write implementation specifications for secure program synthesis. Be concrete, testable, and concise. Do not invent organization-specific policies unless they are implied by the provided context.\n\nCondition-specific instruction:\nUse the product ticket and the retrieved policy card. The policy card is authoritative and must be preserved in the implementation spec if applicable.\n\nTask title: Access control for deleting users\nFunction entrypoint: delete_user\n\nProduct ticket:\n# Product ticket: delete user\n\n## Background\nSupport administrators need to delete active users that should no longer exist in the system.\n\n## Happy path\n- Admin deletes an active target user.\n- Target status becomes deleted.\n\n## Edge cases\n- Missing targets should fail.\n- Deleted targets should not be deleted again.\n\n## Acceptance criteria\n- Admin delete succeeds.\n- Target state is updated.\n\nRetrieved policy card:\nPolicy card ID: access.destructive.admin_only\nTitle: Destructive user actions require admin authorization\nRequirement: Only admins may perform destructive user actions such as deleting users.\nWhy it matters: Unauthorized users may perform privileged destructive actions.\nAudit questions:\n- Does the spec explicitly restrict deletion to authorized admins?\nKeywords:\n- admin\n- only admins\n- administrator\n- authorization\n- authorized\n\nReturn JSON only with this exact top-level shape:\n{\n  \"title\": \"short title\",\n  \"behavior_requirements\": [\"...\"],\n  \"edge_cases\": [\"...\"],\n  \"acceptance_criteria\": [\"...\"],\n  \"non_goals\": [\"...\"],\n  \"testable_assertions\": [\"...\"]\n}\nDo not output code.",
+  "prompt_hash": "d9075a3c428ba17467e04ebfb40c202955a6625128c64f95ca16470dec23558c",
+  "provider": "openai_compatible",
+  "response_text": "{\n  \"title\": \"Access control for deleting users\",\n  \"behavior_requirements\": [\n    \"delete_user(entrypoint) must require admin authorization prior to performing any destructive user action.\",\n    \"Only authenticated admins (admin role) may initiate deletion of a target user.\",\n    \"On successful authorization, delete_user must change target user state from active to deleted.\",\n    \"Audit log must record admin identity and target user deleted action.\"\n  ],\n  \"edge_cases\": [\n    \"If target user does not exist, delete_user should fail with a not-found error and no state change occurs.\",\n    \"If target user is already in deleted state, delete_user should fail with an already-deleted error and no further action occurs.\",\n    \"If the requesting user is not an admin, delete_user should fail with an authorization error and no state change occurs.\",\n    \"If target user deletion would violate invariants (e.g., system-critical accounts), operation should be denied with appropriate error.\"\n  ],\n  \"acceptance_criteria\": [\n    \"Admin authorization is verified before any deletion logic executes.\",\n    \"Target user state changes from active to deleted when an authorized admin deletes a target active user.\",\n    \"Deleting a non-existent target results in a not-found failure.\",\n    \"Deleting an already-deleted target results in an error and no state change.\",\n    \"All delete actions are auditable with admin identity and target user reference.\"\n  ],\n  \"non_goals\": [\n    \"Implementing non-destructive suspension instead of deletion is out of scope.\",\n    \"Admin self-deletion or deletion of admin accounts is not specified and not allowed unless explicitly covered by policy.\"\n  ],\n  \"testable_assertions\": [\n    \"Given an admin user and an active target, delete_user returns success and target state becomes deleted.\",\n    \"Given a non-admin user, delete_user returns authorization error and target state remains unchanged.\",\n    \"Given a non-existent target, delete_user returns not-found error.\",\n    \"Given an already-deleted target, delete_user returns already-deleted error.\"\n  ]\n}",
+  "response_hash": "c47ebd54992b460eeb41c10820d988a0a867d64449f35a08fbf4fd9dbddbf0f4",
+  "provider_metadata": {
+    "provider": "openai_compatible",
+    "response_id": "resp_0f0ef1adc1819741006a036308b31881949ce674e2d03b48fd",
+    "status": "completed",
+    "usage": {
+      "input_tokens": 398,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 437,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 835
+    }
+  },
+  "parse_status": "json_ok",
+  "structured_spec": {
+    "title": "Access control for deleting users",
+    "behavior_requirements": [
+      "delete_user(entrypoint) must require admin authorization prior to performing any destructive user action.",
+      "Only authenticated admins (admin role) may initiate deletion of a target user.",
+      "On successful authorization, delete_user must change target user state from active to deleted.",
+      "Audit log must record admin identity and target user deleted action."
+    ],
+    "edge_cases": [
+      "If target user does not exist, delete_user should fail with a not-found error and no state change occurs.",
+      "If target user is already in deleted state, delete_user should fail with an already-deleted error and no further action occurs.",
+      "If the requesting user is not an admin, delete_user should fail with an authorization error and no state change occurs.",
+      "If target user deletion would violate invariants (e.g., system-critical accounts), operation should be denied with appropriate error."
+    ],
+    "acceptance_criteria": [
+      "Admin authorization is verified before any deletion logic executes.",
+      "Target user state changes from active to deleted when an authorized admin deletes a target active user.",
+      "Deleting a non-existent target results in a not-found failure.",
+      "Deleting an already-deleted target results in an error and no state change.",
+      "All delete actions are auditable with admin identity and target user reference."
+    ],
+    "non_goals": [
+      "Implementing non-destructive suspension instead of deletion is out of scope.",
+      "Admin self-deletion or deletion of admin accounts is not specified and not allowed unless explicitly covered by policy."
+    ],
+    "testable_assertions": [
+      "Given an admin user and an active target, delete_user returns success and target state becomes deleted.",
+      "Given a non-admin user, delete_user returns authorization error and target state remains unchanged.",
+      "Given a non-existent target, delete_user returns not-found error.",
+      "Given an already-deleted target, delete_user returns already-deleted error."
+    ]
+  },
+  "public_spec": "Title: Access control for deleting users\n\nBehavior requirements:\n- delete_user(entrypoint) must require admin authorization prior to performing any destructive user action.\n- Only authenticated admins (admin role) may initiate deletion of a target user.\n- On successful authorization, delete_user must change target user state from active to deleted.\n- Audit log must record admin identity and target user deleted action.\n\nEdge cases:\n- If target user does not exist, delete_user should fail with a not-found error and no state change occurs.\n- If target user is already in deleted state, delete_user should fail with an already-deleted error and no further action occurs.\n- If the requesting user is not an admin, delete_user should fail with an authorization error and no state change occurs.\n- If target user deletion would violate invariants (e.g., system-critical accounts), operation should be denied with appropriate error.\n\nAcceptance criteria:\n- Admin authorization is verified before any deletion logic executes.\n- Target user state changes from active to deleted when an authorized admin deletes a target active user.\n- Deleting a non-existent target results in a not-found failure.\n- Deleting an already-deleted target results in an error and no state change.\n- All delete actions are auditable with admin identity and target user reference.\n\nNon-goals:\n- Implementing non-destructive suspension instead of deletion is out of scope.\n- Admin self-deletion or deletion of admin accounts is not specified and not allowed unless explicitly covered by policy.\n\nTestable assertions:\n- Given an admin user and an active target, delete_user returns success and target state becomes deleted.\n- Given a non-admin user, delete_user returns authorization error and target state remains unchanged.\n- Given a non-existent target, delete_user returns not-found error.\n- Given an already-deleted target, delete_user returns already-deleted error.",
+  "generation_empty": false,
+  "generation_error": null
+}

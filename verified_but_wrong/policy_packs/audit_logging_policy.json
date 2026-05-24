@@ -1,0 +1,70 @@
+{
+  "id": "audit_logging_policy",
+  "title": "Audit logging policy",
+  "policy_cards": [
+    {
+      "id": "audit.delete.preserve_records",
+      "title": "Required audit records must be preserved",
+      "requirement": "Required audit records must be preserved when deleting or deactivating a user.",
+      "category": "audit_log_omission",
+      "severity": "high",
+      "applies_to_tasks": [
+        "audit_log_retention_delete_user"
+      ],
+      "applies_to": [
+        "delete",
+        "audit",
+        "compliance"
+      ],
+      "keywords": [
+        "audit",
+        "preserve",
+        "retention",
+        "audit records",
+        "audit log",
+        "history"
+      ],
+      "why_it_matters": "Compliance and incident response require retained audit history.",
+      "failure_if_omitted": "Deleting a user can erase required audit evidence.",
+      "audit_questions": [
+        "Does deletion preserve required audit records?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "suggested_spec_patch": "User deletion must preserve existing audit log entries.",
+      "example_failure": "User is deleted and audit_log becomes empty.",
+      "safe_spec_example": "Existing audit entries remain after deletion.",
+      "requirement_test": "Required audit records must be preserved"
+    },
+    {
+      "id": "audit.delete.metadata_recorded",
+      "title": "Deletion metadata must be recorded",
+      "requirement": "Deletion metadata must be recorded.",
+      "category": "audit_log_omission",
+      "severity": "high",
+      "applies_to_tasks": [
+        "audit_log_retention_delete_user"
+      ],
+      "applies_to": [
+        "delete",
+        "audit"
+      ],
+      "keywords": [
+        "deletion metadata",
+        "record deletion",
+        "user_deleted",
+        "actor_id",
+        "audit event"
+      ],
+      "why_it_matters": "Deletion events need accountability.",
+      "failure_if_omitted": "There is no record of who deleted the user.",
+      "audit_questions": [
+        "Does deletion append metadata including actor and target?"
+      ],
+      "selection_risk": "verified_but_wrong",
+      "suggested_spec_patch": "Deletion must append an audit event with actor_id and target user_id.",
+      "example_failure": "User deleted but no user_deleted event exists.",
+      "safe_spec_example": "Audit log includes user_deleted event with actor_id.",
+      "requirement_test": "Deletion metadata must be recorded"
+    }
+  ]
+}

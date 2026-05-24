@@ -1,0 +1,1 @@
+dotnet tool run dafny verify C:\Users\Philip Nilsson\OneDrive - Mälardalens Tekniska Gymnasium\Skrivbordet\Hackathon apartresearch The Secure Program Synthesis\verified_but_wrong\external_vericoding_cases\candidate_DA0003\dafny_direct\bad_candidate.dfy

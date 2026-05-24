@@ -1,0 +1,13 @@
+{
+  "result_type": "formal_demo",
+  "timestamp": "2026-05-13T13:28:31.324526+00:00",
+  "status": "skipped_dafny_not_installed",
+  "dafny_found": false,
+  "dafny_version": null,
+  "checks": [],
+  "summary": "Dafny was not found on PATH, so the illustrative contract demo was not executed.",
+  "caveats": [
+    "This machine does not currently have Dafny installed or discoverable on PATH.",
+    "The reproduction script treats this as a soft skip."
+  ]
+}

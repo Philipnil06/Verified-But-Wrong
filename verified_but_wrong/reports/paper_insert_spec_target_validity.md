@@ -1,0 +1,1 @@
+Spec Target Validity asks whether a supplied public spec preserves known intent-critical requirements before it is trusted as an implementation-selection target. This is distinct from checking whether code satisfies the supplied spec.
