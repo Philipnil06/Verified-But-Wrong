@@ -29,8 +29,8 @@ const EVIDENCE_CARDS = [
   '128 scanner candidates',
   '41 high-confidence candidates adjudicated',
   '11 validated demonstrations',
-  '2 direct-Dafny cases',
-  '2 repaired-target blocks',
+  '3 direct-Dafny cases',
+  '3 repaired-target blocks',
 ]
 
 const BAD_CANDIDATE = `method Solve(...) returns (result: int)\n  ensures result >= 0\n{\n  result := 0;\n}`
@@ -96,7 +96,7 @@ function App() {
           <li>
             <h3>Step 2: Public formal target</h3>
             <p>
-              For both Tier 1 cases, the public target effectively only requires
+              The paper reports three Tier 1 cases. This demo interactively replays two of them. For the replayed cases, the public target effectively only requires
               a nonnegative result:
             </p>
             <pre className="target-block">

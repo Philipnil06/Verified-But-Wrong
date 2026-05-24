@@ -31,3 +31,5 @@ verified_but_wrong/.dotnet/
 
 # Oversized raw run dump (kept locally; summary artifacts remain versioned)
 verified_but_wrong/results/results.jsonl
+verified_but_wrong/external_data/vericoding-benchmark/
+verified_but_wrong/reports/noisy_policy_pack_eval.json
