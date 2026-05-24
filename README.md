@@ -4,11 +4,9 @@ Vericoding can prove that code satisfies a formal specification. But it cannot p
 
 GitHub repository: https://github.com/Philipnil06/Verified-But-Wrong
 
-Paper draft: `verified_but_wrong/results/final_submission_paper.md` (replace with PDF path once exported)
-
 Demo source: `demo/`
 
-Live demo: [INSERT VERCEL URL AFTER DEPLOYMENT]
+Live demo: https://verified-but-wrong-demo.vercel.app/
 
 ## Key Counts
 
